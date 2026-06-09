@@ -1,258 +1,311 @@
-/* --- BASE SYSTEM CONFIG --- */
+/* ==========================================================================
+   PREMIUM ARCADE GLASSMORPHISM STYLE - UNTUK PERPISAHAN SEKOLAH 2026
+   ========================================================================== */
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 body {
     width: 100%;
     height: 100vh;
-    background-color: #1e293b;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #090a0f;
+    font-family: 'Poppins', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    position: relative;
+}
+
+/* Background Cahaya Neon di Belakang Layar Utama */
+.epic-bg-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(58, 143, 253, 0.15) 0%, transparent 70%);
+    z-index: 1;
 }
 
 #game-container {
     position: relative;
-    width: 800px;
-    height: 640px; /* Alokasi ruang untuk Canvas + Header UI */
-    background-color: #0f172a;
-    border: 6px solid #334155;
-    border-radius: 20px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    z-index: 5;
+    width: 820px;
+    height: 690px;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.2);
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
-/* --- TAMPILAN BAR ATAS (IZUR HEADER) --- */
+/* --- PANEL ATAS: DIALOG BOX IZUR (HIGH TECH) --- */
 #izur-header {
     width: 100%;
-    background: #1e1e2e;
-    padding: 15px 25px;
+    background: rgba(30, 30, 46, 0.8);
+    padding: 20px 30px;
     display: flex;
     align-items: center;
-    gap: 20px;
-    border-bottom: 4px solid #313244;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
+    gap: 25px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+}
+
+#izur-avatar-container {
+    position: relative;
 }
 
 #izur-avatar {
-    font-size: 2.5rem;
-    background: #fab387;
-    width: 60px;
-    height: 60px;
+    font-size: 2.8rem;
+    background: linear-gradient(135deg, #ffdd1a, #ff9f1c);
+    width: 70px;
+    height: 70px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    box-shadow: 0 0 20px rgba(255, 159, 28, 0.4);
+    z-index: 2;
+    position: relative;
 }
 
-#izur-bubble {
-    flex: 1;
+.avatar-pulse {
+    position: absolute;
+    width: 70px; height: 70px;
+    top: 0; left: 0;
+    background: #ffdd1a;
+    border-radius: 50%;
+    z-index: 1;
+    animation: denyutAvatar 2s infinite linear;
+}
+@keyframes denyutAvatar {
+    0% { transform: scale(1); opacity: 0.5; }
+    100% { transform: scale(1.4); opacity: 0; }
 }
 
+#izur-bubble { flex: 1; }
+#izur-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 900;
+    color: #ff9f1c;
+    letter-spacing: 2px;
+    margin-bottom: 3px;
+}
 #izur-command {
     display: block;
-    font-size: 1.3rem;
-    font-weight: bold;
+    font-size: 1.4rem;
+    font-weight: 800;
     color: #ffffff;
-    margin-bottom: 8px;
-    font-family: 'Courier New', Courier, monospace;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
-/* --- TIMER PROGRESS BAR SYSTEM --- */
+/* --- TIMER PROGRESS BAR --- */
 #timer-bar {
-    width: 100%;
-    height: 10px;
-    background-color: #313244;
-    border-radius: 10px;
-    overflow: hidden;
+    width: 100%; height: 8px;
+    background-color: rgba(255,255,255,0.1);
+    border-radius: 4px; overflow: hidden;
 }
-
 #timer-progress {
-    width: 100%;
-    height: 100%;
-    background-color: #4caf50;
-    transition: width 1s linear, background-color 0.5s ease;
+    width: 100%; height: 100%;
+    background-color: #a6e3a1;
+    transition: width 1s linear;
 }
 
-/* --- PANEL SKOR & TOMBOL LEAVE --- */
+/* --- PANEL SKOR & TOMBOL KELUAR --- */
 #ui-panel {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
-    background-color: #111827;
+    padding: 12px 25px;
+    background: rgba(15, 23, 42, 0.4);
 }
 
 #btn-back {
-    padding: 8px 16px;
-    background: #ef4444;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
+    padding: 10px 20px;
+    background: rgba(243, 139, 168, 0.15);
+    color: #f38ba8;
+    border: 1px solid rgba(243, 139, 168, 0.3);
+    border-radius: 12px;
+    font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 4px 0 #991b1b;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
 }
-#btn-back:active {
-    transform: translateY(3px);
-    box-shadow: none;
+#btn-back:hover {
+    background: #f38ba8; color: #11111b;
+    box-shadow: 0 0 15px rgba(243, 139, 168, 0.4);
 }
 
 #score-box {
-    color: #ffdd1a;
-    font-weight: bold;
-    font-size: 1.2rem;
-    background: #1f2937;
-    padding: 6px 15px;
-    border-radius: 8px;
-    border: 2px solid #374151;
+    display: flex; flex-direction: column; align-items: flex-end;
+}
+#score-box .label {
+    font-family: 'Orbitron', sans-serif; font-size: 0.75rem; color: #a6adc8;
+}
+#current-score {
+    font-family: 'Orbitron', sans-serif; font-size: 1.8rem; font-weight: 900; color: #ffdd1a;
+    text-shadow: 0 0 10px rgba(255, 221, 26, 0.4);
 }
 
-/* --- GAME SCREEN CANVAS --- */
+/* --- CANVAS & WRAPPER MANAGEMENT --- */
+#canvas-wrapper {
+    position: relative;
+    width: 800px; height: 500px;
+    margin: 0 auto;
+    border-radius: 0 0 20px 20px;
+    overflow: hidden;
+}
 canvas {
-    background-color: #579e23;
     display: block;
-    cursor: crosshair;
 }
 
-#controls-notice {
-    text-align: center;
-    color: #94a3b8;
-    font-size: 0.85rem;
-    padding: 8px 0;
-    background: #0f172a;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-}
-
-/* --- MODAL BOX POPUP (LEADERBOARD / ENTER NAME) --- */
-.modal {
+/* ==========================================================================
+   SISTEM JOYSTICK LAYER OVERLAY (MOBILE FRIENDLY)
+   ========================================================================== */
+#joystick-zone {
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(15, 23, 42, 0.85);
-    backdrop-filter: blur(4px);
-    z-index: 100;
+    bottom: 30px;
+    left: 30px;
+    width: 110px;
+    height: 110px;
+    z-index: 50;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: opacity 0.3s ease;
+}
+
+#joystick-base {
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    border: 3px solid rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    touch-action: none;
+    cursor: grab;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+#joystick-base:active { cursor: grabbing; }
+
+#joystick-knob {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5), 0 0 10px rgba(255,255,255,0.4);
+    transition: transform 0.05s ease;
+    pointer-events: none; /* Klik tembus ke base */
+}
+
+/* ==========================================================================
+   MODAL WINDOW PREMIUM STYLE
+   ========================================================================== */
+.modal {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(5, 7, 12, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    display: flex; justify-content: center; align-items: center;
 }
 
 .modal-content {
-    background: #1e293b;
-    border: 4px solid #ffdd1a;
-    border-radius: 20px;
-    padding: 35px;
-    width: 85%;
-    max-width: 450px;
-    text-color: #fff;
-    color: white;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    background: rgba(24, 24, 37, 0.9);
+    border: 2px solid #ffdd1a;
+    border-radius: 24px;
+    padding: 40px;
+    width: 90%; max-width: 460px;
+    color: white; text-align: center;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.7), 0 0 30px rgba(255, 221, 26, 0.2);
 }
 
-.modal-content h2, .modal-content h3 {
-    margin-bottom: 15px;
-    color: #ffdd1a;
+.event-tag {
+    font-family: 'Orbitron', sans-serif; background: rgba(255, 221, 26, 0.15);
+    color: #ffdd1a; padding: 6px 16px; border-radius: 30px; font-size: 0.75rem;
+    font-weight: bold; display: inline-block; margin-bottom: 15px; border: 1px solid #ffdd1a;
 }
 
-.modal-content p {
-    color: #cbd5e1;
-    margin-bottom: 20px;
+.eliminated-tag {
+    font-family: 'Orbitron', sans-serif; background: rgba(243, 139, 168, 0.15);
+    color: #f38ba8; padding: 6px 16px; border-radius: 30px; font-size: 0.75rem;
+    font-weight: bold; display: inline-block; margin-bottom: 15px; border: 1px solid #f38ba8;
 }
 
-.text-danger {
-    color: #f87171;
-    font-size: 2.2rem;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px #000;
+.modal-content h2 {
+    font-family: 'Cinzel', serif; font-size: 2.5rem; color: #fff; margin-bottom: 5px; letter-spacing: 2px;
 }
+.subtext { color: #a6adc8; font-size: 0.9rem; margin-bottom: 30px; }
 
-/* Form Input */
+.input-group {
+    text-align: left; margin-bottom: 25px;
+}
+.input-group label {
+    font-family: 'Orbitron', sans-serif; font-size: 0.75rem; color: #ff9f1c; font-weight: bold; display: block; margin-bottom: 8px;
+}
 #player-name-input {
-    width: 100%;
-    padding: 12px;
-    font-size: 1.1rem;
-    border: 2px solid #475569;
-    border-radius: 10px;
-    background: #0f172a;
-    color: white;
-    text-align: center;
-    margin-bottom: 20px;
+    width: 100%; padding: 14px 20px; font-size: 1.1rem; border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 14px; background: #11111b; color: white; transition: all 0.2s; text-align: center;
 }
 #player-name-input:focus {
-    outline: none;
-    border-color: #ffdd1a;
+    outline: none; border-color: #ffdd1a; box-shadow: 0 0 15px rgba(255,221,26,0.2);
 }
 
-/* Tombol Menu Button */
+/* --- TOMBOL-TOMBOL MENU UTAMA --- */
 .menu-btn {
-    width: 100%;
-    padding: 14px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #000;
-    background: #ffdd1a;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 4px 0 #b39700;
-    margin-top: 10px;
+    width: 100%; padding: 15px; font-size: 1.1rem; font-weight: 800; color: #11111b;
+    background: linear-gradient(to bottom, #ffdd1a, #ff9f1c); border: none; border-radius: 14px;
+    cursor: pointer; transition: all 0.2s ease; font-family: 'Poppins', sans-serif;
 }
 .menu-btn:hover {
-    background: #ffe547;
+    transform: translateY(-2px); filter: brightness(1.1);
 }
-.menu-btn:active {
-    transform: translateY(3px);
-    box-shadow: none;
+.gold-glow {
+    box-shadow: 0 8px 20px rgba(255, 159, 28, 0.4);
 }
 .btn-secondary {
-    background: #475569;
-    color: white;
-    box-shadow: 0 4px 0 #1e293b;
+    background: rgba(255,255,255,0.08); color: #cdd6f4; border: 1px solid rgba(255,255,255,0.1); margin-top: 12px;
 }
-.btn-secondary:hover { background: #64748b; }
+.btn-secondary:hover { background: rgba(255,255,255,0.15); color: #fff; }
 
-/* --- STRUKTUR LIST LEADERBOARD --- */
-#leaderboard-list {
-    margin: 15px 0;
-    max-height: 180px;
-    overflow-y: auto;
+/* --- TAMPILAN LEADERBOARD KELAS ATAS --- */
+.text-danger {
+    font-size: 2.4rem; font-weight: 900; color: #f38ba8; margin-bottom: 5px;
 }
+.score-summary { color: #cdd6f4; font-size: 1.1rem; margin-bottom: 25px; }
+.score-summary span { color: #ffdd1a; font-weight: bold; font-size: 1.4rem; }
+
+.leaderboard-box {
+    background: #11111b; border-radius: 16px; padding: 18px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05);
+}
+.leaderboard-box h3 { font-size: 0.9rem; color: #ff9f1c; margin-bottom: 12px; letter-spacing: 1px; }
 
 .leaderboard-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 15px;
-    background: #0f172a;
-    margin-bottom: 8px;
-    border-radius: 8px;
-    font-size: 1rem;
-    border-left: 4px solid #38bdf8;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 15px; background: rgba(255,255,255,0.03); margin-bottom: 8px;
+    border-radius: 10px; font-size: 0.95rem; border-left: 4px solid #ff9f1c; color: #cdd6f4;
 }
 
-hr {
-    border: 0;
-    height: 1px;
-    background: #334155;
-    margin: 15px 0;
+/* --- ANIMATIONS ENGINE --- */
+.animate-pop {
+    animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes popIn {
+    0% { transform: scale(0.85); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
 }
 
-.modal-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.hidden {
-    display: none !important;
-}
+.hidden { display: none !important; }
+    
