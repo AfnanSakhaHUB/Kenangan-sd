@@ -215,6 +215,12 @@
         setupMobileButton('pad-right', 'ArrowRight');
 
         btnStart.addEventListener('click', () => {
+            if(nameInput.value.trim().toUpperCase() === "RESETSCOREALL") {
+        localStorage.removeItem('izur_leaderboard');
+        alert("Leaderboard berhasil di-reset! Halaman akan dimuat ulang.");
+        location.reload(); // Refresh otomatis
+        return; // Berhenti di sini, jangan lanjut ke game
+            }
             if(nameInput.value.trim() !== "") playerName = nameInput.value.trim();
             overlayModal.classList.add('hidden');
             initGame();
