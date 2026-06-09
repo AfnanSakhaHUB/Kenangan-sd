@@ -1,0 +1,173 @@
+/* RESET DASAR agar tampilan rapi di semua browser */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 1. KONTEN LANGIT & AWAN BERGERAK */
+.sky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #3a7bd5, #3a6073); /* Gradasi langit biru */
+    z-index: -1;
+    overflow: hidden;
+    transition: background 1s ease;
+}
+
+/* Bentuk dasar awan menggunakan CSS */
+.cloud {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 100px;
+}
+.cloud::before, .cloud::after {
+    content: '';
+    position: absolute;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 50%;
+}
+
+/* Pengaturan ukuran posisi awal awan dan kecepatan normal */
+.cloud1 { width: 180px; height: 60px; top: 15%; left: -200px; animation: moveClouds 25s linear infinite; }
+.cloud1::before { width: 80px; height: 80px; top: -40px; left: 20px; }
+.cloud1::after { width: 60px; height: 60px; top: -25px; right: 20px; }
+
+.cloud2 { width: 240px; height: 80px; top: 40%; left: -250px; animation: moveClouds 35s linear infinite; animation-delay: 5s; }
+.cloud2::before { width: 100px; height: 100px; top: -50px; left: 30px; }
+.cloud2::after { width: 80px; height: 80px; top: -30px; right: 30px; }
+
+.cloud3 { width: 140px; height: 50px; top: 25%; left: -150px; animation: moveClouds 18s linear infinite; animation-delay: 10s; }
+.cloud3::before { width: 60px; height: 60px; top: -30px; left: 15px; }
+.cloud3::after { width: 50px; height: 50px; top: -20px; right: 15px; }
+
+/* Animasi Awan Berjalan dari Kiri ke Kanan */
+@keyframes moveClouds {
+    0% { left: -300px; }
+    100% { left: 100%; }
+}
+
+/* EFEK TRANSISI: Ketika kelas ini aktif, awan bergerak super cepat */
+.sky.fast-clouds .cloud {
+    animation-duration: 0.8s !important;
+}
+
+/* 2. LAYOUT UTAMA */
+.container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* 3. GAYA MODEL BALON (UMUM) */
+.balloon {
+    width: 140px;
+    height: 170px;
+    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; /* Membuat bentuk balon oval bawah agak lancip */
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 15px;
+    box-shadow: inset -10px -10px 20px rgba(0,0,0,0.3), 0 10px 20px rgba(0,0,0,0.2);
+    animation: floatBalloon 3s ease-in-out infinite alternate; /* Efek melayang halus */
+}
+
+/* Tali/Simpul di bawah balon */
+.balloon::after {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+}
+
+/* Efek balon melayang naik turun */
+@keyframes floatBalloon {
+    0% { transform: translateY(0px) rotate(-1deg); }
+    100% { transform: translateY(-15px) rotate(1deg); }
+}
+
+/* BALON MERAH (MULAI) */
+.red-balloon {
+    background-color: #ff3838;
+}
+.red-balloon::after {
+    border-bottom: 12px solid #ff3838;
+}
+.red-balloon:hover {
+    transform: scale(1.05);
+}
+
+/* ANIMASI BALON MELEDAK */
+.balloon.exploded {
+    animation: explodeEffect 0.25s forwards ease-out;
+    pointer-events: none; /* Supaya tidak bisa diklik dua kali */
+}
+
+@keyframes explodeEffect {
+    0% { transform: scale(1); opacity: 1; }
+    40% { transform: scale(1.5); background-color: #ff6b81; opacity: 0.9; }
+    100% { transform: scale(0); opacity: 0; }
+}
+
+/* 4. TAMPILAN 3 BALON BARU */
+.choices-container {
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* Warna masing-masing balon pilihan */
+.choice-balloon.blue { background-color: #00a8ff; }
+.choice-balloon.blue::after { border-bottom: 12px solid #00a8ff; }
+
+.choice-balloon.green { background-color: #4cd137; }
+.choice-balloon.green::after { border-bottom: 12px solid #4cd137; }
+
+.choice-balloon.yellow { background-color: #fbc531; color: #2f3640; }
+.choice-balloon.yellow::after { border-bottom: 12px solid #fbc531; }
+
+/* Animasi Terbang Datang untuk 3 Balon */
+.fade-in-balloons .balloon-wrapper {
+    animation: dynamicEntrance 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+/* Efek jeda muncul agar balon bergantian datangnya */
+.fade-in-balloons .wrapper1 { animation-delay: 0s; }
+.fade-in-balloons .wrapper2 { animation-delay: 0.2s; }
+.fade-in-balloons .wrapper3 { animation-delay: 0.4s; }
+
+@keyframes dynamicEntrance {
+    0% { transform: translateY(600px) scale(0); opacity: 0; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* Efek Hover untuk Balon Pilihan */
+.choice-balloon:hover {
+    transform: translateY(-20px) scale(1.08);
+    box-shadow: inset -10px -10px 20px rgba(0,0,0,0.3), 0 20px 30px rgba(0,0,0,0.3);
+}
+
+/* FUNGSI UTILITAS (Menyembunyikan Elemen) */
+.hidden {
+    display: none !important;
+}
