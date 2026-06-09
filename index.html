@@ -3,69 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Kelulusan Interaktif</title>
+    <title>Kelulusan Epik 2026</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- BACKGROUND: Langit dengan Efek Gradasi Mewah -->
     <div class="sky" id="skyBg">
+        <div class="sun-glow"></div>
         <div class="cloud cloud1"></div>
         <div class="cloud cloud2"></div>
         <div class="cloud cloud3"></div>
     </div>
 
+    <!-- WADAH UTAMA -->
     <div class="container">
         
-        <div id="balloon-start" class="balloon red-balloon">
-            <span>Mulai?</span>
+        <!-- TAHAP 1: Balon Merah "Mulai?" dengan Tali -->
+        <div id="balloon-start" class="balloon-wrapper" style="--delay: 0s;">
+            <div class="balloon red-balloon">
+                <div class="gloss"></div>
+                <span>Mulai? 🎓</span>
+            </div>
+            <div class="string"></div>
         </div>
 
+        <!-- TAHAP 2: 3 Balon Menu Utama (Awalnya Tersembunyi) -->
         <div id="balloon-choices" class="choices-container hidden">
             
-            <div class="balloon-wrapper wrapper1">
-                <div class="balloon choice-balloon blue">
-                    <span>Foto Kenangan</span>
+            <div class="balloon-wrapper float-1">
+                <div class="balloon blue-balloon">
+                    <div class="gloss"></div>
+                    <span>📸<br>Foto<br>Kenangan</span>
                 </div>
+                <div class="string"></div>
             </div>
 
-            <div class="balloon-wrapper wrapper2">
-                <div class="balloon choice-balloon green">
-                    <span>Catatan Ranking</span>
+            <div class="balloon-wrapper float-2">
+                <div class="balloon green-balloon">
+                    <div class="gloss"></div>
+                    <span>🏆<br>Catatan<br>Ranking</span>
                 </div>
+                <div class="string"></div>
             </div>
 
-            <div class="balloon-wrapper wrapper3">
-                <div class="balloon choice-balloon yellow">
-                    <span>Catatan Prestasi</span>
+            <div class="balloon-wrapper float-3">
+                <div class="balloon gold-balloon">
+                    <div class="gloss"></div>
+                    <span>📜<br>Catatan<br>Prestasi</span>
                 </div>
+                <div class="string"></div>
             </div>
 
         </div>
 
     </div>
 
+    <!-- SCRIPT LOGIKA & EFEK CONFETTI -->
     <script>
         const startBalloon = document.getElementById('balloon-start');
         const skyBg = document.getElementById('skyBg');
         const choicesContainer = document.getElementById('balloon-choices');
 
-        startBalloon.addEventListener('click', () => {
-            // 1. Jalankan animasi meledak pada balon merah
-            startBalloon.classList.add('exploded');
-            
-            // 2. Ubah gerakan awan menjadi sangat cepat (efek transisi)
-            skyBg.classList.add('fast-clouds');
+        startBalloon.addEventListener('click', (e) => {
+            // Ambil posisi klik balon untuk pusat ledakan confetti
+            const rect = startBalloon.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
 
-            // 3. Tunggu selama 1.5 detik (1500 milidetik) saat transisi berlangsung
+            // 1. Jalankan animasi meledak & buat confetti
+            startBalloon.classList.add('exploded');
+            createConfetti(x, y);
+            
+            // 2. Efek transisi awan melesat cepat
+            skyBg.classList.add('warp-speed');
+
+            // 3. Waktu transisi sinematik
             setTimeout(() => {
-                startBalloon.classList.add('hidden'); // Sembunyikan balon merah total
-                skyBg.classList.remove('fast-clouds'); // Kembalikan kecepatan awan ke normal
+                startBalloon.classList.add('hidden');
+                skyBg.classList.remove('warp-speed');
                 
-                // 4. Munculkan 3 balon baru dari bawah
+                // 4. Memunculkan 3 balon menu dengan efek membal (bounce)
                 choicesContainer.classList.remove('hidden');
-                choicesContainer.classList.add('fade-in-balloons');
-            }, 1500);
+                choicesContainer.classList.add('fade-in-menu');
+            }, 1400);
         });
+
+        // FUNGSI MEMBUAT SERPIHAN PESTA (CONFETTI)
+        function createConfetti(startX, startY) {
+            const colors = ['#ffd700', '#ff3333', '#33dbff', '#33ff57', '#ff33f3', '#ffffff'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = startX + 'px';
+                confetti.style.top = startY + 'px';
+                
+                // Arah ledakan acak
+                const velocityX = (Math.random() - 0.5) * 300;
+                const velocityY = (Math.random() - 0.6) * 300;
+                
+                confetti.style.setProperty('--vx', `${velocityX}px`);
+                confetti.style.setProperty('--vy', `${velocityY}px`);
+                
+                document.body.appendChild(confetti);
+                
+                // Hapus elemen setelah animasi selesai agar web tidak lemot
+                setTimeout(() => confetti.remove(), 2000);
+            }
+        }
     </script>
 </body>
 </html>
