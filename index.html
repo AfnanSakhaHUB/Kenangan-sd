@@ -20,7 +20,7 @@
             background-color: #3a8ffd;
         }
 
-        /* --- BACKGROUND LANGIT BIRU INDAH --- */
+        /* --- BACKGROUND LANGIT BIRU (AWAN NORMAL) --- */
         .sky {
             position: fixed;
             top: 0;
@@ -30,10 +30,8 @@
             background: linear-gradient(to bottom, #3a8ffd 0%, #6cb2ff 60%, #b4ecff 100%);
             z-index: 1;
             overflow: hidden;
-            transition: all 0.8s ease;
         }
 
-        /* Awan Bergerak */
         .cloud {
             position: absolute;
             background: rgba(255, 255, 255, 0.95);
@@ -60,13 +58,6 @@
             100% { left: 110%; }
         }
 
-        .sky.cepat .cloud {
-            animation-duration: 0.5s !important;
-            transform: scaleX(4) skewX(-10deg);
-            opacity: 0.7;
-            filter: blur(2px);
-        }
-
         /* --- KONTEN UTAMA --- */
         .container {
             position: relative;
@@ -79,7 +70,7 @@
             padding: 20px;
         }
 
-        /* --- BALON 3D GLOSSY NYATA --- */
+        /* --- BALON 3D GLOSSY --- */
         .balloon-group {
             display: flex;
             flex-direction: column;
@@ -108,7 +99,7 @@
             user-select: none;
         }
 
-        /* Pantulan Cahaya Utama (Glossy) */
+        /* Pantulan Cahaya Glossy */
         .balloon::before {
             content: '';
             position: absolute;
@@ -119,23 +110,18 @@
             transform: rotate(-25deg);
         }
 
-        /* Pantulan Cahaya Sekunder */
         .balloon::after {
             content: "";
             position: absolute;
-            bottom: 12px;
-            right: 15%;
-            width: 20px;
-            height: 20px;
+            bottom: 12px; right: 15%;
+            width: 20px; height: 20px;
             background: rgba(255, 255, 255, 0.15);
             border-radius: 50%;
             filter: blur(1px);
         }
 
-        /* Simpul Tali Balon */
         .knot {
-            width: 0;
-            height: 0;
+            width: 0; height: 0;
             border-left: 8px solid transparent;
             border-right: 8px solid transparent;
             position: relative;
@@ -143,14 +129,13 @@
             margin-top: -1px;
         }
 
-        /* Tali Balon */
         .string {
             width: 2px;
             height: 80px;
             background: rgba(0, 0, 0, 0.15);
         }
 
-        /* KATEGORI WARNA GRADASI BALON */
+        /* WARNA BALON */
         .red { background: radial-gradient(circle at 35% 35%, #ff5252 0%, #cc0000 80%); }
         .red + .knot { border-bottom: 12px solid #cc0000; }
 
@@ -163,7 +148,7 @@
         .yellow { background: radial-gradient(circle at 35% 35%, #ffca28 0%, #f57f17 80%); }
         .yellow + .knot { border-bottom: 12px solid #f57f17; }
 
-        /* ANIMASI MELAYANG */
+        /* ANIMASI AYUNAN */
         @keyframes ayunBalon {
             0% { transform: translateY(0px) rotate(-1.5deg); }
             100% { transform: translateY(-15px) rotate(1.5deg); }
@@ -173,18 +158,18 @@
             transform: scale(1.06);
         }
 
-        /* ANIMASI MELEDAK */
+        /* EFEK LETUSAN POP REALISTIS */
         .balloon-group.meledak {
-            animation: pop 0.2s forwards ease-out;
+            animation: pop 0.3s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
             pointer-events: none;
         }
         @keyframes pop {
             0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.4); filter: brightness(1.4); }
+            40% { transform: scale(1.3); filter: brightness(1.4); }
             100% { transform: scale(0); opacity: 0; }
         }
 
-        /* --- LAYOUT 3 BALON MENU --- */
+        /* --- LAYOUT MENU --- */
         .menu-balloons {
             display: flex;
             gap: 30px;
@@ -193,11 +178,7 @@
             width: 100%;
         }
 
-        .menu-balloons .b-1 { animation-delay: 0s; }
-        .menu-balloons .b-2 { animation-delay: -1s; }
-        .menu-balloons .b-3 { animation-delay: -2s; }
-
-        /* Responsif HP */
+        /* RESPONSIVENESS HP */
         @media (max-width: 600px) {
             .menu-balloons {
                 flex-direction: row;
@@ -214,16 +195,16 @@
             }
         }
 
-        /* Animasi Balon Terbang Masuk */
+        /* ANIMASI TERBANG MASUK DARI BAWAH KE ATAS */
         .reveal .balloon-group {
-            animation: terbangMasuk 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+            animation: terbangMasuk 1.2s cubic-bezier(0.075, 0.82, 0.165, 1) both;
         }
         .reveal .b-1 { animation-delay: 0s; }
-        .reveal .b-2 { animation-delay: 0.2s; }
-        .reveal .b-3 { animation-delay: 0.4s; }
+        .reveal .b-2 { animation-delay: 0.15s; }
+        .reveal .b-3 { animation-delay: 0.3s; }
 
         @keyframes terbangMasuk {
-            0% { transform: translateY(700px) scale(0.5); opacity: 0; }
+            0% { transform: translateY(800px) scale(0.6); opacity: 0; }
             100% { transform: translateY(0) scale(1); opacity: 1; }
         }
 
@@ -238,7 +219,7 @@
         <source src="dragon-studio-wind-blowing-sfx-01-423673.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="sky" id="skyBg">
+    <div class="sky">
         <div class="cloud cloud1"></div>
         <div class="cloud cloud2"></div>
     </div>
@@ -278,42 +259,38 @@
     <script>
         const startNode = document.getElementById('start-node');
         const menuNode = document.getElementById('menu-node');
-        const skyBg = document.getElementById('skyBg');
         const windSfx = document.getElementById('windSfx');
         
-        let audioTracker; // Variabel pemantau waktu internet
+        let audioTracker;
 
         startNode.addEventListener('click', () => {
-            // Skenario reset total audio sebelum mulai
+            // Amankan sistem audio & batasi maksimal 3 detik
             windSfx.pause();
             windSfx.currentTime = 0;
 
-            // Putar audio
             windSfx.play().then(() => {
-                // METODE INDEPENDEN: Cek waktu manual tiap 100ms (Anti-Throttling HP)
                 clearInterval(audioTracker);
                 audioTracker = setInterval(() => {
                     if (windSfx.currentTime >= 3.0) {
                         windSfx.pause();
                         windSfx.currentTime = 0;
-                        clearInterval(audioTracker); // Matikan pelacak jika sudah sukses dipotong
+                        clearInterval(audioTracker);
                     }
                 }, 100);
-            }).catch(error => {
-                console.log("Audio sempat tertahan sistem proteksi browser:", error);
-            });
+            }).catch(error => console.log("Audio play diblokir browser:", error));
 
-            // Jalankan animasi visual
+            // 1. Memicu letusan pop di tempat
             startNode.classList.add('meledak');
-            skyBg.classList.add('cepat');
 
+            // 2. Tepat setelah efek letusan meledak selesai (0.3 detik), ganti konten
             setTimeout(() => {
                 startNode.classList.add('hidden');
-                skyBg.classList.remove('cepat');
                 
+                // 3. Memunculkan menu baru meluncur terbang dari bawah ke atas
                 menuNode.classList.remove('hidden');
                 menuNode.classList.add('reveal');
                 
+                // 4. Setelah selesai terbang masuk (1.2 detik), kembalikan ke animasi melayang santai
                 setTimeout(() => {
                     const allBalloons = menuNode.querySelectorAll('.balloon-group');
                     allBalloons.forEach((b, idx) => {
@@ -322,7 +299,7 @@
                     });
                 }, 1200);
 
-            }, 1200);
+            }, 300); 
         });
     </script>
 </body>
