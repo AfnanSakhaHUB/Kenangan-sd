@@ -101,7 +101,6 @@
             font-size: 1.1rem;
             text-align: center;
             padding: 10px;
-            /* Efek Bayangan Kedalaman (3D Sphere) */
             box-shadow: inset -12px -20px 30px rgba(0,0,0,0.4), 
                         inset 10px 10px 20px rgba(255,255,255,0.2),
                         0 12px 24px rgba(0,0,0,0.15);
@@ -109,7 +108,7 @@
             user-select: none;
         }
 
-        /* PANTULAN CAHAYA UTAMA (Glossy Highlight Atas) */
+        /* Pantulan Cahaya Utama (Glossy) */
         .balloon::before {
             content: '';
             position: absolute;
@@ -120,7 +119,7 @@
             transform: rotate(-25deg);
         }
 
-        /* PANTULAN CAHAYA SEKUNDER (Pantulan Lembut Bawah/Samping) */
+        /* Pantulan Cahaya Sekunder */
         .balloon::after {
             content: "";
             position: absolute;
@@ -283,11 +282,17 @@
         const windSfx = document.getElementById('windSfx');
 
         startNode.addEventListener('click', () => {
-            // Memaksa audio diputar ulang dari detik ke-0 (mengatasi bug delay mobile browser)
+            // 1. Putar musik dari detik ke-0
             windSfx.currentTime = 0;
             windSfx.play().catch(error => {
                 console.log("Audio diblokir browser, butuh interaksi fisik:", error);
             });
+
+            // 2. TIMEOUT UNTUK MEMOTONG AUDIO TEPAT DI DETIK KE-3 (3000 ms)
+            setTimeout(() => {
+                windSfx.pause();
+                windSfx.currentTime = 0; 
+            }, 3000);
 
             startNode.classList.add('meledak');
             skyBg.classList.add('cepat');
