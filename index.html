@@ -70,7 +70,7 @@
             padding: 20px;
         }
 
-        /* --- SCRIPT CSS BALON BARU (MURNI GAMBAR PNG KAMU) --- */
+        /* --- STYLE BALON FIX PAKAI FILE PNG LU --- */
         .balloon-group {
             display: flex;
             flex-direction: column;
@@ -81,9 +81,9 @@
 
         .balloon {
             position: relative;
-            width: 160px; /* Ukuran disesuaikan agar gambar proporsional */
+            width: 160px; 
             height: 210px;
-            /* Memanggil gambar langsung di CSS & memastikan ukuran pas (contain) */
+            /* SEKARANG SUDAH FIX PAKAI FILE PNG LU */
             background: url('1000017857-removebg-preview.png') no-repeat center center;
             background-size: contain;
             display: flex;
@@ -92,10 +92,10 @@
             user-select: none;
         }
 
-        /* Teks melayang pas di tengah gambar balon */
+        /* Teks melayang pas di tengah perut balon */
         .balloon-text {
             position: absolute;
-            top: 40%; /* Menyesuaikan rata-rata tengah perut balon */
+            top: 40%; 
             left: 50%;
             transform: translate(-50%, -50%);
             color: white;
@@ -103,7 +103,7 @@
             font-size: 1.1rem;
             text-align: center;
             width: 80%;
-            /* Bayangan teks hitam tebal agar tulisan putih selalu kontras & terbaca */
+            /* Bayangan hitam biar tulisan putih kebaca jelas */
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), -2px -2px 4px rgba(0, 0, 0, 0.8);
             z-index: 5;
             pointer-events: none;
@@ -127,7 +127,7 @@
         }
         @keyframes pop {
             0% { transform: scale(1); opacity: 1; }
-            40% { transform: scale(1.2) filter: brightness(1.2); }
+            40% { transform: scale(1.2); filter: brightness(1.2); }
             100% { transform: scale(0); opacity: 0; }
         }
 
@@ -225,7 +225,6 @@
         let audioTracker;
 
         startNode.addEventListener('click', () => {
-            // Pengaturan audio
             windSfx.pause();
             windSfx.currentTime = 0;
 
@@ -240,18 +239,13 @@
                 }, 100);
             }).catch(error => console.log("Audio terblokir:", error));
 
-            // 1. Efek letusan pop di tempat
             startNode.classList.add('meledak');
 
-            // 2. Transisi langsung berjalan setelah letusan selesai (0.3 detik)
             setTimeout(() => {
                 startNode.classList.add('hidden');
-                
-                // 3. Menampilkan menu baru yang langsung meluncur terbang dari bawah ke atas
                 menuNode.classList.remove('hidden');
                 menuNode.classList.add('reveal');
                 
-                // 4. Setelah selesai meluncur naik, kembalikan goyangan lembutnya
                 setTimeout(() => {
                     const allBalloons = menuNode.querySelectorAll('.balloon-group');
                     allBalloons.forEach((b, idx) => {
