@@ -13,6 +13,7 @@
 
     <div id="game-container">
         
+        <!-- HEADER DIALOG IZUR -->
         <div id="izur-header">
             <div id="izur-avatar-container">
                 <div id="izur-avatar">😎</div>
@@ -25,6 +26,7 @@
             </div>
         </div>
 
+        <!-- PANEL SKOR -->
         <div id="ui-panel">
             <button id="btn-back" onclick="window.location.href='index.html'">⬅ KELUAR</button>
             <div id="score-box">
@@ -33,10 +35,12 @@
             </div>
         </div>
 
+        <!-- AREA CANVAS GAME -->
         <div id="canvas-wrapper">
             <canvas id="gameCanvas" width="800" height="500"></canvas>
         </div>
 
+        <!-- VIRTUAL CONTROLLER FOR MOBILE (Hanya muncul di HP) -->
         <div id="mobile-controller">
             <div class="dpad-row">
                 <button class="dpad-btn btn-up" id="pad-up">▲</button>
@@ -51,6 +55,7 @@
             </div>
         </div>
 
+        <!-- MODAL: INPUT NAMA AWAL -->
         <div id="overlay-modal" class="modal">
             <div class="modal-content animate-pop">
                 <div class="event-tag">MEMORIES OF 2026</div>
@@ -66,6 +71,7 @@
             </div>
         </div>
 
+        <!-- MODAL: GAME OVER & LEADERBOARD -->
         <div id="gameover-modal" class="modal hidden">
             <div class="modal-content animate-pop">
                 <div class="eliminated-tag">ELIMINASI</div>
@@ -113,9 +119,47 @@
         let gamePhase = "idle"; 
         let phaseTimeLeft = 0;
         let maxPhaseTime = 5;
-
         let particles = [];
+
+        // ==========================================
+        // CONFIG & PRELOAD SPRITE ANIMATION CHARACTER
+        // ==========================================
+        const spriteIdle = new Image();
+        spriteIdle.src = '1000018020.png'; // Sprite Diam tunggal
+
+        const spriteRun = new Image();
+        spriteRun.src = '1000018019.png';  // Spritesheet Lari (4 Kolom x 2 Baris)
+
+        const spriteConfig = {
+            cols: 4,
+            rows: 2,
+            totalFrames: 8,
+            getFrameWidth: function() { return spriteRun.width / this.cols; },
+            getFrameHeight: function() { return spriteRun.height / this.rows; },
+            animSpeed: 0.15, 
+            currentFrame: 0
+        };
+
+        const player = {
+            x: 400, 
+            y: 250,
+            radius: 14, 
+            speed: 5,
+            keys: {},
+            isMoving: false,
+            facingLeft: false
+        };
+
+        const zones = {
+            danau: { x: 460, y: 50, w: 290, h: 190 },
+            kapal: { x: 560, y: 120, w: 85, h: 45 },
+            pasir: { x: 50, y: 310, w: 240, h: 150 },
+            perosotan: { x: 360, y: 340, w: 110, h: 130 },
+            rumah: { x: 70, y: 50, w: 200, h: 150 }
+        };
+
         function createParticles() {
+            particles = [];
             for(let i=0; i<30; i++) {
                 particles.push({
                     x: Math.random() * canvas.width,
@@ -139,29 +183,14 @@
         ];
         let activeCommand = null;
 
-        const player = {
-            x: 400, y: 250,
-            radius: 14, speed: 5,
-            keys: {}
-        };
-
-        const zones = {
-            danau: { x: 460, y: 50, w: 290, h: 190 },
-            kapal: { x: 560, y: 120, w: 85, h: 45 },
-            pasir: { x: 50, y: 310, w: 240, h: 150 },
-            perosotan: { x: 360, y: 340, w: 110, h: 130 },
-            rumah: { x: 70, y: 50, w: 200, h: 150 }
-        };
-
         // Keyboard Handlers
         window.addEventListener('keydown', (e) => { if(gameActive) player.keys[e.key] = true; });
         window.addEventListener('keyup', (e) => { if(gameActive) player.keys[e.key] = false; });
 
-        // ================= DETEKSI TOMBOL SCREENTOUCH HP (D-PAD) =================
+        // D-PAD Touch Handlers
         function setupMobileButton(elementId, keyName) {
             const btn = document.getElementById(elementId);
             
-            // Saat Ditekan
             btn.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 if(gameActive) player.keys[keyName] = true;
@@ -171,26 +200,19 @@
                 if(gameActive) player.keys[keyName] = true;
             });
 
-            // Saat Dilepas
             btn.addEventListener('touchend', (e) => {
                 e.preventDefault();
                 player.keys[keyName] = false;
             }, { passive: false });
             
-            btn.addEventListener('mouseup', () => {
-                player.keys[keyName] = false;
-            });
-            
-            btn.addEventListener('mouseleave', () => {
-                player.keys[keyName] = false;
-            });
+            btn.addEventListener('mouseup', () => { player.keys[keyName] = false; });
+            btn.addEventListener('mouseleave', () => { player.keys[keyName] = false; });
         }
 
         setupMobileButton('pad-up', 'ArrowUp');
         setupMobileButton('pad-down', 'ArrowDown');
         setupMobileButton('pad-left', 'ArrowLeft');
         setupMobileButton('pad-right', 'ArrowRight');
-
 
         btnStart.addEventListener('click', () => {
             if(nameInput.value.trim() !== "") playerName = nameInput.value.trim();
@@ -209,9 +231,10 @@
             player.x = 380;
             player.y = 260;
             player.keys = {};
+            player.isMoving = false;
+            player.facingLeft = false;
             gameActive = true;
             didMoveThisRound = false;
-            particles = [];
             createParticles();
             
             triggerIdlePhase();
@@ -277,26 +300,25 @@
 
         function checkCurrentZone() {
             let px = player.x; let py = player.y;
-
             if (px >= zones.rumah.x && px <= zones.rumah.x + zones.rumah.w && py >= zones.rumah.y && py <= zones.rumah.y + zones.rumah.h) return "rumah";
             if (px >= zones.kapal.x && px <= zones.kapal.x + zones.kapal.w && py >= zones.kapal.y && py <= zones.kapal.y + zones.kapal.h) return "kapal";
             if (px >= zones.danau.x && px <= zones.danau.x + zones.danau.w && py >= zones.danau.y && py <= zones.danau.y + zones.danau.h) return "danau"; 
             if (px >= zones.pasir.x && px <= zones.pasir.x + zones.pasir.w && py >= zones.pasir.y && py <= zones.pasir.y + zones.pasir.h) return "pasir";
             if (px >= zones.perosotan.x && px <= zones.perosotan.x + zones.perosotan.w && py >= zones.perosotan.y && py <= zones.perosotan.y + zones.perosotan.h) return "perosotan";
-            
             return "tanah";
         }
 
         function updateGameEngine() {
             if(!gameActive) return;
 
-            let moved = false;
-            if (player.keys['ArrowUp'] || player.keys['w'] || player.keys['W']) { player.y -= player.speed; moved = true; }
-            if (player.keys['ArrowDown'] || player.keys['s'] || player.keys['S']) { player.y += player.speed; moved = true; }
-            if (player.keys['ArrowLeft'] || player.keys['a'] || player.keys['A']) { player.x -= player.speed; moved = true; }
-            if (player.keys['ArrowRight'] || player.keys['d'] || player.keys['D']) { player.x += player.speed; moved = true; }
+            player.isMoving = false;
 
-            if(moved && gamePhase === "command") {
+            if (player.keys['ArrowUp'] || player.keys['w'] || player.keys['W']) { player.y -= player.speed; player.isMoving = true; }
+            if (player.keys['ArrowDown'] || player.keys['s'] || player.keys['S']) { player.y += player.speed; player.isMoving = true; }
+            if (player.keys['ArrowLeft'] || player.keys['a'] || player.keys['A']) { player.x -= player.speed; player.isMoving = true; player.facingLeft = true; }
+            if (player.keys['ArrowRight'] || player.keys['d'] || player.keys['D']) { player.x += player.speed; player.isMoving = true; player.facingLeft = false; }
+
+            if(player.isMoving && gamePhase === "command") {
                 didMoveThisRound = true;
             }
 
@@ -326,99 +348,108 @@
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Rumput
+            // 1. Rumput
             ctx.fillStyle = '#457a22';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#4d852a';
-            for(let i=0; i<canvas.width; i+=40) {
-                for(let j=0; j<canvas.height; j+=40) {
-                    if((i+j)%3===0) ctx.fillRect(i, j, 4, 4);
-                }
-            }
 
-            // Pasir
+            // 2. Pasir
             let sandGrad = ctx.createLinearGradient(zones.pasir.x, zones.pasir.y, zones.pasir.x+zones.pasir.w, zones.pasir.y+zones.pasir.h);
             sandGrad.addColorStop(0, '#e9c46a'); sandGrad.addColorStop(1, '#dfb24c');
             ctx.fillStyle = sandGrad;
             ctx.fillRect(zones.pasir.x, zones.pasir.y, zones.pasir.w, zones.pasir.h);
-            ctx.fillStyle = 'rgba(0,0,0,0.2)';
+            ctx.fillStyle = 'rgba(0,0,0,0.15)';
             ctx.font = 'bold 11px Poppins';
-            ctx.fillText("⏳ AREA PASIR PANTAI", zones.pasir.x + 15, zones.pasir.y + 25);
+            ctx.fillText("⏳ AREA PASIR", zones.pasir.x + 15, zones.pasir.y + 25);
 
-            // Danau
+            // 3. Danau
             let lakeGrad = ctx.createLinearGradient(zones.danau.x, zones.danau.y, zones.danau.x+zones.danau.w, zones.danau.y+zones.danau.h);
             lakeGrad.addColorStop(0, '#0077b6'); lakeGrad.addColorStop(1, '#0096c7');
             ctx.fillStyle = lakeGrad;
             ctx.fillRect(zones.danau.x, zones.danau.y, zones.danau.w, zones.danau.h);
-            
-            ctx.strokeStyle = 'rgba(255,255,255,0.15)';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            for (let i = 0; i < zones.danau.w; i += 30) {
-                let waveY = zones.danau.y + 40 + Math.sin(waveOffset + i)*5;
-                ctx.lineTo(zones.danau.x + i, waveY);
-            }
-            ctx.stroke();
 
-            // Kapal
+            // 4. Kapal
             ctx.fillStyle = '#5c3d2e';
             ctx.fillRect(zones.kapal.x, zones.kapal.y, zones.kapal.w, zones.kapal.h);
-            ctx.fillStyle = '#f8f9fa';
-            ctx.beginPath();
-            ctx.moveTo(zones.kapal.x + 40, zones.kapal.y + 5);
-            ctx.lineTo(zones.kapal.x + 70, zones.kapal.y + 25);
-            ctx.lineTo(zones.kapal.x + 40, zones.kapal.y + 25);
-            ctx.fill();
             ctx.fillStyle = '#fff';
-            ctx.fillText("⛵ DECK KAPAL", zones.kapal.x + 10, zones.kapal.y + 40);
+            ctx.fillText("⛵ DECK KAPAL", zones.kapal.x + 5, zones.kapal.y + 25);
 
-            // Perosotan
+            // 5. Perosotan
             let slideGrad = ctx.createLinearGradient(zones.perosotan.x, zones.perosotan.y, zones.perosotan.x+zones.perosotan.w, zones.perosotan.y);
             slideGrad.addColorStop(0, '#f26419'); slideGrad.addColorStop(1, '#f6bd60');
             ctx.fillStyle = slideGrad;
             ctx.fillRect(zones.perosotan.x, zones.perosotan.y, zones.perosotan.w, zones.perosotan.h);
             ctx.fillStyle = '#fff';
-            ctx.fillText("🛝 PEROSOTAN EMAS", zones.perosotan.x + 5, zones.perosotan.y + 20);
+            ctx.fillText("🛝 PEROSOTAN", zones.perosotan.x + 10, zones.perosotan.y + 25);
 
-            // Dalam Rumah
+            // 6. Lantai Rumah
             ctx.fillStyle = '#e5e5e5';
             ctx.fillRect(zones.rumah.x, zones.rumah.y, zones.rumah.w, zones.rumah.h);
-            ctx.strokeStyle = '#2b2d42'; ctx.lineWidth = 6;
+            ctx.strokeStyle = '#2b2d42'; ctx.lineWidth = 4;
             ctx.strokeRect(zones.rumah.x, zones.rumah.y, zones.rumah.w, zones.rumah.h);
 
-            // Bayangan
-            ctx.fillStyle = 'rgba(0,0,0,0.25)';
-            ctx.beginPath(); ctx.arc(player.x, player.y + 20, 10, 0, Math.PI*2); ctx.fill();
+            // 7. Render Bayangan Kaki Sprite
+            ctx.fillStyle = 'rgba(0,0,0,0.3)';
+            ctx.beginPath(); 
+            ctx.ellipse(player.x, player.y + 22, 16, 6, 0, 0, Math.PI * 2); 
+            ctx.fill();
 
-            // Player Stickman Glowing Neon
-            ctx.strokeStyle = '#ffffff'; ctx.fillStyle = '#ffffff';
-            ctx.lineWidth = 4;
-            ctx.shadowBlur = 10; ctx.shadowColor = "#ffffff";
-
-            ctx.beginPath(); ctx.arc(player.x, player.y - 12, 7, 0, Math.PI * 2); ctx.fill();
-            ctx.beginPath();
-            ctx.moveTo(player.x, player.y - 5); ctx.lineTo(player.x, player.y + 10);
-            ctx.moveTo(player.x - 12, player.y + 2); ctx.lineTo(player.x + 12, player.y + 2);
-            ctx.moveTo(player.x, player.y + 10); ctx.lineTo(player.x - 8, player.y + 22);
-            ctx.moveTo(player.x, player.y + 10); ctx.lineTo(player.x + 8, player.y + 22);
-            ctx.stroke();
-            ctx.shadowBlur = 0; 
-
-            // Atap Rumah
-            if (roofAlpha > 0.01) {
-                ctx.fillStyle = `rgba(141, 153, 174, ${roofAlpha})`;
-                ctx.beginPath();
-                ctx.moveTo(zones.rumah.x - 15, zones.rumah.y + zones.rumah.h);
-                ctx.lineTo(zones.rumah.x + (zones.rumah.w / 2), zones.rumah.y - 30);
-                ctx.lineTo(zones.rumah.x + zones.rumah.w + 15, zones.rumah.y + zones.rumah.h);
-                ctx.closePath(); ctx.fill();
-                
-                ctx.fillStyle = `rgba(255, 255, 255, ${roofAlpha})`;
-                ctx.font = 'bold 12px Poppins';
-                ctx.fillText("🏡 ECO HOUSE", zones.rumah.x + 55, zones.rumah.y + 80);
+            // Render Karakter Stickman (Sprite Crop & Auto-Flip)
+            ctx.save();
+            if (player.facingLeft) {
+                ctx.translate(player.x * 2, 0);
+                ctx.scale(-1, 1);
             }
 
-            // Partikel Konfeti
+            const drawW = 42;
+            const drawH = 54;
+            const drawX = player.x - (drawW / 2);
+            const drawY = player.y - (drawH / 2);
+
+            if (player.isMoving) {
+                let frameW = spriteConfig.getFrameWidth();
+                let frameHeight = spriteConfig.getFrameHeight();
+                let currentIdx = Math.floor(spriteConfig.currentFrame) % spriteConfig.totalFrames;
+                let col = currentIdx % spriteConfig.cols;
+                let row = Math.floor(currentIdx / spriteConfig.cols);
+
+                ctx.drawImage(
+                    spriteRun, 
+                    col * frameW, row * frameHeight, frameW, frameHeight,
+                    drawX, drawY, drawW, drawH
+                );
+                spriteConfig.currentFrame += spriteConfig.animSpeed;
+            } else {
+                ctx.drawImage(spriteIdle, drawX, drawY, drawW, drawH);
+                spriteConfig.currentFrame = 0;
+            }
+            ctx.restore();
+
+            // 8. Atap Rumah Segitiga 3D
+            if (roofAlpha > 0.01) {
+                let rx = zones.rumah.x; let ry = zones.rumah.y;
+                let rw = zones.rumah.w; let rh = zones.rumah.h;
+                let cx = rx + (rw / 2); let cy = ry + (rh / 2);
+
+                ctx.fillStyle = `rgba(168, 180, 202, ${roofAlpha})`;
+                ctx.beginPath(); ctx.moveTo(rx, ry); ctx.lineTo(rx + rw, ry); ctx.lineTo(cx, cy); ctx.closePath(); ctx.fill();
+
+                ctx.fillStyle = `rgba(141, 153, 174, ${roofAlpha})`;
+                ctx.beginPath(); ctx.moveTo(rx + rw, ry); ctx.lineTo(rx + rw, ry + rh); ctx.lineTo(cx, cy); ctx.closePath(); ctx.fill();
+
+                ctx.fillStyle = `rgba(102, 112, 133, ${roofAlpha})`;
+                ctx.beginPath(); ctx.moveTo(rx + rw, ry + rh); ctx.lineTo(rx, ry + rh); ctx.lineTo(cx, cy); ctx.closePath(); ctx.fill();
+
+                ctx.fillStyle = `rgba(120, 131, 151, ${roofAlpha})`;
+                ctx.beginPath(); ctx.moveTo(rx, ry + rh); ctx.lineTo(rx, ry); ctx.lineTo(cx, cy); ctx.closePath(); ctx.fill();
+
+                ctx.fillStyle = `rgba(255, 255, 255, ${roofAlpha})`;
+                ctx.font = 'bold 11px Poppins';
+                ctx.shadowColor = "black"; ctx.shadowBlur = 4;
+                ctx.fillText("🏡 ECO HOUSE (3D)", rx + 15, ry + rh - 15);
+                ctx.shadowBlur = 0;
+            }
+
+            // Partikel
             particles.forEach((p) => {
                 p.y += p.speedY; p.x += p.speedX;
                 if(p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; }
@@ -440,12 +471,10 @@
         function showLeaderboard() {
             let leaderboard = JSON.parse(localStorage.getItem('izur_leaderboard')) || [];
             leaderboardList.innerHTML = "";
-            
             if(leaderboard.length === 0) {
                 leaderboardList.innerHTML = "<p>Belum ada data skor.</p>";
                 return;
             }
-
             leaderboard.forEach((data, idx) => {
                 let item = document.createElement('div');
                 item.className = "leaderboard-item";
