@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap');
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -7,75 +9,95 @@
 body, html {
     height: 100%;
     overflow: hidden;
-    font-family: 'Poppins', sans-serif;
-    background-color: #111;
+    font-family: 'Space Grotesk', sans-serif;
+    background-color: #0b0f19;
 }
 
-/* --- 1. LANGIT & EFEK SINEMATIK --- */
+/* --- SCREEN SHAKE CONTAINER --- */
+.shake-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.1s ease;
+}
+
+.action-shake {
+    animation: screenShake 0.4s ease-in-out;
+}
+
+@keyframes screenShake {
+    0%, 100% { transform: translate(0, 0); }
+    10%, 90% { transform: translate(-8px, 5px); }
+    30%, 70% { transform: translate(9px, -6px); }
+    50% { transform: translate(-5px, -5px); }
+}
+
+/* --- BACKGROUND LANGIT ATMOSFERIK --- */
 .sky {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, #1a81f7, #6fb1fc, #b9e3de);
-    z-index: -1;
-    overflow: hidden;
-    transition: all 1s cubic-bezier(0.25, 1, 0.5, 1);
+    background: radial-gradient(circle at 50% 100%, #1a365d 0%, #0b0f19 80%);
+    z-index: -2;
+    transition: all 1s ease;
 }
 
-.sun-glow {
+.aurora {
     position: absolute;
-    top: -10%;
-    right: -10%;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%);
+    width: 150%;
+    height: 100%;
+    background: radial-gradient(circle at 50% -20%, rgba(56, 189, 248, 0.15), transparent 50%);
+    top: 0; left: -25%;
 }
 
-/* Desain Awan yang Lebih Lembut */
-.cloud {
+/* Awan Estetik Minimalis (Mist) */
+.mist {
     position: absolute;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 100px;
-    filter: drop-shadow(0 8px 15px rgba(0,0,0,0.08));
-    transition: transform 0.5s, filter 0.5s, width 0.5s;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    width: 200%;
+    height: 120px;
+    filter: blur(20px);
 }
-.cloud::before, .cloud::after {
-    content: '';
-    position: absolute;
-    background: inherit;
+.m1 { top: 20%; left: -50%; animation: drift 40s linear infinite; }
+.m2 { top: 50%; left: -20%; animation: drift 25s linear infinite reverse; }
+
+@keyframes drift {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(30%); }
+}
+
+/* EFEK HYPER DRIVE (Saat Klik) */
+.sky.hyper-drive {
+    background: radial-gradient(circle at 50% 50%, #0284c7 0%, #031329 100%);
+}
+.sky.hyper-drive .mist {
+    transform: scaleY(0.1) scaleX(3);
+    background: rgba(255, 255, 255, 0.4);
+    filter: blur(5px);
+    transition: all 0.5s ease;
+}
+
+/* --- GELOMBANG KEJUT (SHOCKWAVE) --- */
+.shockwave {
+    position: fixed;
+    border: 4px solid rgba(56, 189, 248, 0.8);
     border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    z-index: 99;
+    pointer-events: none;
+    opacity: 0;
 }
-.cloud1 { width: 200px; height: 60px; top: 15%; left: -250px; animation: fly 30s linear infinite; }
-.cloud1::before { width: 90px; height: 90px; top: -45px; left: 25px; }
-.cloud1::after { width: 70px; height: 70px; top: -30px; right: 25px; }
-
-.cloud2 { width: 280px; height: 80px; top: 45%; left: -350px; animation: fly 45s linear infinite; animation-delay: 7s; }
-.cloud2::before { width: 120px; height: 120px; top: -60px; left: 40px; }
-.cloud2::after { width: 90px; height: 90px; top: -35px; right: 40px; }
-
-.cloud3 { width: 160px; height: 50px; top: 25%; left: -200px; animation: fly 22s linear infinite; animation-delay: 12s; }
-.cloud3::before { width: 70px; height: 70px; top: -35px; left: 20px; }
-.cloud3::after { width: 60px; height: 60px; top: -25px; right: 20px; }
-
-@keyframes fly {
-    0% { left: -350px; }
-    100% { left: 110%; }
+.wave-blast {
+    animation: blastEffect 0.8s cubic-bezier(0.1, 0.8, 0.1, 1) forwards;
+}
+@keyframes blastEffect {
+    0% { width: 0; height: 0; opacity: 1; }
+    100% { width: 1500px; height: 1500px; opacity: 0; border-width: 1px; }
 }
 
-/* EFEK TRANSISI WARP SPEED (AWAN MEMANJANG DAN SUPER CEPAT) */
-.sky.warp-speed {
-    background: linear-gradient(to bottom, #0a3d62, #3c6382);
-    filter: blur(1px);
-}
-.sky.warp-speed .cloud {
-    animation-duration: 0.4s !important;
-    transform: scaleX(6) skewX(-15deg); /* Membuat efek efek blur memanjang */
-    opacity: 0.6;
-}
-
-/* --- 2. GAYA BALON PREMIUM (3D GLASSY) --- */
+/* --- BALON MULAI (CYBERPUNK GLOW ORB) --- */
 .container {
     height: 100%;
     display: flex;
@@ -83,147 +105,140 @@ body, html {
     align-items: center;
 }
 
-.balloon-wrapper {
+.orb-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
-    animation: float 4s ease-in-out infinite alternate;
-    animation-delay: var(--delay, 0s);
+    animation: floatGlow 4s ease-in-out infinite alternate;
 }
 
-.balloon {
-    width: 145px;
-    height: 180px;
-    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
-    position: relative;
-    cursor: pointer;
+.main-orb {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.8), rgba(153, 27, 27, 0.9));
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 40px rgba(239, 68, 68, 0.5), inset 0 10px 20px rgba(255,255,255,0.3);
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
-    font-weight: 700;
-    text-align: center;
-    font-size: 1.1rem;
-    line-height: 1.3;
-    box-shadow: inset -12px -15px 30px rgba(0,0,0,0.35), 0 15px 25px rgba(0,0,0,0.25);
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    user-select: none;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Efek Kilauan Cahaya pada Balon */
-.gloss {
+.orb-text {
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.pulse-glow {
     position: absolute;
-    top: 8%;
-    left: 12%;
-    width: 25px;
-    height: 45px;
-    background: rgba(255, 255, 255, 0.6);
+    width: 100%; height: 100%;
     border-radius: 50%;
-    transform: rotate(-25deg);
-    filter: blur(1px);
+    background: inherit;
+    filter: blur(15px);
+    z-index: -1;
+    opacity: 0.6;
+    animation: pulse 2s infinite;
 }
 
-/* Simpul bawah balon */
-.balloon::after {
-    content: "";
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-}
-
-/* Tali Balon */
-.string {
+.energy-line {
     width: 2px;
-    height: 100px;
-    background: rgba(0, 0, 0, 0.2);
-    transform-origin: top center;
-    animation: sway 2s ease-in-out infinite alternate;
+    height: 120px;
+    background: linear-gradient(to bottom, rgba(239, 68, 68, 0.5), transparent);
 }
 
-/* WARNA-WARNA BALON GRADASI 3D */
-.red-balloon { background: radial-gradient(circle at 35% 35%, #ff4d4d, #b30000); }
-.red-balloon::after { border-bottom: 14px solid #b30000; }
-
-.blue-balloon { background: radial-gradient(circle at 35% 35%, #3498db, #1d4f73); }
-.blue-balloon::after { border-bottom: 14px solid #1d4f73; }
-
-.green-balloon { background: radial-gradient(circle at 35% 35%, #2ecc71, #145a32); }
-.green-balloon::after { border-bottom: 14px solid #145a32; }
-
-.gold-balloon { background: radial-gradient(circle at 35% 35%, #f1c40f, #9a7d0a); color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-.gold-balloon::after { border-bottom: 14px solid #9a7d0a; }
-
-/* ANIMASI MELAYANG & GOYANG TALI */
-@keyframes float {
-    0% { transform: translateY(0px) rotate(-1.5deg); }
-    100% { transform: translateY(-25px) rotate(1.5deg); }
+@keyframes floatGlow {
+    0% { transform: translateY(0px) scale(1); }
+    100% { transform: translateY(-20px) scale(1.02); }
 }
-@keyframes sway {
-    0% { transform: rotate(-3deg); }
-    100% { transform: rotate(3deg); }
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.6; }
+    100% { transform: scale(1.4); opacity: 0; }
 }
 
-.balloon:hover {
-    transform: scale(1.08) translateY(-5px);
+.main-orb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 60px rgba(239, 68, 68, 0.8), inset 0 10px 20px rgba(255,255,255,0.5);
 }
 
-/* --- 3. ANIMASI MELEDAK & CONFETTI --- */
-.balloon-wrapper.exploded {
-    animation: explode 0.2s forwards ease-out;
-    pointer-events: none;
+/* Animasi Hancur Meremuk ke Dalam Sebelum Meledak */
+.orb-wrapper.implode {
+    animation: implode 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
 }
-@keyframes explode {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.6); filter: brightness(1.5); }
+@keyframes implode {
+    0% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.3); filter: brightness(2); }
     100% { transform: scale(0); opacity: 0; }
 }
 
-/* Elemen Confetti */
-.confetti {
-    position: fixed;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    z-index: 100;
-    animation: scatter 1.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
-}
-@keyframes scatter {
-    0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
-    100% { transform: translate(var(--vx), var(--vy)) rotate(720deg); opacity: 0; }
-}
-
-/* --- 4. TAMPILAN MENU 3 BALON BARU --- */
-.choices-container {
+/* --- MENU 3 POD PILIHAN (GLASSMORPHISM) --- */
+.menu-container {
     display: flex;
-    gap: 60px;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
+    gap: 40px;
+    perspective: 1000px;
 }
 
-/* Mengatur delay melayang tiap balon agar tidak kompak (lebih organik) */
-.choices-container .float-1 { --delay: 0s; }
-.choices-container .float-2 { --delay: -1.3s; }
-.choices-container .float-3 { --delay: -2.5s; }
-
-/* Efek Muncul Membal (Elastic Bounce) */
-.fade-in-menu .balloon-wrapper {
-    animation: elasticEntrance 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both, float 4s ease-in-out infinite alternate;
+.card-pod {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 40px 30px;
+    width: 220px;
+    border-radius: 24px;
+    text-align: center;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
-.fade-in-menu .float-1 { animation-delay: 0s, 0s; }
-.fade-in-menu .float-2 { animation-delay: 0.2s, -1.3s; }
-.fade-in-menu .float-3 { animation-delay: 0.4s, -2.5s; }
 
-@keyframes elasticEntrance {
-    0% { transform: translateY(800px) scale(0.3); opacity: 0; }
-    70% { transform: translateY(-40px) scale(1.05); }
-    100% { transform: translateY(0) scale(1); opacity: 1; }
+.card-pod .icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.card-pod h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #f3f4f6;
+}
+
+.card-pod p {
+    font-size: 0.85rem;
+    color: #9ca3af;
+}
+
+/* Hover Effect yang Responsif & Glowing */
+.card-pod:hover {
+    transform: translateY(-15px) scale(1.03);
+    background: rgba(255, 255, 255, 0.07);
+}
+.card-pod:hover .icon { transform: scale(1.2) rotate(5deg); }
+
+.pod-blue:hover { border-color: #38bdf8; box-shadow: 0 15px 30px rgba(56, 189, 248, 0.2); }
+.pod-green:hover { border-color: #4ade80; box-shadow: 0 15px 30px rgba(74, 222, 128, 0.2); }
+.pod-gold:hover { border-color: #fbbf24; box-shadow: 0 15px 30px rgba(251, 191, 36, 0.2); }
+
+/* Animasi Muncul Berurutan Sempurna */
+.reveal-menu .card-pod {
+    animation: slideUpIn 0.8s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+.reveal-menu .card-pod:nth-child(1) { animation-delay: 0.1s; }
+.reveal-menu .card-pod:nth-child(2) { animation-delay: 0.2s; }
+.reveal-menu .card-pod:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes slideUpIn {
+    0% { opacity: 0; transform: translateY(100px) rotateX(-20deg); }
+    100% { opacity: 1; transform: translateY(0) rotateX(0); }
 }
 
 .hidden {
     display: none !important;
-}
+                                                                      }
