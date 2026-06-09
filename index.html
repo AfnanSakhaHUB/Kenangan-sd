@@ -3,519 +3,422 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelulusan Epik 2026</title>
-    <style>
-        /* --- RESET & DASAR --- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body, html {
-            width: 100%;
-            height: 100vh;
-            overflow: hidden;
-            font-family: 'Arial', sans-serif;
-            background-color: #3a8ffd;
-        }
-
-        /* --- VIEWPORT ENGINE (UNTUK EFEK KAMERA TURUN) --- */
-        #main-viewport {
-            width: 100%;
-            height: 200vh; /* Dua kali tinggi layar (Langit + Darat) */
-            position: absolute;
-            top: 0;
-            left: 0;
-            transition: transform 2s cubic-bezier(0.76, 0, 0.24, 1); /* Efek kamera turun cinematic */
-        }
-
-        /* Trigger saat balon mini game diklik */
-        .camera-down {
-            transform: translateY(-100vh);
-        }
-
-        /* --- KELOMPOK SCENE 1: LANGIT --- */
-        #sky-scene {
-            width: 100%;
-            height: 100vh;
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(to bottom, #3a8ffd 0%, #6cb2ff 60%, #b4ecff 100%);
-        }
-
-        .sun {
-            position: absolute;
-            top: 40px;
-            right: 40px;
-            width: 100px;
-            height: 100px;
-            background: #ffdd1a;
-            border-radius: 50%;
-            box-shadow: 0 0 40px #ffea4a, 0 0 80px #ffea4a, 0 0 120px #ffea4a;
-            animation: pendarMatahari 4s ease-in-out infinite alternate;
-        }
-        @keyframes pendarMatahari {
-            0% { transform: scale(1); box-shadow: 0 0 40px #ffea4a; }
-            100% { transform: scale(1.05); box-shadow: 0 0 60px #ffea4a, 0 0 120px #ffea4a; }
-        }
-
-        .bird {
-            position: absolute;
-            width: 70px;
-            height: 70px;
-            background: url('200w.webp') no-repeat center center;
-            background-size: contain;
-            pointer-events: none;
-            z-index: 2;
-        }
-        .bird1 { top: 15%; left: -100px; animation: terbangBurung 7s linear infinite; }
-        .bird2 { width: 50px; height: 50px; top: 25%; left: -100px; animation: terbangBurung 9s linear infinite; animation-delay: 3s; }
-
-        @keyframes terbangBurung {
-            0% { left: -100px; transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-            100% { left: 110%; transform: translateY(0); }
-        }
-
-        .cloud {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 100px;
-            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.05));
-            z-index: 1;
-        }
-        .cloud::before, .cloud::after { content: ''; position: absolute; background: inherit; border-radius: 50%; }
-        .cloud1 { width: 170px; height: 60px; top: 30%; left: -200px; animation: jalanAwan 25s linear infinite; }
-        .cloud1::before { width: 80px; height: 80px; top: -40px; left: 20px; }
-        .cloud1::after { width: 60px; height: 60px; top: -25px; right: 20px; }
-        .cloud2 { width: 230px; height: 75px; top: 50%; left: -300px; animation: jalanAwan 35s linear infinite; animation-delay: 3s; }
-        .cloud2::before { width: 100px; height: 100px; top: -50px; left: 30px; }
-        .cloud2::after { width: 80px; height: 80px; top: -30px; right: 30px; }
-
-        @keyframes jalanAwan {
-            0% { left: -300px; }
-            100% { left: 110%; }
-        }
-
-        .container {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        /* --- BALON SETTINGS --- */
-        .balloon-group {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            animation: ayunBalon 3s ease-in-out infinite alternate;
-            cursor: pointer;
-        }
-        .balloon {
-            position: relative;
-            width: 160px; 
-            height: 210px;
-            background: url('1000017857-removebg-preview.png') no-repeat center center;
-            background-size: contain;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            user-select: none;
-        }
-        .balloon-text {
-            position: absolute;
-            top: 40%; left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-weight: bold;
-            font-size: 1.1rem;
-            text-align: center;
-            width: 80%;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), -2px -2px 4px rgba(0, 0, 0, 0.8);
-            z-index: 5;
-            pointer-events: none;
-        }
-
-        @keyframes ayunBalon {
-            0% { transform: translateY(0px) rotate(-1.5deg); }
-            100% { transform: translateY(-15px) rotate(1.5deg); }
-        }
-        .balloon-group:hover { transform: scale(1.06); transition: transform 0.2s; }
-        
-        .balloon-group.meledak {
-            animation: pop 0.3s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            pointer-events: none;
-        }
-        @keyframes pop {
-            0% { transform: scale(1); opacity: 1; }
-            40% { transform: scale(1.2); filter: brightness(1.2); }
-            100% { transform: scale(0); opacity: 0; }
-        }
-
-        .menu-balloons { display: flex; gap: 40px; justify-content: center; align-items: center; width: 100%; }
-        .reveal .balloon-group { animation: terbangMasuk 1.2s cubic-bezier(0.075, 0.82, 0.165, 1) both; }
-        .reveal .b-1 { animation-delay: 0s; }
-        .reveal .b-2 { animation-delay: 0.15s; }
-        .reveal .b-3 { animation-delay: 0.3s; }
-
-        @keyframes terbangMasuk {
-            0% { transform: translateY(800px) scale(0.6); opacity: 0; }
-            100% { transform: translateY(0) scale(1); opacity: 1; }
-        }
-        .hidden { display: none !important; }
-
-
-        /* ==========================================================================
-           KELOMPOK SCENE 2: GAME DARATAN (MINI GAMES SCENE)
-           ========================================================================== */
-        #game-scene {
-            width: 100%;
-            height: 100vh;
-            position: relative;
-            background: linear-gradient(to bottom, #b4ecff 0%, #e2f7ff 50%, #7db941 50%, #579e23 100%);
-            overflow: hidden;
-        }
-
-        /* --- PARALLAX GUNUNG BERGERAK --- */
-        .mountain-track {
-            position: absolute;
-            bottom: 50%;
-            width: 200%;
-            height: 160px;
-            display: flex;
-            align-items: flex-end;
-            animation: gerakMundur 25s linear infinite;
-            z-index: 1;
-        }
-        .mountain {
-            width: 0; height: 0;
-            border-left: 180px solid transparent;
-            border-right: 180px solid transparent;
-            border-bottom: 150px solid #487534;
-            margin-right: -90px;
-        }
-        .mountain.back {
-            border-bottom-color: #3b612a;
-            transform: scale(0.8);
-            margin-bottom: -10px;
-        }
-
-        /* --- PARALLAX POHON BERGERAK --- */
-        .tree-track {
-            position: absolute;
-            bottom: 140px;
-            width: 200%;
-            height: 90px;
-            display: flex;
-            animation: gerakMundur 10s linear infinite;
-            z-index: 3;
-        }
-        .tree { position: relative; width: 60px; height: 90px; margin-right: 120px; }
-        .tree-leaves {
-            width: 0; height: 0;
-            border-left: 25px solid transparent;
-            border-right: 25px solid transparent;
-            border-bottom: 60px solid #2d6a4f;
-        }
-        .tree-trunk {
-            width: 10px; height: 30px;
-            background: #5c3d2e;
-            margin: 0 auto;
-        }
-
-        @keyframes gerakMundur {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        /* --- JALAN RAYA --- */
-        .road {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 150px;
-            background: #333;
-            border-top: 6px solid #ffdd1a;
-            z-index: 4;
-        }
-        .road-lines {
-            position: absolute;
-            top: 50%; left: 0;
-            width: 200%; height: 6px;
-            background: linear-gradient(to right, #fff 50%, transparent 50%);
-            background-size: 80px 100%;
-            animation: jalanNgebut 0.4s linear infinite;
-        }
-        @keyframes jalanNgebut {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-80px); }
-        }
-
-        /* --- MOBIL MERAH CSS GAME --- */
-        .red-car {
-            position: absolute;
-            bottom: 45px;
-            left: 8%;
-            width: 140px;
-            height: 65px;
-            z-index: 5;
-            animation: mobilGoyang 0.15s infinite alternate;
-        }
-        .car-cabin {
-            background: #e63946;
-            width: 75px; height: 30px;
-            position: absolute; top: 0; left: 25px;
-            border-radius: 20px 20px 0 0;
-            border: 4px solid #1d3557;
-            border-bottom: none;
-        }
-        .car-body {
-            background: #e63946;
-            width: 140px; height: 35px;
-            position: absolute; bottom: 8px; left: 0;
-            border-radius: 10px 25px 8px 8px;
-            box-shadow: inset -10px 0 0 rgba(0,0,0,0.15);
-        }
-        .car-wheel {
-            background: #1d3557;
-            width: 26px; height: 26px;
-            border-radius: 50%;
-            position: absolute; bottom: 0;
-            border: 4px solid #f1faee;
-            animation: rodaBerputar 0.2s linear infinite;
-        }
-        .wheel-back { left: 20px; }
-        .wheel-front { right: 25px; }
-
-        @keyframes mobilGoyang {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-3px); }
-        }
-        @keyframes rodaBerputar {
-            100% { transform: rotate(360deg); }
-        }
-
-        /* --- MAIN MENU SIDEBAR GAME --- */
-        .game-sidebar {
-            position: absolute;
-            right: 40px;
-            top: 10%;
-            width: 42%; /* Hampir setengah layar sesuai request */
-            height: 80%;
-            background: rgba(15, 23, 42, 0.92);
-            border: 5px solid #ffdd1a;
-            border-radius: 25px;
-            padding: 40px 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 10;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-            transform: translateX(600px); /* Mulai dari luar layar */
-            transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s; /* Muncul setelah kamera turun */
-        }
-        
-        /* Animasi sidebar slide-in saat masuk daratan */
-        .camera-down .game-sidebar {
-            transform: translateX(0);
-        }
-
-        .game-title {
-            font-size: 2.2rem;
-            font-weight: 900;
-            color: #ffdd1a;
-            text-align: center;
-            margin-bottom: 50px;
-            text-shadow: 4px 4px 0px #000;
-            letter-spacing: 3px;
-            font-family: 'Arial Black', sans-serif;
-            animation: detakJudul 1s ease-in-out infinite alternate;
-        }
-        @keyframes detakJudul {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.03); color: #fff37a; }
-        }
-
-        .game-btn {
-            width: 100%;
-            padding: 18px;
-            margin-bottom: 20px;
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #fff;
-            background: linear-gradient(to bottom, #3a8ffd, #1a6fd4);
-            border: 3px solid #fff;
-            border-radius: 15px;
-            cursor: pointer;
-            box-shadow: 0 5px 0 #0f4c94, 0 8px 15px rgba(0,0,0,0.3);
-            transition: all 0.1s ease;
-            text-align: center;
-        }
-        .game-btn:hover:not(:disabled) {
-            background: linear-gradient(to bottom, #ffdd1a, #e6c200);
-            color: #222;
-            box-shadow: 0 5px 0 #b39700, 0 8px 15px rgba(0,0,0,0.3);
-            transform: translateY(-2px);
-        }
-        .game-btn:active:not(:disabled) {
-            transform: translateY(3px);
-            box-shadow: 0 2px 0 #b39700;
-        }
-        .game-btn:disabled {
-            background: #475569;
-            color: #94a3b8;
-            border-color: #64748b;
-            box-shadow: none;
-            cursor: not-allowed;
-            font-style: italic;
-        }
-
-        /* --- RESPONSIVE LAYOUT HP --- */
-        @media (max-width: 768px) {
-            .menu-balloons { flex-direction: row; flex-wrap: wrap; gap: 20px; }
-            .balloon { width: 120px; height: 160px; }
-            .balloon-text { font-size: 0.9rem; }
-            .sun { width: 70px; height: 70px; top: 20px; right: 20px; }
-            .game-sidebar { width: 90%; right: 5%; left: 5%; top: 15%; height: 70%; }
-            .game-title { font-size: 1.6rem; }
-            .red-car { transform: scale(0.7); bottom: 30px; left: 2%; }
-        }
-    </style>
+    <title>Izur Says - Edisi Spesial Perpisahan</title>
+    <link rel="stylesheet" href="izursays.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Orbitron:wght500;900&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div id="main-viewport">
+    <div class="epic-bg-glow"></div>
 
-        <div id="sky-scene">
-            <audio id="windSfx" preload="auto">
-                <source src="dragon-studio-wind-blowing-sfx-01-423673.mp3" type="audio/mpeg">
-            </audio>
-
-            <div class="sky">
-                <div class="sun"></div>
-                <div class="bird bird1"></div>
-                <div class="bird bird2"></div>
-                <div class="cloud cloud1"></div>
-                <div class="cloud cloud2"></div>
+    <div id="game-container">
+        
+        <!-- HEADER DIALOG IZUR -->
+        <div id="izur-header">
+            <div id="izur-avatar-container">
+                <div id="izur-avatar">😎</div>
+                <div class="avatar-pulse"></div>
             </div>
-
-            <div class="container">
-                <div id="start-node" class="balloon-group">
-                    <div class="balloon">
-                        <div class="balloon-text">Mulai?</div>
-                    </div>
-                </div>
-
-                <div id="menu-node" class="menu-balloons hidden">
-                    <div class="balloon-group b-1">
-                        <div class="balloon"><div class="balloon-text">Foto<br>Kenangan</div></div>
-                    </div>
-                    <div class="balloon-group b-2">
-                        <div class="balloon"><div class="balloon-text">Catatan<br>Ranking</div></div>
-                    </div>
-                    <div id="btn-minigames" class="balloon-group b-3">
-                        <div class="balloon"><div class="balloon-text">Mini games</div></div>
-                    </div>
-                </div>
+            <div id="izur-bubble">
+                <div id="izur-title">IZUR SAYS ENGINE</div>
+                <span id="izur-command">MENUNGGU KOMANDO...</span>
+                <div id="timer-bar"><div id="timer-progress"></div></div>
             </div>
         </div>
 
-        <div id="game-scene">
-            
-            <div class="mountain-track">
-                <div class="mountain back"></div>
-                <div class="mountain"></div>
-                <div class="mountain back"></div>
-                <div class="mountain"></div>
+        <!-- PANEL SKOR -->
+        <div id="ui-panel">
+            <button id="btn-back" onclick="window.location.href='index.html'">⬅ KELUAR</button>
+            <div id="score-box">
+                <span class="label">SCORE</span>
+                <span id="current-score">000</span>
             </div>
+        </div>
 
-            <div class="tree-track">
-                <div class="tree"><div class="tree-leaves"></div><div class="tree-trunk"></div></div>
-                <div class="tree"><div class="tree-leaves"></div><div class="tree-trunk"></div></div>
-                <div class="tree"><div class="tree-leaves"></div><div class="tree-trunk"></div></div>
-                <div class="tree"><div class="tree-leaves"></div><div class="tree-trunk"></div></div>
-            </div>
+        <!-- AREA CANVAS GAME -->
+        <div id="canvas-wrapper">
+            <canvas id="gameCanvas" width="800" height="500"></canvas>
+            <div id="controls-notice">TEKAN TOMBOL PANAH <b>( ⬆️ ⬇️ ⬅️ ➡️ )</b> UNTUK BERGERAK</div>
+        </div>
 
-            <div class="red-car">
-                <div class="car-cabin"></div>
-                <div class="car-body"></div>
-                <div class="car-wheel wheel-back"></div>
-                <div class="car-wheel wheel-front"></div>
-            </div>
-
-            <div class="road">
-                <div class="road-lines"></div>
-            </div>
-
-            <div class="game-sidebar">
-                <div class="game-title">SEKOLAH MINIGAMES</div>
+        <!-- MODAL: INPUT NAMA AWAL -->
+        <div id="overlay-modal" class="modal">
+            <div class="modal-content animate-pop">
+                <div class="event-tag">MEMORIES OF 2026</div>
+                <h2>IZUR SAYS</h2>
+                <p class="subtext">Edisi Spesial Perpisahan Sekolah. Buktikan lu gak gampang dikacangin!</p>
                 
-                <button class="game-btn" onclick="window.location.href='izursays.html'">Izur says</button>
+                <div class="input-group">
+                    <label for="player-name-input">INPUT NAMA KAMU</label>
+                    <input type="text" id="player-name-input" placeholder="Ketik nama di sini..." maxlength="12">
+                </div>
                 
-                <button class="game-btn" disabled>Dan sisanya akan ku pikirkan.</button>
+                <button id="btn-start-game" class="menu-btn gold-glow">MULAI PERMAINAN</button>
             </div>
+        </div>
 
+        <!-- MODAL: GAME OVER & LEADERBOARD -->
+        <div id="gameover-modal" class="modal hidden">
+            <div class="modal-content animate-pop">
+                <div class="eliminated-tag">ELIMINASI</div>
+                <h1 class="text-danger">LU DIKACANGI!</h1>
+                <p class="score-summary">Total Skor Akhir: <span id="final-score">0</span></p>
+                
+                <div class="leaderboard-box">
+                    <h3>🏆 PAPAN PERINGKAT TERATAS 🏆</h3>
+                    <div id="leaderboard-list"></div>
+                </div>
+
+                <div class="modal-actions">
+                    <button id="btn-restart" class="menu-btn gold-glow">MAIN LAGI</button>
+                    <button class="menu-btn btn-secondary" onclick="window.location.href='index.html'">BALIK KE MENU UTAMA</button>
+                </div>
+            </div>
         </div>
 
     </div>
 
     <script>
-        const startNode = document.getElementById('start-node');
-        const menuNode = document.getElementById('menu-node');
-        const btnMinigames = document.getElementById('btn-minigames');
-        const mainViewport = document.getElementById('main-viewport');
-        const windSfx = document.getElementById('windSfx');
-        
-        let audioTracker;
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
 
-        // Logika Tombol Mulai Awal
-        startNode.addEventListener('click', () => {
-            windSfx.pause(); windSfx.currentTime = 0;
-            windSfx.play().then(() => {
-                clearInterval(audioTracker);
-                audioTracker = setInterval(() => {
-                    if (windSfx.currentTime >= 3.0) {
-                        windSfx.pause(); windSfx.currentTime = 0;
-                        clearInterval(audioTracker);
-                    }
-                }, 100);
-            }).catch(error => console.log("Audio terblokir:", error));
+        const izurCommandText = document.getElementById('izur-command');
+        const timerProgress = document.getElementById('timer-progress');
+        const currentScoreText = document.getElementById('current-score');
+        const finalScoreText = document.getElementById('final-score');
+        const overlayModal = document.getElementById('overlay-modal');
+        const gameoverModal = document.getElementById('gameover-modal');
+        const nameInput = document.getElementById('player-name-input');
+        const btnStart = document.getElementById('btn-start-game');
+        const btnRestart = document.getElementById('btn-restart');
+        const leaderboardList = document.getElementById('leaderboard-list');
 
-            startNode.classList.add('meledak');
+        let playerName = "Anonim";
+        let score = 0;
+        let gameActive = false;
+        let currentZone = "tanah"; 
+        let didMoveThisRound = false;
+        let roofAlpha = 1; 
+        let waveOffset = 0; 
 
-            setTimeout(() => {
-                startNode.classList.add('hidden');
-                menuNode.classList.remove('hidden');
-                menuNode.classList.add('reveal');
+        // Sistem Waktu
+        let gameLoopTimer;
+        let gamePhase = "idle"; 
+        let phaseTimeLeft = 0;
+        let maxPhaseTime = 5;
+
+        // Efek Konfeti Emas
+        let particles = [];
+        function createParticles() {
+            for(let i=0; i<30; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 4 + 2,
+                    color: `hsla(${Math.random() * 40 + 20}, 85%, 60%, ${Math.random() * 0.4 + 0.3})`, // Gradasi warna emas/pesta
+                    speedX: Math.random() * 1 - 0.5,
+                    speedY: Math.random() * 0.7 + 0.3
+                });
+            }
+        }
+
+        const commandsList = [
+            { text: "Yang nyentuh pasir kacangi!", check: () => currentZone === "pasir" },
+            { text: "Yang nyentuh tanah kacangi!", check: () => currentZone === "tanah" },
+            { text: "Yang gak naik kapal kacangi!", check: () => currentZone !== "kapal" },
+            { text: "Yang gak masuk rumah kacangi!", check: () => currentZone !== "rumah" },
+            { text: "Yang gak jalan kacangi!", check: () => !didMoveThisRound },
+            { text: "Yang gerak kacangi!", check: () => didMoveThisRound },
+            { text: "Yang gak perosotan kacangi!", check: () => currentZone !== "perosotan" }
+        ];
+        let activeCommand = null;
+
+        // Player Data (Murni Deteksi Tombol)
+        const player = {
+            x: 400, y: 250,
+            radius: 14, speed: 5,
+            keys: {}
+        };
+
+        const zones = {
+            danau: { x: 460, y: 50, w: 290, h: 190 },
+            kapal: { x: 560, y: 120, w: 85, h: 45 },
+            pasir: { x: 50, y: 310, w: 240, h: 150 },
+            perosotan: { x: 360, y: 340, w: 110, h: 130 },
+            rumah: { x: 70, y: 50, w: 200, h: 150 }
+        };
+
+        // Event Keyboard (Mendukung Arrow Keys & WASD sebagai alternatif nyaman)
+        window.addEventListener('keydown', (e) => { if(gameActive) player.keys[e.key] = true; });
+        window.addEventListener('keyup', (e) => { if(gameActive) player.keys[e.key] = false; });
+
+        btnStart.addEventListener('click', () => {
+            if(nameInput.value.trim() !== "") playerName = nameInput.value.trim();
+            overlayModal.classList.add('hidden');
+            initGame();
+        });
+
+        btnRestart.addEventListener('click', () => {
+            gameoverModal.classList.add('hidden');
+            initGame();
+        });
+
+        function initGame() {
+            score = 0;
+            currentScoreText.textContent = "000";
+            player.x = 380;
+            player.y = 260;
+            player.keys = {};
+            gameActive = true;
+            didMoveThisRound = false;
+            particles = [];
+            createParticles();
+            
+            triggerIdlePhase();
+            requestAnimationFrame(updateGameEngine);
+        }
+
+        function triggerIdlePhase() {
+            gamePhase = "idle";
+            activeCommand = null;
+            izurCommandText.textContent = "IZUR SEDANG BERPIKIR...";
+            izurCommandText.style.color = "#a6adc8";
+            maxPhaseTime = 5;
+            phaseTimeLeft = maxPhaseTime;
+            
+            clearInterval(gameLoopTimer);
+            gameLoopTimer = setInterval(() => {
+                phaseTimeLeft--;
+                if(phaseTimeLeft <= 0) triggerCommandPhase();
+            }, 1000);
+        }
+
+        function triggerCommandPhase() {
+            gamePhase = "command";
+            didMoveThisRound = false; 
+            
+            activeCommand = commandsList[Math.floor(Math.random() * commandsList.length)];
+            izurCommandText.textContent = activeCommand.text;
+            izurCommandText.style.color = "#ffdd1a";
+            
+            maxPhaseTime = 10;
+            phaseTimeLeft = maxPhaseTime;
+
+            clearInterval(gameLoopTimer);
+            gameLoopTimer = setInterval(() => {
+                phaseTimeLeft--;
+                if(phaseTimeLeft <= 0) evaluatePlayerSuccess();
+            }, 1000);
+        }
+
+        function evaluatePlayerSuccess() {
+            clearInterval(gameLoopTimer);
+            let isKacangi = activeCommand.check();
+
+            if (isKacangi) {
+                endGamePlay();
+            } else {
+                score += 10;
+                currentScoreText.textContent = String(score).padStart(3, '0');
+                triggerIdlePhase();
+            }
+        }
+
+        function endGamePlay() {
+            gameActive = false;
+            izurCommandText.textContent = "GAME OVER! LU DIKACANGI.";
+            izurCommandText.style.color = "#f38ba8";
+            finalScoreText.textContent = score;
+            
+            saveLeaderboard(playerName, score);
+            showLeaderboard();
+            gameoverModal.classList.remove('hidden');
+        }
+
+        function checkCurrentZone() {
+            let px = player.x; let py = player.y;
+
+            if (px >= zones.rumah.x && px <= zones.rumah.x + zones.rumah.w && py >= zones.rumah.y && py <= zones.rumah.y + zones.rumah.h) return "rumah";
+            if (px >= zones.kapal.x && px <= zones.kapal.x + zones.kapal.w && py >= zones.kapal.y && py <= zones.kapal.y + zones.kapal.h) return "kapal";
+            if (px >= zones.danau.x && px <= zones.danau.x + zones.danau.w && py >= zones.danau.y && py <= zones.danau.y + zones.danau.h) return "danau"; 
+            if (px >= zones.pasir.x && px <= zones.pasir.x + zones.pasir.w && py >= zones.pasir.y && py <= zones.pasir.y + zones.pasir.h) return "pasir";
+            if (px >= zones.perosotan.x && px <= zones.perosotan.x + zones.perosotan.w && py >= zones.perosotan.y && py <= zones.perosotan.y + zones.perosotan.h) return "perosotan";
+            
+            return "tanah";
+        }
+
+        function updateGameEngine() {
+            if(!gameActive) return;
+
+            let moved = false;
+            if (player.keys['ArrowUp'] || player.keys['w'] || player.keys['W']) { player.y -= player.speed; moved = true; }
+            if (player.keys['ArrowDown'] || player.keys['s'] || player.keys['S']) { player.y += player.speed; moved = true; }
+            if (player.keys['ArrowLeft'] || player.keys['a'] || player.keys['A']) { player.x -= player.speed; moved = true; }
+            if (player.keys['ArrowRight'] || player.keys['d'] || player.keys['D']) { player.x += player.speed; moved = true; }
+
+            if(moved && gamePhase === "command") {
+                didMoveThisRound = true;
+            }
+
+            // Batas Screen
+            if(player.x < player.radius) player.x = player.radius;
+            if(player.x > canvas.width - player.radius) player.x = canvas.width - player.radius;
+            if(player.y < player.radius) player.y = player.radius;
+            if(player.y > canvas.height - player.radius) player.y = canvas.height - player.radius;
+
+            currentZone = checkCurrentZone();
+
+            if(currentZone === "danau") {
+                endGamePlay();
+                return;
+            }
+
+            let percentage = (phaseTimeLeft / maxPhaseTime) * 100;
+            timerProgress.style.width = percentage + "%";
+            timerProgress.style.backgroundColor = gamePhase === "command" ? "#ffdd1a" : "#a6e3a1";
+
+            if (currentZone === "rumah") {
+                if(roofAlpha > 0) roofAlpha -= 0.08;
+            } else {
+                if(roofAlpha < 1) roofAlpha += 0.08;
+            }
+
+            waveOffset += 0.05;
+
+            // RENDER CANVAS MAP
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Rumput Dasar RPG
+            ctx.fillStyle = '#457a22';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#4d852a';
+            for(let i=0; i<canvas.width; i+=40) {
+                for(let j=0; j<canvas.height; j+=40) {
+                    if((i+j)%3===0) ctx.fillRect(i, j, 4, 4);
+                }
+            }
+
+            // Pasir
+            let sandGrad = ctx.createLinearGradient(zones.pasir.x, zones.pasir.y, zones.pasir.x+zones.pasir.w, zones.pasir.y+zones.pasir.h);
+            sandGrad.addColorStop(0, '#e9c46a'); sandGrad.addColorStop(1, '#dfb24c');
+            ctx.fillStyle = sandGrad;
+            ctx.fillRect(zones.pasir.x, zones.pasir.y, zones.pasir.w, zones.pasir.h);
+            ctx.fillStyle = 'rgba(0,0,0,0.2)';
+            ctx.font = 'bold 11px Poppins';
+            ctx.fillText("⏳ AREA PASIR PANTAI", zones.pasir.x + 15, zones.pasir.y + 25);
+
+            // Danau + Riak Ombak
+            let lakeGrad = ctx.createLinearGradient(zones.danau.x, zones.danau.y, zones.danau.x+zones.danau.w, zones.danau.y+zones.danau.h);
+            lakeGrad.addColorStop(0, '#0077b6'); lakeGrad.addColorStop(1, '#0096c7');
+            ctx.fillStyle = lakeGrad;
+            ctx.fillRect(zones.danau.x, zones.danau.y, zones.danau.w, zones.danau.h);
+            
+            ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (let i = 0; i < zones.danau.w; i += 30) {
+                let waveY = zones.danau.y + 40 + Math.sin(waveOffset + i)*5;
+                ctx.lineTo(zones.danau.x + i, waveY);
+            }
+            ctx.stroke();
+
+            // Kapal
+            ctx.fillStyle = '#5c3d2e';
+            ctx.fillRect(zones.kapal.x, zones.kapal.y, zones.kapal.w, zones.kapal.h);
+            ctx.fillStyle = '#f8f9fa';
+            ctx.beginPath();
+            ctx.moveTo(zones.kapal.x + 40, zones.kapal.y + 5);
+            ctx.lineTo(zones.kapal.x + 70, zones.kapal.y + 25);
+            ctx.lineTo(zones.kapal.x + 40, zones.kapal.y + 25);
+            ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.fillText("⛵ DECK KAPAL", zones.kapal.x + 10, zones.kapal.y + 40);
+
+            // Perosotan
+            let slideGrad = ctx.createLinearGradient(zones.perosotan.x, zones.perosotan.y, zones.perosotan.x+zones.perosotan.w, zones.perosotan.y);
+            slideGrad.addColorStop(0, '#f26419'); slideGrad.addColorStop(1, '#f6bd60');
+            ctx.fillStyle = slideGrad;
+            ctx.fillRect(zones.perosotan.x, zones.perosotan.y, zones.perosotan.w, zones.perosotan.h);
+            ctx.fillStyle = '#fff';
+            ctx.fillText("🛝 PEROSOTAN EMAS", zones.perosotan.x + 5, zones.perosotan.y + 20);
+
+            // Dalam Rumah
+            ctx.fillStyle = '#e5e5e5';
+            ctx.fillRect(zones.rumah.x, zones.rumah.y, zones.rumah.w, zones.rumah.h);
+            ctx.strokeStyle = '#2b2d42'; ctx.lineWidth = 6;
+            ctx.strokeRect(zones.rumah.x, zones.rumah.y, zones.rumah.w, zones.rumah.h);
+
+            // Bayangan Bulat Player
+            ctx.fillStyle = 'rgba(0,0,0,0.25)';
+            ctx.beginPath(); ctx.arc(player.x, player.y + 20, 10, 0, Math.PI*2); ctx.fill();
+
+            // Karakter Stickman Glowing Neon White
+            ctx.strokeStyle = '#ffffff'; ctx.fillStyle = '#ffffff';
+            ctx.lineWidth = 4;
+            ctx.shadowBlur = 10; ctx.shadowColor = "#ffffff";
+
+            ctx.beginPath(); ctx.arc(player.x, player.y - 12, 7, 0, Math.PI * 2); ctx.fill(); // Kepala
+            ctx.beginPath();
+            ctx.moveTo(player.x, player.y - 5); ctx.lineTo(player.x, player.y + 10); // Badan
+            ctx.moveTo(player.x - 12, player.y + 2); ctx.lineTo(player.x + 12, player.y + 2); // Tangan
+            ctx.moveTo(player.x, player.y + 10); ctx.lineTo(player.x - 8, player.y + 22); // Kaki Ki
+            ctx.moveTo(player.x, player.y + 10); ctx.lineTo(player.x + 8, player.y + 22); // Kaki Ka
+            ctx.stroke();
+            ctx.shadowBlur = 0; 
+
+            // Atap Rumah Memudar Halus
+            if (roofAlpha > 0.01) {
+                ctx.fillStyle = `rgba(141, 153, 174, ${roofAlpha})`;
+                ctx.beginPath();
+                ctx.moveTo(zones.rumah.x - 15, zones.rumah.y + zones.rumah.h);
+                ctx.lineTo(zones.rumah.x + (zones.rumah.w / 2), zones.rumah.y - 30);
+                ctx.lineTo(zones.rumah.x + zones.rumah.w + 15, zones.rumah.y + zones.rumah.h);
+                ctx.closePath(); ctx.fill();
                 
-                setTimeout(() => {
-                    const allBalloons = menuNode.querySelectorAll('.balloon-group');
-                    allBalloons.forEach((b, idx) => {
-                        b.style.animation = `ayunBalon 3s ease-in-out infinite alternate`;
-                        b.style.animationDelay = `-${idx}s`;
-                    });
-                }, 1200);
-            }, 300); 
-        });
+                ctx.fillStyle = `rgba(255, 255, 255, ${roofAlpha})`;
+                ctx.font = 'bold 12px Poppins';
+                ctx.fillText("🏡 ECO HOUSE", zones.rumah.x + 55, zones.rumah.y + 80);
+            }
 
-        // ================= ACTION UTAMA MINI GAMES =================
-        btnMinigames.addEventListener('click', () => {
-            // 1. Jalankan animasi balon meletup di tempat
-            btnMinigames.classList.add('meledak');
+            // Update Efek Partikel Perpisahan
+            particles.forEach((p) => {
+                p.y += p.speedY; p.x += p.speedX;
+                if(p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; }
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, p.size, p.size);
+            });
 
-            // 2. Kamera langsung bergerak turun drastis (Viewport meluncur naik)
-            setTimeout(() => {
-                mainViewport.classList.add('camera-down');
-            }, 300);
-        });
+            requestAnimationFrame(updateGameEngine);
+        }
+
+        function saveLeaderboard(name, finalScore) {
+            let leaderboard = JSON.parse(localStorage.getItem('izur_leaderboard')) || [];
+            leaderboard.push({ name: name, score: finalScore });
+            leaderboard.sort((a, b) => b.score - a.score);
+            leaderboard = leaderboard.slice(0, 5);
+            localStorage.setItem('izur_leaderboard', JSON.stringify(leaderboard));
+        }
+
+        function showLeaderboard() {
+            let leaderboard = JSON.parse(localStorage.getItem('izur_leaderboard')) || [];
+            leaderboardList.innerHTML = "";
+            
+            if(leaderboard.length === 0) {
+                leaderboardList.innerHTML = "<p>Belum ada data skor.</p>";
+                return;
+            }
+
+            leaderboard.forEach((data, idx) => {
+                let item = document.createElement('div');
+                item.className = "leaderboard-item";
+                if(data.name === playerName && data.score === score) {
+                    item.style.background = "linear-gradient(to right, #ffdd1a, #ffaa00)";
+                    item.style.color = "#000";
+                }
+                item.innerHTML = `<span><b>#${idx + 1}</b> ${data.name}</span> <span>${data.score} PTS</span>`;
+                leaderboardList.appendChild(item);
+            });
+        }
     </script>
 </body>
 </html>
-                                                                                   
