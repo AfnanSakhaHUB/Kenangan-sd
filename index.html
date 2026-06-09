@@ -70,7 +70,7 @@
             padding: 20px;
         }
 
-        /* --- BALON MENGGUNAKAN GAMBAR PNG KAMU --- */
+        /* --- SCRIPT CSS BALON BARU (MURNI GAMBAR PNG KAMU) --- */
         .balloon-group {
             display: flex;
             flex-direction: column;
@@ -80,31 +80,33 @@
         }
 
         .balloon {
-            width: 140px;
-            height: 175px;
-            /* Memasang gambar PNG kamu sebagai background balon */
+            position: relative;
+            width: 160px; /* Ukuran disesuaikan agar gambar proporsional */
+            height: 210px;
+            /* Memanggil gambar langsung di CSS & memastikan ukuran pas (contain) */
             background: url('1000017857-removebg-preview.png') no-repeat center center;
             background-size: contain;
             display: flex;
             justify-content: center;
             align-items: center;
+            user-select: none;
+        }
+
+        /* Teks melayang pas di tengah gambar balon */
+        .balloon-text {
+            position: absolute;
+            top: 40%; /* Menyesuaikan rata-rata tengah perut balon */
+            left: 50%;
+            transform: translate(-50%, -50%);
             color: white;
             font-weight: bold;
             font-size: 1.1rem;
             text-align: center;
-            padding: 10px;
-            /* Shadow teks agar tulisan putih tetap terbaca jelas di background terang */
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6), -1px -1px 3px rgba(0, 0, 0, 0.6);
-            user-select: none;
-            transition: transform 0.2s;
-        }
-
-        /* Tali bawah balon */
-        .string {
-            width: 2px;
-            height: 80px;
-            background: rgba(0, 0, 0, 0.15);
-            margin-top: -5px; /* Narik tali sedikit ke atas agar pas di ujung gambar balon */
+            width: 80%;
+            /* Bayangan teks hitam tebal agar tulisan putih selalu kontras & terbaca */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), -2px -2px 4px rgba(0, 0, 0, 0.8);
+            z-index: 5;
+            pointer-events: none;
         }
 
         /* ANIMASI AYUNAN SANTAI */
@@ -113,8 +115,9 @@
             100% { transform: translateY(-15px) rotate(1.5deg); }
         }
 
-        .balloon-group:hover .balloon {
+        .balloon-group:hover {
             transform: scale(1.06);
+            transition: transform 0.2s;
         }
 
         /* ANIMASI MELEDAK POP DI TEMPAT */
@@ -124,14 +127,14 @@
         }
         @keyframes pop {
             0% { transform: scale(1); opacity: 1; }
-            40% { transform: scale(1.3); filter: brightness(1.2); }
+            40% { transform: scale(1.2) filter: brightness(1.2); }
             100% { transform: scale(0); opacity: 0; }
         }
 
         /* --- LAYOUT MENU UTAMA --- */
         .menu-balloons {
             display: flex;
-            gap: 30px;
+            gap: 40px;
             justify-content: center;
             align-items: center;
             width: 100%;
@@ -142,15 +145,14 @@
             .menu-balloons {
                 flex-direction: row;
                 flex-wrap: wrap;
-                gap: 15px;
+                gap: 20px;
             }
-            .menu-balloons .balloon {
-                width: 110px;
-                height: 140px;
-                font-size: 0.85rem;
+            .balloon {
+                width: 120px;
+                height: 160px;
             }
-            .menu-balloons .string {
-                height: 50px;
+            .balloon-text {
+                font-size: 0.9rem;
             }
         }
 
@@ -186,25 +188,29 @@
     <div class="container">
         
         <div id="start-node" class="balloon-group">
-            <div class="balloon">Mulai?</div>
-            <div class="string"></div>
+            <div class="balloon">
+                <div class="balloon-text">Mulai?</div>
+            </div>
         </div>
 
         <div id="menu-node" class="menu-balloons hidden">
             
             <div class="balloon-group b-1">
-                <div class="balloon">Foto<br>Kenangan</div>
-                <div class="string"></div>
+                <div class="balloon">
+                    <div class="balloon-text">Foto<br>Kenangan</div>
+                </div>
             </div>
 
             <div class="balloon-group b-2">
-                <div class="balloon">Catatan<br>Ranking</div>
-                <div class="string"></div>
+                <div class="balloon">
+                    <div class="balloon-text">Catatan<br>Ranking</div>
+                </div>
             </div>
 
             <div class="balloon-group b-3">
-                <div class="balloon">Catatan<br>Prestasi</div>
-                <div class="string"></div>
+                <div class="balloon">
+                    <div class="balloon-text">Catatan<br>Prestasi</div>
+                </div>
             </div>
 
         </div>
@@ -234,7 +240,7 @@
                 }, 100);
             }).catch(error => console.log("Audio terblokir:", error));
 
-            // 1. Memicu efek letusan pop di tempat
+            // 1. Efek letusan pop di tempat
             startNode.classList.add('meledak');
 
             // 2. Transisi langsung berjalan setelah letusan selesai (0.3 detik)
@@ -245,7 +251,7 @@
                 menuNode.classList.remove('hidden');
                 menuNode.classList.add('reveal');
                 
-                // 4. Setelah selesai meluncur naik, aktifkan goyangan lembutnya secara otomatis
+                // 4. Setelah selesai meluncur naik, kembalikan goyangan lembutnya
                 setTimeout(() => {
                     const allBalloons = menuNode.querySelectorAll('.balloon-group');
                     allBalloons.forEach((b, idx) => {
