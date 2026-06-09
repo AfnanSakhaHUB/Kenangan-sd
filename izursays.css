@@ -1,0 +1,258 @@
+/* --- BASE SYSTEM CONFIG --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+    background-color: #1e293b;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+#game-container {
+    position: relative;
+    width: 800px;
+    height: 640px; /* Alokasi ruang untuk Canvas + Header UI */
+    background-color: #0f172a;
+    border: 6px solid #334155;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- TAMPILAN BAR ATAS (IZUR HEADER) --- */
+#izur-header {
+    width: 100%;
+    background: #1e1e2e;
+    padding: 15px 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 4px solid #313244;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+#izur-avatar {
+    font-size: 2.5rem;
+    background: #fab387;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+#izur-bubble {
+    flex: 1;
+}
+
+#izur-command {
+    display: block;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 8px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* --- TIMER PROGRESS BAR SYSTEM --- */
+#timer-bar {
+    width: 100%;
+    height: 10px;
+    background-color: #313244;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#timer-progress {
+    width: 100%;
+    height: 100%;
+    background-color: #4caf50;
+    transition: width 1s linear, background-color 0.5s ease;
+}
+
+/* --- PANEL SKOR & TOMBOL LEAVE --- */
+#ui-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #111827;
+}
+
+#btn-back {
+    padding: 8px 16px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #991b1b;
+}
+#btn-back:active {
+    transform: translateY(3px);
+    box-shadow: none;
+}
+
+#score-box {
+    color: #ffdd1a;
+    font-weight: bold;
+    font-size: 1.2rem;
+    background: #1f2937;
+    padding: 6px 15px;
+    border-radius: 8px;
+    border: 2px solid #374151;
+}
+
+/* --- GAME SCREEN CANVAS --- */
+canvas {
+    background-color: #579e23;
+    display: block;
+    cursor: crosshair;
+}
+
+#controls-notice {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.85rem;
+    padding: 8px 0;
+    background: #0f172a;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+/* --- MODAL BOX POPUP (LEADERBOARD / ENTER NAME) --- */
+.modal {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease;
+}
+
+.modal-content {
+    background: #1e293b;
+    border: 4px solid #ffdd1a;
+    border-radius: 20px;
+    padding: 35px;
+    width: 85%;
+    max-width: 450px;
+    text-color: #fff;
+    color: white;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.modal-content h2, .modal-content h3 {
+    margin-bottom: 15px;
+    color: #ffdd1a;
+}
+
+.modal-content p {
+    color: #cbd5e1;
+    margin-bottom: 20px;
+}
+
+.text-danger {
+    color: #f87171;
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px #000;
+}
+
+/* Form Input */
+#player-name-input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    border: 2px solid #475569;
+    border-radius: 10px;
+    background: #0f172a;
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+}
+#player-name-input:focus {
+    outline: none;
+    border-color: #ffdd1a;
+}
+
+/* Tombol Menu Button */
+.menu-btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #000;
+    background: #ffdd1a;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #b39700;
+    margin-top: 10px;
+}
+.menu-btn:hover {
+    background: #ffe547;
+}
+.menu-btn:active {
+    transform: translateY(3px);
+    box-shadow: none;
+}
+.btn-secondary {
+    background: #475569;
+    color: white;
+    box-shadow: 0 4px 0 #1e293b;
+}
+.btn-secondary:hover { background: #64748b; }
+
+/* --- STRUKTUR LIST LEADERBOARD --- */
+#leaderboard-list {
+    margin: 15px 0;
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.leaderboard-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background: #0f172a;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    font-size: 1rem;
+    border-left: 4px solid #38bdf8;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #334155;
+    margin: 15px 0;
+}
+
+.modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.hidden {
+    display: none !important;
+}
