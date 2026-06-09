@@ -5,18 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=none">
     <title>Izur Says - Edisi Spesial Perpisahan</title>
     <link rel="stylesheet" href="izursays.css">
-    <!-- Google Fonts untuk tampilan font premium -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Orbitron:wght@500;900&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- BACKGROUND MANAGEMENT -->
     <div class="epic-bg-glow"></div>
 
-    <!-- MAIN CONTAINER -->
     <div id="game-container">
         
-        <!-- HEADER UTAMA PERINTAH IZUR (ARCADE STYLE) -->
         <div id="izur-header">
             <div id="izur-avatar-container">
                 <div id="izur-avatar">😎</div>
@@ -29,30 +25,32 @@
             </div>
         </div>
 
-        <!-- PANEL KONTROL ATAS -->
         <div id="ui-panel">
-            <button id="btn-back" onclick="window.location.href='index.html'">
-                <span class="icon">⬅</span> KELUAR GAME
-            </button>
+            <button id="btn-back" onclick="window.location.href='index.html'">⬅ KELUAR</button>
             <div id="score-box">
                 <span class="label">SCORE</span>
                 <span id="current-score">000</span>
             </div>
         </div>
 
-        <!-- AREA UTAMA CANVAS -->
         <div id="canvas-wrapper">
             <canvas id="gameCanvas" width="800" height="500"></canvas>
-            
-            <!-- VIRTUAL JOYSTICK OVERLAY -->
-            <div id="joystick-zone">
-                <div id="joystick-base">
-                    <div id="joystick-knob"></div>
-                </div>
+        </div>
+
+        <div id="mobile-controller">
+            <div class="dpad-row">
+                <button class="dpad-btn btn-up" id="pad-up">▲</button>
+            </div>
+            <div class="dpad-row">
+                <button class="dpad-btn btn-left" id="pad-left">◀</button>
+                <div class="dpad-center"></div>
+                <button class="dpad-btn btn-right" id="pad-right">▶</button>
+            </div>
+            <div class="dpad-row">
+                <button class="dpad-btn btn-down" id="pad-down">▼</button>
             </div>
         </div>
 
-        <!-- OVERLAY MODAL: DAFTAR NAMA AWAL -->
         <div id="overlay-modal" class="modal">
             <div class="modal-content animate-pop">
                 <div class="event-tag">MEMORIES OF 2026</div>
@@ -60,15 +58,14 @@
                 <p class="subtext">Edisi Spesial Perpisahan Sekolah. Buktikan lu gak gampang dikacangin!</p>
                 
                 <div class="input-group">
-                    <label for="player-name-input">INPUT NAMA ACCOUNTPMU</label>
-                    <input type="text" id="player-name-input" placeholder="Ketik nama lu di sini..." maxlength="12">
+                    <label for="player-name-input">INPUT NAMA KAMU</label>
+                    <input type="text" id="player-name-input" placeholder="Ketik nama di sini..." maxlength="12">
                 </div>
                 
                 <button id="btn-start-game" class="menu-btn gold-glow">MULAI PERMAINAN</button>
             </div>
         </div>
 
-        <!-- OVERLAY MODAL: GAME OVER & LEADERBOARD HIGH-CLASS -->
         <div id="gameover-modal" class="modal hidden">
             <div class="modal-content animate-pop">
                 <div class="eliminated-tag">ELIMINASI</div>
@@ -77,9 +74,7 @@
                 
                 <div class="leaderboard-box">
                     <h3>🏆 PAPAN PERINGKAT TERATAS 🏆</h3>
-                    <div id="leaderboard-list">
-                        <!-- Diisi otomatis oleh JavaScript -->
-                    </div>
+                    <div id="leaderboard-list"></div>
                 </div>
 
                 <div class="modal-actions">
@@ -91,12 +86,10 @@
 
     </div>
 
-    <!-- LOGIKA CORE ENGINE & JOYSTICK -->
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        // DOM Nodes
         const izurCommandText = document.getElementById('izur-command');
         const timerProgress = document.getElementById('timer-progress');
         const currentScoreText = document.getElementById('current-score');
@@ -108,26 +101,19 @@
         const btnRestart = document.getElementById('btn-restart');
         const leaderboardList = document.getElementById('leaderboard-list');
 
-        // Joystick DOM Elements
-        const joystickBase = document.getElementById('joystick-base');
-        const joystickKnob = document.getElementById('joystick-knob');
-
-        // Game States
         let playerName = "Anonim";
         let score = 0;
         let gameActive = false;
         let currentZone = "tanah"; 
         let didMoveThisRound = false;
-        let roofAlpha = 1; // Untuk efek transisi halus memudarnya atap rumah
-        let waveOffset = 0; // Efek riak air bergerak
+        let roofAlpha = 1; 
+        let waveOffset = 0; 
 
-        // Sistem Timer Perintah
         let gameLoopTimer;
         let gamePhase = "idle"; 
         let phaseTimeLeft = 0;
         let maxPhaseTime = 5;
 
-        // Partikel Efek Perpisahan (Confetti System)
         let particles = [];
         function createParticles() {
             for(let i=0; i<30; i++) {
@@ -135,9 +121,9 @@
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
                     size: Math.random() * 4 + 2,
-                    color: `hsla(${Math.random() * 360}, 80%, 60%, ${Math.random() * 0.5 + 0.3})`,
+                    color: `hsla(${Math.random() * 40 + 20}, 85%, 60%, ${Math.random() * 0.4 + 0.3})`,
                     speedX: Math.random() * 1 - 0.5,
-                    speedY: Math.random() * 0.8 + 0.3
+                    speedY: Math.random() * 0.7 + 0.3
                 });
             }
         }
@@ -153,15 +139,12 @@
         ];
         let activeCommand = null;
 
-        // Struktur Player
         const player = {
             x: 400, y: 250,
-            radius: 14, speed: 4.5,
-            vx: 0, vy: 0, // Ditambahkan untuk handle joystick velocity
+            radius: 14, speed: 5,
             keys: {}
         };
 
-        // Koordinat Geometris Zona Map
         const zones = {
             danau: { x: 460, y: 50, w: 290, h: 190 },
             kapal: { x: 560, y: 120, w: 85, h: 45 },
@@ -170,68 +153,45 @@
             rumah: { x: 70, y: 50, w: 200, h: 150 }
         };
 
-        // Event Listener Keyboard
-        window.addEventListener('keydown', (e) => { if(gameActive) player.keys[e.key.toLowerCase()] = true; });
-        window.addEventListener('keyup', (e) => { if(gameActive) player.keys[e.key.toLowerCase()] = false; });
+        // Keyboard Handlers
+        window.addEventListener('keydown', (e) => { if(gameActive) player.keys[e.key] = true; });
+        window.addEventListener('keyup', (e) => { if(gameActive) player.keys[e.key] = false; });
 
-        // ================= INTEGRASI ENGINE VIRTUAL JOYSTICK =================
-        let joystickActive = false;
-        let joystickCenter = { x: 0, y: 0 };
-        const maxRadius = 40; // Batas radius gerak knob joystick
-
-        function handleJoystickStart(e) {
-            if (!gameActive) return;
-            joystickActive = true;
-            const rect = joystickBase.getBoundingClientRect();
-            joystickCenter = {
-                x: rect.left + rect.width / 2,
-                y: rect.top + rect.height / 2
-            };
-            handleJoystickMove(e);
-        }
-
-        function handleJoystickMove(e) {
-            if (!joystickActive) return;
-            e.preventDefault();
+        // ================= DETEKSI TOMBOL SCREENTOUCH HP (D-PAD) =================
+        function setupMobileButton(elementId, keyName) {
+            const btn = document.getElementById(elementId);
             
-            let clientX = e.clientX || (e.touches && e.touches[0].clientX);
-            let clientY = e.clientY || (e.touches && e.touches[0].clientY);
+            // Saat Ditekan
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if(gameActive) player.keys[keyName] = true;
+            }, { passive: false });
+            
+            btn.addEventListener('mousedown', () => {
+                if(gameActive) player.keys[keyName] = true;
+            });
 
-            let deltaX = clientX - joystickCenter.x;
-            let deltaY = clientY - joystickCenter.y;
-            let distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-            if (distance > maxRadius) {
-                deltaX = (deltaX / distance) * maxRadius;
-                deltaY = (deltaY / distance) * maxRadius;
-                distance = maxRadius;
-            }
-
-            joystickKnob.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-
-            // Konversi nilai koordinat ke kecepatan gerak player
-            player.vx = (deltaX / maxRadius) * player.speed;
-            player.vy = (deltaY / maxRadius) * player.speed;
+            // Saat Dilepas
+            btn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                player.keys[keyName] = false;
+            }, { passive: false });
+            
+            btn.addEventListener('mouseup', () => {
+                player.keys[keyName] = false;
+            });
+            
+            btn.addEventListener('mouseleave', () => {
+                player.keys[keyName] = false;
+            });
         }
 
-        function handleJoystickEnd() {
-            joystickActive = false;
-            joystickKnob.style.transform = `translate(0px, 0px)`;
-            player.vx = 0;
-            player.vy = 0;
-        }
-
-        // Pointer & Touch Events untuk Joystick
-        joystickBase.addEventListener('mousedown', handleJoystickStart);
-        window.addEventListener('mousemove', handleJoystickMove);
-        window.addEventListener('mouseup', handleJoystickEnd);
-
-        joystickBase.addEventListener('touchstart', handleJoystickStart, {passive: false});
-        window.addEventListener('touchmove', handleJoystickMove, {passive: false});
-        window.addEventListener('touchend', handleJoystickEnd);
+        setupMobileButton('pad-up', 'ArrowUp');
+        setupMobileButton('pad-down', 'ArrowDown');
+        setupMobileButton('pad-left', 'ArrowLeft');
+        setupMobileButton('pad-right', 'ArrowRight');
 
 
-        // ================= LOOP LOGIKA PERMAINAN =================
         btnStart.addEventListener('click', () => {
             if(nameInput.value.trim() !== "") playerName = nameInput.value.trim();
             overlayModal.classList.add('hidden');
@@ -248,7 +208,6 @@
             currentScoreText.textContent = "000";
             player.x = 380;
             player.y = 260;
-            player.vx = 0; player.vy = 0;
             player.keys = {};
             gameActive = true;
             didMoveThisRound = false;
@@ -331,27 +290,16 @@
         function updateGameEngine() {
             if(!gameActive) return;
 
-            // Satukan Input Gerak (Keyboard + Joystick)
-            let mx = 0; let my = 0;
-            if (player.keys['w'] || player.keys['arrowup']) my = -player.speed;
-            if (player.keys['s'] || player.keys['arrowdown']) my = player.speed;
-            if (player.keys['a'] || player.keys['arrowleft']) mx = -player.speed;
-            if (player.keys['d'] || player.keys['arrowright']) mx = player.speed;
+            let moved = false;
+            if (player.keys['ArrowUp'] || player.keys['w'] || player.keys['W']) { player.y -= player.speed; moved = true; }
+            if (player.keys['ArrowDown'] || player.keys['s'] || player.keys['S']) { player.y += player.speed; moved = true; }
+            if (player.keys['ArrowLeft'] || player.keys['a'] || player.keys['A']) { player.x -= player.speed; moved = true; }
+            if (player.keys['ArrowRight'] || player.keys['d'] || player.keys['D']) { player.x += player.speed; moved = true; }
 
-            // Jika ada input dari joystick, timpa input keyboard
-            if(Math.abs(player.vx) > 0.1 || Math.abs(player.vy) > 0.1) {
-                mx = player.vx;
-                my = player.vy;
-            }
-
-            player.x += mx;
-            player.y += my;
-
-            if((Math.abs(mx) > 0.1 || Math.abs(my) > 0.1) && gamePhase === "command") {
+            if(moved && gamePhase === "command") {
                 didMoveThisRound = true;
             }
 
-            // Batas Canvas Boundary
             if(player.x < player.radius) player.x = player.radius;
             if(player.x > canvas.width - player.radius) player.x = canvas.width - player.radius;
             if(player.y < player.radius) player.y = player.radius;
@@ -359,34 +307,28 @@
 
             currentZone = checkCurrentZone();
 
-            // Aturan Otomatis Danau
             if(currentZone === "danau") {
                 endGamePlay();
                 return;
             }
 
-            // Update Progress UI Bar
             let percentage = (phaseTimeLeft / maxPhaseTime) * 100;
             timerProgress.style.width = percentage + "%";
             timerProgress.style.backgroundColor = gamePhase === "command" ? "#ffdd1a" : "#a6e3a1";
 
-            // Animasi transisi atap rumah memudar
             if (currentZone === "rumah") {
                 if(roofAlpha > 0) roofAlpha -= 0.08;
             } else {
                 if(roofAlpha < 1) roofAlpha += 0.08;
             }
 
-            waveOffset += 0.05; // Menggerakkan riak danau
+            waveOffset += 0.05;
 
-            // ---------------- DRAW ENGINE RENDERING ----------------
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // 1. Render Tanah (Gaya Grid RPG High Class)
+            // Rumput
             ctx.fillStyle = '#457a22';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Detail Tekstur Rumput Estetik
             ctx.fillStyle = '#4d852a';
             for(let i=0; i<canvas.width; i+=40) {
                 for(let j=0; j<canvas.height; j+=40) {
@@ -394,22 +336,21 @@
                 }
             }
 
-            // 2. Render Pasir Gradasi HD
+            // Pasir
             let sandGrad = ctx.createLinearGradient(zones.pasir.x, zones.pasir.y, zones.pasir.x+zones.pasir.w, zones.pasir.y+zones.pasir.h);
             sandGrad.addColorStop(0, '#e9c46a'); sandGrad.addColorStop(1, '#dfb24c');
             ctx.fillStyle = sandGrad;
             ctx.fillRect(zones.pasir.x, zones.pasir.y, zones.pasir.w, zones.pasir.h);
-            ctx.fillStyle = 'rgba(0,0,0,0.15)';
+            ctx.fillStyle = 'rgba(0,0,0,0.2)';
             ctx.font = 'bold 11px Poppins';
             ctx.fillText("⏳ AREA PASIR PANTAI", zones.pasir.x + 15, zones.pasir.y + 25);
 
-            // 3. Render Danau Air Animatif
+            // Danau
             let lakeGrad = ctx.createLinearGradient(zones.danau.x, zones.danau.y, zones.danau.x+zones.danau.w, zones.danau.y+zones.danau.h);
             lakeGrad.addColorStop(0, '#0077b6'); lakeGrad.addColorStop(1, '#0096c7');
             ctx.fillStyle = lakeGrad;
             ctx.fillRect(zones.danau.x, zones.danau.y, zones.danau.w, zones.danau.h);
             
-            // Menggambar garis riak air bergerak sinematik
             ctx.strokeStyle = 'rgba(255,255,255,0.15)';
             ctx.lineWidth = 2;
             ctx.beginPath();
@@ -419,10 +360,9 @@
             }
             ctx.stroke();
 
-            // 4. Render Kapal Mewah
+            // Kapal
             ctx.fillStyle = '#5c3d2e';
             ctx.fillRect(zones.kapal.x, zones.kapal.y, zones.kapal.w, zones.kapal.h);
-            // Layar Kapal Futuristik
             ctx.fillStyle = '#f8f9fa';
             ctx.beginPath();
             ctx.moveTo(zones.kapal.x + 40, zones.kapal.y + 5);
@@ -432,7 +372,7 @@
             ctx.fillStyle = '#fff';
             ctx.fillText("⛵ DECK KAPAL", zones.kapal.x + 10, zones.kapal.y + 40);
 
-            // 5. Render Perosotan Colorful
+            // Perosotan
             let slideGrad = ctx.createLinearGradient(zones.perosotan.x, zones.perosotan.y, zones.perosotan.x+zones.perosotan.w, zones.perosotan.y);
             slideGrad.addColorStop(0, '#f26419'); slideGrad.addColorStop(1, '#f6bd60');
             ctx.fillStyle = slideGrad;
@@ -440,35 +380,31 @@
             ctx.fillStyle = '#fff';
             ctx.fillText("🛝 PEROSOTAN EMAS", zones.perosotan.x + 5, zones.perosotan.y + 20);
 
-            // 6. Render Interior Lantai Rumah
+            // Dalam Rumah
             ctx.fillStyle = '#e5e5e5';
             ctx.fillRect(zones.rumah.x, zones.rumah.y, zones.rumah.w, zones.rumah.h);
             ctx.strokeStyle = '#2b2d42'; ctx.lineWidth = 6;
             ctx.strokeRect(zones.rumah.x, zones.rumah.y, zones.rumah.w, zones.rumah.h);
 
-            // 7. Render Bayangan & Player Stickman
-            ctx.fillStyle = 'rgba(0,0,0,0.25)'; // Bayangan bulat di bawah kaki
-            ctx.beginPath();
-            ctx.arc(player.x, player.y + 20, 10, 0, Math.PI*2);
-            ctx.fill();
+            // Bayangan
+            ctx.fillStyle = 'rgba(0,0,0,0.25)';
+            ctx.beginPath(); ctx.arc(player.x, player.y + 20, 10, 0, Math.PI*2); ctx.fill();
 
-            ctx.strokeStyle = '#ffffff'; ctx.fillStyle = '#ffffff'; // Warna Kontras Premium Neon White
+            // Player Stickman Glowing Neon
+            ctx.strokeStyle = '#ffffff'; ctx.fillStyle = '#ffffff';
             ctx.lineWidth = 4;
-            ctx.shadowBlur = 10; ctx.shadowColor = "#ffffff"; // Efek Glow pada Player
+            ctx.shadowBlur = 10; ctx.shadowColor = "#ffffff";
 
-            // Kepala
             ctx.beginPath(); ctx.arc(player.x, player.y - 12, 7, 0, Math.PI * 2); ctx.fill();
-            // Badan & Anggota Tubuh
             ctx.beginPath();
-            ctx.moveTo(player.x, player.y - 5); ctx.lineTo(player.x, player.y + 10); // Badan
-            ctx.moveTo(player.x - 12, player.y + 2); ctx.lineTo(player.x + 12, player.y + 2); // Tangan
-            ctx.moveTo(player.x, player.y + 10); ctx.lineTo(player.x - 8, player.y + 22); // Kaki Ki
-            ctx.moveTo(player.x, player.y + 10); ctx.lineTo(player.x + 8, player.y + 22); // Kaki Ka
-        ctx.stroke();
-            
-            ctx.shadowBlur = 0; // Matikan glow agar tidak merembet ke objek lain
+            ctx.moveTo(player.x, player.y - 5); ctx.lineTo(player.x, player.y + 10);
+            ctx.moveTo(player.x - 12, player.y + 2); ctx.lineTo(player.x + 12, player.y + 2);
+            ctx.moveTo(player.x, player.y + 10); ctx.lineTo(player.x - 8, player.y + 22);
+            ctx.moveTo(player.x, player.y + 10); ctx.lineTo(player.x + 8, player.y + 22);
+            ctx.stroke();
+            ctx.shadowBlur = 0; 
 
-            // 8. Render Atap Rumah dengan Smooth Alpha Fading
+            // Atap Rumah
             if (roofAlpha > 0.01) {
                 ctx.fillStyle = `rgba(141, 153, 174, ${roofAlpha})`;
                 ctx.beginPath();
@@ -482,7 +418,7 @@
                 ctx.fillText("🏡 ECO HOUSE", zones.rumah.x + 55, zones.rumah.y + 80);
             }
 
-            // 9. Efek Ambient Partikel Perpisahan (Confetti System)
+            // Partikel Konfeti
             particles.forEach((p) => {
                 p.y += p.speedY; p.x += p.speedX;
                 if(p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; }
@@ -493,7 +429,6 @@
             requestAnimationFrame(updateGameEngine);
         }
 
-        // ================= STRUKTUR DATA LEADERBOARD ENGINE =================
         function saveLeaderboard(name, finalScore) {
             let leaderboard = JSON.parse(localStorage.getItem('izur_leaderboard')) || [];
             leaderboard.push({ name: name, score: finalScore });
