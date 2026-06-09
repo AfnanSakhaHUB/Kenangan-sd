@@ -20,7 +20,7 @@
             background-color: #3a8ffd;
         }
 
-        /* --- BACKGROUND LANGIT BIRU (AWAN NORMAL) --- */
+        /* --- BACKGROUND LANGIT BIRU (AWAN GERAK NORMAL) --- */
         .sky {
             position: fixed;
             top: 0;
@@ -32,6 +32,7 @@
             overflow: hidden;
         }
 
+        /* Awan Bergerak Santai */
         .cloud {
             position: absolute;
             background: rgba(255, 255, 255, 0.95);
@@ -70,7 +71,7 @@
             padding: 20px;
         }
 
-        /* --- BALON 3D GLOSSY --- */
+        /* --- BALON STYLE AWAL (TIDAK DIUBAH) --- */
         .balloon-group {
             display: flex;
             flex-direction: column;
@@ -99,7 +100,7 @@
             user-select: none;
         }
 
-        /* Pantulan Cahaya Glossy */
+        /* Pantulan Cahaya Utama (Glossy) */
         .balloon::before {
             content: '';
             position: absolute;
@@ -110,6 +111,7 @@
             transform: rotate(-25deg);
         }
 
+        /* Pantulan Cahaya Sekunder */
         .balloon::after {
             content: "";
             position: absolute;
@@ -120,6 +122,7 @@
             filter: blur(1px);
         }
 
+        /* Simpul Tali Balon */
         .knot {
             width: 0; height: 0;
             border-left: 8px solid transparent;
@@ -129,13 +132,14 @@
             margin-top: -1px;
         }
 
+        /* Tali Balon */
         .string {
             width: 2px;
             height: 80px;
             background: rgba(0, 0, 0, 0.15);
         }
 
-        /* WARNA BALON */
+        /* KATEGORI WARNA GRADASI BALON */
         .red { background: radial-gradient(circle at 35% 35%, #ff5252 0%, #cc0000 80%); }
         .red + .knot { border-bottom: 12px solid #cc0000; }
 
@@ -148,7 +152,7 @@
         .yellow { background: radial-gradient(circle at 35% 35%, #ffca28 0%, #f57f17 80%); }
         .yellow + .knot { border-bottom: 12px solid #f57f17; }
 
-        /* ANIMASI AYUNAN */
+        /* ANIMASI MELAYANG SANTAI */
         @keyframes ayunBalon {
             0% { transform: translateY(0px) rotate(-1.5deg); }
             100% { transform: translateY(-15px) rotate(1.5deg); }
@@ -158,9 +162,9 @@
             transform: scale(1.06);
         }
 
-        /* EFEK LETUSAN POP REALISTIS */
+        /* ANIMASI MELEDAK POP DI TEMPAT */
         .balloon-group.meledak {
-            animation: pop 0.3s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: pop 0.3s forwards ease-out;
             pointer-events: none;
         }
         @keyframes pop {
@@ -169,7 +173,7 @@
             100% { transform: scale(0); opacity: 0; }
         }
 
-        /* --- LAYOUT MENU --- */
+        /* --- LAYOUT 3 BALON MENU --- */
         .menu-balloons {
             display: flex;
             gap: 30px;
@@ -178,7 +182,7 @@
             width: 100%;
         }
 
-        /* RESPONSIVENESS HP */
+        /* Responsif HP */
         @media (max-width: 600px) {
             .menu-balloons {
                 flex-direction: row;
@@ -195,16 +199,16 @@
             }
         }
 
-        /* ANIMASI TERBANG MASUK DARI BAWAH KE ATAS */
+        /* TRANSISI UTAMA: ANIMASI TERBANG MASUK DARI BAWAH KE ATAS */
         .reveal .balloon-group {
-            animation: terbangMasuk 1.2s cubic-bezier(0.075, 0.82, 0.165, 1) both;
+            animation: terbangMasuk 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
         }
         .reveal .b-1 { animation-delay: 0s; }
         .reveal .b-2 { animation-delay: 0.15s; }
         .reveal .b-3 { animation-delay: 0.3s; }
 
         @keyframes terbangMasuk {
-            0% { transform: translateY(800px) scale(0.6); opacity: 0; }
+            0% { transform: translateY(800px) scale(0.5); opacity: 0; }
             100% { transform: translateY(0) scale(1); opacity: 1; }
         }
 
@@ -264,7 +268,7 @@
         let audioTracker;
 
         startNode.addEventListener('click', () => {
-            // Amankan sistem audio & batasi maksimal 3 detik
+            // Putar audio & batasi maksimal 3 detik otomatis
             windSfx.pause();
             windSfx.currentTime = 0;
 
@@ -277,20 +281,20 @@
                         clearInterval(audioTracker);
                     }
                 }, 100);
-            }).catch(error => console.log("Audio play diblokir browser:", error));
+            }).catch(error => console.log("Audio diblokir browser:", error));
 
-            // 1. Memicu letusan pop di tempat
+            // 1. Memicu efek letusan pop di tempat
             startNode.classList.add('meledak');
 
-            // 2. Tepat setelah efek letusan meledak selesai (0.3 detik), ganti konten
+            // 2. Transisi ganti menu tepat setelah balon merah selesai meledak (0.3 detik)
             setTimeout(() => {
                 startNode.classList.add('hidden');
                 
-                // 3. Memunculkan menu baru meluncur terbang dari bawah ke atas
+                // 3. Memunculkan 3 balon meluncur mulus naik dari bawah ke atas
                 menuNode.classList.remove('hidden');
                 menuNode.classList.add('reveal');
                 
-                // 4. Setelah selesai terbang masuk (1.2 detik), kembalikan ke animasi melayang santai
+                // 4. Setelah selesai meluncur naik, kembalikan ke efek ayunan melayang santai
                 setTimeout(() => {
                     const allBalloons = menuNode.querySelectorAll('.balloon-group');
                     allBalloons.forEach((b, idx) => {
