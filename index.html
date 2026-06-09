@@ -17,6 +17,7 @@
             height: 100vh;
             overflow: hidden;
             font-family: 'Arial', sans-serif;
+            background-color: #3a8ffd;
         }
 
         /* --- BACKGROUND LANGIT BIRU INDAH --- */
@@ -46,7 +47,6 @@
             border-radius: 50%;
         }
         
-        /* Posisi & Kecepatan Awan Normal */
         .cloud1 { width: 170px; height: 60px; top: 15%; left: -200px; animation: jalanAwan 25s linear infinite; }
         .cloud1::before { width: 80px; height: 80px; top: -40px; left: 20px; }
         .cloud1::after { width: 60px; height: 60px; top: -25px; right: 20px; }
@@ -54,10 +54,6 @@
         .cloud2 { width: 230px; height: 75px; top: 35%; left: -300px; animation: jalanAwan 35s linear infinite; animation-delay: 5s; }
         .cloud2::before { width: 100px; height: 100px; top: -50px; left: 30px; }
         .cloud2::after { width: 80px; height: 80px; top: -30px; right: 30px; }
-
-        .cloud3 { width: 130px; height: 45px; top: 60%; left: -150px; animation: jalanAwan 20s linear infinite; animation-delay: 10s; }
-        .cloud3::before { width: 60px; height: 60px; top: -30px; left: 15px; }
-        .cloud3::after { width: 50px; height: 50px; top: -20px; right: 15px; }
 
         @keyframes jalanAwan {
             0% { left: -300px; }
@@ -84,7 +80,7 @@
             padding: 20px;
         }
 
-        /* --- STRUKTUR BALON 3D REALISTIS --- */
+        /* --- ANIMASI AMBIENT MELAYANG --- */
         .balloon-group {
             display: flex;
             flex-direction: column;
@@ -93,73 +89,46 @@
             cursor: pointer;
         }
 
-        .balloon {
-            width: 140px;
-            height: 175px;
-            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+        /* Wadah Balon Gambar */
+        .balloon-container {
             position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.1rem;
-            text-align: center;
-            padding: 10px;
-            box-shadow: inset -10px -15px 25px rgba(0,0,0,0.35), 0 10px 20px rgba(0,0,0,0.15);
+            width: 150px;
             transition: transform 0.2s;
             user-select: none;
         }
 
-        /* Efek Kilap Cahaya pada Balon */
-        .balloon::before {
-            content: '';
+        /* Mengatur Gambar Balon Berfungsi Baik */
+        .balloon-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+        }
+
+        /* Penempatan Teks di Tengah Kepala Balon */
+        .balloon-text {
             position: absolute;
-            top: 8%; left: 12%;
-            width: 20px; height: 40px;
-            background: rgba(255,255,255,0.5);
-            border-radius: 50%;
-            transform: rotate(-20deg);
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-align: center;
+            width: 85%;
+            /* Bayangan teks agar tulisan tetap terbaca jelas apa pun warna balonnya */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), -2px -2px 4px rgba(0, 0, 0, 0.8);
+            pointer-events: none;
+            line-height: 1.3;
         }
 
-        /* Simpul di bawah balon */
-        .balloon::after {
-            content: "";
-            position: absolute;
-            bottom: -8px; left: 50%;
-            transform: translateX(-50%);
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-        }
-
-        /* Tali Balon */
-        .string {
-            width: 2px;
-            height: 90px;
-            background: rgba(0, 0, 0, 0.15);
-        }
-
-        /* WARNA BALON */
-        .red { background: radial-gradient(circle at 35% 35%, #ff4d4d, #cc0000); }
-        .red::after { border-bottom: 12px solid #cc0000; }
-
-        .blue { background: radial-gradient(circle at 35% 35%, #3498db, #1f618d); }
-        .blue::after { border-bottom: 12px solid #1f618d; }
-
-        .green { background: radial-gradient(circle at 35% 35%, #2ecc71, #1e8449); }
-        .green::after { border-bottom: 12px solid #1e8449; }
-
-        .yellow { background: radial-gradient(circle at 35% 35%, #f1c40f, #b7950b); }
-        .yellow::after { border-bottom: 12px solid #b7950b; }
-
-        /* ANIMASI MELAYANG */
         @keyframes ayunBalon {
-            0% { transform: translateY(0px) rotate(-1deg); }
-            100% { transform: translateY(-15px) rotate(1deg); }
+            0% { transform: translateY(0px) rotate(-1.3deg); }
+            100% { transform: translateY(-18px) rotate(1.3deg); }
         }
 
-        .balloon-group:hover .balloon {
-            transform: scale(1.06);
+        .balloon-group:hover .balloon-container {
+            transform: scale(1.08);
         }
 
         /* ANIMASI MELEDAK */
@@ -169,38 +138,37 @@
         }
         @keyframes pop {
             0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.4); filter: brightness(1.3); }
+            50% { transform: scale(1.3); filter: brightness(1.4); }
             100% { transform: scale(0); opacity: 0; }
         }
 
-        /* --- LAYOUT 3 BALON MENU (RESPONSIF HP) --- */
+        /* --- LAYOUT 3 BALON MENU (RESPONSIF PONSEL) --- */
         .menu-balloons {
             display: flex;
-            gap: 30px;
+            gap: 40px;
             justify-content: center;
             align-items: center;
             width: 100%;
         }
 
-        /* Pengaturan variasi ayunan balon biar estetik tidak barengan */
         .menu-balloons .b-1 { animation-delay: 0s; }
         .menu-balloons .b-2 { animation-delay: -1s; }
         .menu-balloons .b-3 { animation-delay: -2s; }
 
-        /* Tampilan khusus kalau dibuka di layar HP kecil */
+        /* Tampilan khusus Layar HP */
         @media (max-width: 600px) {
             .menu-balloons {
                 flex-direction: row;
                 flex-wrap: wrap;
                 gap: 15px;
+                justify-content: center;
             }
-            .menu-balloons .balloon {
-                width: 105px;
-                height: 135px;
+            .balloon-container {
+                width: 110px;
+            }
+            .balloon-text {
                 font-size: 0.85rem;
-            }
-            .menu-balloons .string {
-                height: 50px;
+                top: 38%;
             }
         }
 
@@ -217,7 +185,6 @@
             100% { transform: translateY(0) scale(1); opacity: 1; }
         }
 
-        /* UTILITY */
         .hidden {
             display: none !important;
         }
@@ -225,67 +192,75 @@
 </head>
 <body>
 
-    <!-- BACKGROUND -->
     <div class="sky" id="skyBg">
         <div class="cloud cloud1"></div>
         <div class="cloud cloud2"></div>
-        <div class="cloud cloud3"></div>
     </div>
 
-    <!-- KONTEN -->
     <div class="container">
         
-        <!-- BALON UTAMA (MULAI) -->
         <div id="start-node" class="balloon-group">
-            <div class="balloon red">Mulai? 🎈</div>
-            <div class="string"></div>
+            <div class="balloon-container">
+                <img src="1000017857-removebg-preview.png" alt="Balon" class="balloon-img">
+                <div class="balloon-text">Mulai? 🎈</div>
+            </div>
         </div>
 
-        <!-- 3 BALON MENU (AWALNYA COLOSED/HIDDEN) -->
         <div id="menu-node" class="menu-balloons hidden">
             
             <div class="balloon-group b-1">
-                <div class="balloon blue">Foto<br>Kenangan 📸</div>
-                <div class="string"></div>
+                <div class="balloon-container">
+                    <img src="1000017857-removebg-preview.png" alt="Balon" class="balloon-img">
+                    <div class="balloon-text">Foto<br>Kenangan 📸</div>
+                </div>
             </div>
 
             <div class="balloon-group b-2">
-                <div class="balloon green">Catatan<br>Ranking 🏆</div>
-                <div class="string"></div>
+                <div class="balloon-container">
+                    <img src="1000017857-removebg-preview.png" alt="Balon" class="balloon-img">
+                    <div class="balloon-text">Catatan<br>Ranking 🏆</div>
+                </div>
             </div>
 
             <div class="balloon-group b-3">
-                <div class="balloon yellow">Catatan<br>Prestasi 📜</div>
-                <div class="string"></div>
+                <div class="balloon-container">
+                    <img src="1000017857-removebg-preview.png" alt="Balon" class="balloon-img">
+                    <div class="balloon-text">Catatan<br>Prestasi 📜</div>
+                </div>
             </div>
 
         </div>
 
     </div>
 
-    <!-- LOGIKA INTERAKSI -->
     <script>
         const startNode = document.getElementById('start-node');
         const menuNode = document.getElementById('menu-node');
         const skyBg = document.getElementById('skyBg');
 
+        // Menyiapkan audio efek angin transisi
+        const sfxWind = new Audio('dragon-studio-wind-blowing-sfx-01-423673.mp3');
+
         startNode.addEventListener('click', () => {
-            // 1. Balon merah meledak
+            // 1. Putar musik SFX Angin secara instan
+            sfxWind.play().catch(err => console.log("Audio dimainkan setelah interaksi user:", err));
+
+            // 2. Memicu animasi meledak pada balon merah
             startNode.classList.add('meledak');
             
-            // 2. Awan bergerak super cepat
+            // 3. Memicu efek awan bergerak super kencang
             skyBg.classList.add('cepat');
 
-            // 3. Jeda transisi selama 1.2 detik
+            // 4. Durasi jeda sinematik selama 1.2 detik
             setTimeout(() => {
                 startNode.classList.add('hidden');
                 skyBg.classList.remove('cepat');
                 
-                // 4. Munculkan 3 balon menu dari bawah
+                // 5. Memunculkan 3 pilihan menu baru terbang dari bawah
                 menuNode.classList.remove('hidden');
                 menuNode.classList.add('reveal');
                 
-                // Kembalikan animasi melayang normal setelah balon masuk
+                // Mengembalikan kontrol ayunan melayang normal setelah animasi masuk selesai
                 setTimeout(() => {
                     const allBalloons = menuNode.querySelectorAll('.balloon-group');
                     allBalloons.forEach((b, idx) => {
