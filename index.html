@@ -20,7 +20,7 @@
             background-color: #3a8ffd;
         }
 
-        /* --- BACKGROUND LANGIT BIRU (AWAN GERAK NORMAL) --- */
+        /* --- BACKGROUND LANGIT BIRU --- */
         .sky {
             position: fixed;
             top: 0;
@@ -32,6 +32,57 @@
             overflow: hidden;
         }
 
+        /* --- EFEK MATAHARI CERAH REAF --- */
+        .sun {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            width: 100px;
+            height: 100px;
+            background: #ffdd1a;
+            border-radius: 50%;
+            /* Efek cahaya kuning cerah melingkar */
+            box-shadow: 0 0 40px #ffea4a, 0 0 80px #ffea4a, 0 0 120px #ffea4a;
+            animation: pendarMatahari 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes pendarMatahari {
+            0% { transform: scale(1); box-shadow: 0 0 40px #ffea4a, 0 0 80px #ffea4a; }
+            100% { transform: scale(1.05); box-shadow: 0 0 60px #ffea4a, 0 0 110px #ffea4a, 0 0 150px #ffea4a; }
+        }
+
+        /* --- BURUNG TERBANG (200w.webp) --- */
+        .bird {
+            position: absolute;
+            background: url('200w.webp') no-repeat center center;
+            background-size: contain;
+            pointer-events: none;
+        }
+
+        .bird1 {
+            width: 70px;
+            height: 70px;
+            top: 20%;
+            left: -100px;
+            animation: terbangBurung 14s linear infinite;
+        }
+
+        .bird2 {
+            width: 50px; /* Lebih kecil biar ada efek jarak (artifisial depth) */
+            height: 50px;
+            top: 12%;
+            left: -100px;
+            animation: terbangBurung 18s linear infinite;
+            animation-delay: 5s; /* Biar lewatnya bergantian */
+        }
+
+        @keyframes terbangBurung {
+            0% { left: -100px; transform: translateY(0); }
+            50% { transform: translateY(-15px); } /* Efek agak naik turun pas terbang */
+            100% { left: 110%; transform: translateY(0); }
+        }
+
+        /* --- AWAN GERAK --- */
         .cloud {
             position: absolute;
             background: rgba(255, 255, 255, 0.95);
@@ -45,11 +96,11 @@
             border-radius: 50%;
         }
         
-        .cloud1 { width: 170px; height: 60px; top: 15%; left: -200px; animation: jalanAwan 25s linear infinite; }
+        .cloud1 { width: 170px; height: 60px; top: 25%; left: -200px; animation: jalanAwan 25s linear infinite; }
         .cloud1::before { width: 80px; height: 80px; top: -40px; left: 20px; }
         .cloud1::after { width: 60px; height: 60px; top: -25px; right: 20px; }
 
-        .cloud2 { width: 230px; height: 75px; top: 35%; left: -300px; animation: jalanAwan 35s linear infinite; animation-delay: 5s; }
+        .cloud2 { width: 230px; height: 75px; top: 45%; left: -300px; animation: jalanAwan 35s linear infinite; animation-delay: 3s; }
         .cloud2::before { width: 100px; height: 100px; top: -50px; left: 30px; }
         .cloud2::after { width: 80px; height: 80px; top: -30px; right: 30px; }
 
@@ -70,7 +121,7 @@
             padding: 20px;
         }
 
-        /* --- STYLE BALON FIX PAKAI FILE PNG LU --- */
+        /* --- STYLE BALON GAMBAR PNG --- */
         .balloon-group {
             display: flex;
             flex-direction: column;
@@ -83,7 +134,6 @@
             position: relative;
             width: 160px; 
             height: 210px;
-            /* SEKARANG SUDAH FIX PAKAI FILE PNG LU */
             background: url('1000017857-removebg-preview.png') no-repeat center center;
             background-size: contain;
             display: flex;
@@ -92,7 +142,7 @@
             user-select: none;
         }
 
-        /* Teks melayang pas di tengah perut balon */
+        /* Teks melayang di tengah perut balon */
         .balloon-text {
             position: absolute;
             top: 40%; 
@@ -103,13 +153,12 @@
             font-size: 1.1rem;
             text-align: center;
             width: 80%;
-            /* Bayangan hitam biar tulisan putih kebaca jelas */
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), -2px -2px 4px rgba(0, 0, 0, 0.8);
             z-index: 5;
             pointer-events: none;
         }
 
-        /* ANIMASI AYUNAN SANTAI */
+        /* ANIMASI AYUNAN BALON */
         @keyframes ayunBalon {
             0% { transform: translateY(0px) rotate(-1.5deg); }
             100% { transform: translateY(-15px) rotate(1.5deg); }
@@ -120,7 +169,7 @@
             transition: transform 0.2s;
         }
 
-        /* ANIMASI MELEDAK POP DI TEMPAT */
+        /* ANIMASI MELEDAK POP */
         .balloon-group.meledak {
             animation: pop 0.3s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
             pointer-events: none;
@@ -154,9 +203,15 @@
             .balloon-text {
                 font-size: 0.9rem;
             }
+            .sun {
+                width: 70px;
+                height: 70px;
+                top: 20px;
+                right: 20px;
+            }
         }
 
-        /* ANIMASI TERBANG LURUS DARI BAWAH KE ATAS */
+        /* ANIMASI TERBANG MASUK */
         .reveal .balloon-group {
             animation: terbangMasuk 1.2s cubic-bezier(0.075, 0.82, 0.165, 1) both;
         }
@@ -181,6 +236,9 @@
     </audio>
 
     <div class="sky">
+        <div class="sun"></div>
+        <div class="bird bird1"></div>
+        <div class="bird bird2"></div>
         <div class="cloud cloud1"></div>
         <div class="cloud cloud2"></div>
     </div>
