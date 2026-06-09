@@ -3,92 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelulusan Premium 2026</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Kelulusan Epik 2026</title>
+    <style>
+        /* --- RESET & DASAR --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* --- BACKGROUND LANGIT BIRU INDAH --- */
+        .sky {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(to bottom, #3a8ffd 0%, #6cb2ff 60%, #b4ecff 100%);
+            z-index: 1;
+            overflow: hidden;
+            transition: all 0.8s ease;
+        }
+
+        /* Desain Awan Minimalis Fluffy */
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 100px;
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.05));
+        }
+        .cloud::before, .cloud::after {
+            content: '';
+            position: absolute;
+            background: inherit;
+            border-radius: 50%;
+        }
+        
+        /* Posisi & Kecepatan Awan Normal */
+        .cloud1 { width: 170px; height: 60px; top: 15%; left: -200px; animation: jalanAwan 25s linear infinite; }
+        .cloud1::before { width: 80px; height: 80px; top: -40px; left: 20px; }
+        .cloud1::after { width: 60px; height: 60px; top: -25px; right: 20px; }
+
+        .cloud2 { width: 230px; height: 75px; top: 35%; left: -300px; animation: jalanAwan 35s linear infinite; animation-delay: 5s; }
+        .cloud2::before { width: 100px; height: 100px; top: -50px; left: 30px; }
+        .cloud2::after { width: 80px; height: 80px; top: -30px; right: 30px; }
+
+        .cloud3 { width: 130px; height: 45px; top: 60%; left: -150px; animation: jalanAwan 20s linear infinite; animation-delay: 10s; }
+        .cloud3::before { width: 60px; height: 60px; top: -30px; left: 15px; }
+        .cloud3::after { width: 50px; height: 50px; top: -20px; right: 15px; }
+
+        @keyframes jalanAwan {
+            0% { left: -300px; }
+            100% { left: 110%; }
+        }
+
+        /* TRANSISI AWAN CEPAT (WARP EFFECT) */
+        .sky.cepat .cloud {
+            animation-duration: 0.5s !important;
+            transform: scaleX(4) skewX(-10deg);
+            opacity: 0.7;
+            filter: blur(2px);
+        }
+
+        /* --- KONTEN UTAMA --- */
+        .container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* --- STRUKTUR BALON 3D REALISTIS --- */
+        .balloon-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: ayunBalon 3s ease-in-out infinite alternate;
+            cursor: pointer;
+        }
+
+        .balloon {
+            width: 140px;
+            height: 175px;
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-align: center;
+            padding: 10px;
+            box-shadow: inset -10px -15px 25px rgba(0,0,0,0.35), 0 10px 20px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
+            user-select: none;
+        }
+
+        /* Efek Kilap Cahaya pada Balon */
+        .balloon::before {
+            content: '';
+            position: absolute;
+            top: 8%; left: 12%;
+            width: 20px; height: 40px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 50%;
+            transform: rotate(-20deg);
+        }
+
+        /* Simpul di bawah balon */
+        .balloon::after {
+            content: "";
+            position: absolute;
+            bottom: -8px; left: 50%;
+            transform: translateX(-50%);
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+        }
+
+        /* Tali Balon */
+        .string {
+            width: 2px;
+            height: 90px;
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        /* WARNA BALON */
+        .red { background: radial-gradient(circle at 35% 35%, #ff4d4d, #cc0000); }
+        .red::after { border-bottom: 12px solid #cc0000; }
+
+        .blue { background: radial-gradient(circle at 35% 35%, #3498db, #1f618d); }
+        .blue::after { border-bottom: 12px solid #1f618d; }
+
+        .green { background: radial-gradient(circle at 35% 35%, #2ecc71, #1e8449); }
+        .green::after { border-bottom: 12px solid #1e8449; }
+
+        .yellow { background: radial-gradient(circle at 35% 35%, #f1c40f, #b7950b); }
+        .yellow::after { border-bottom: 12px solid #b7950b; }
+
+        /* ANIMASI MELAYANG */
+        @keyframes ayunBalon {
+            0% { transform: translateY(0px) rotate(-1deg); }
+            100% { transform: translateY(-15px) rotate(1deg); }
+        }
+
+        .balloon-group:hover .balloon {
+            transform: scale(1.06);
+        }
+
+        /* ANIMASI MELEDAK */
+        .balloon-group.meledak {
+            animation: pop 0.2s forwards ease-out;
+            pointer-events: none;
+        }
+        @keyframes pop {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); filter: brightness(1.3); }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        /* --- LAYOUT 3 BALON MENU (RESPONSIF HP) --- */
+        .menu-balloons {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Pengaturan variasi ayunan balon biar estetik tidak barengan */
+        .menu-balloons .b-1 { animation-delay: 0s; }
+        .menu-balloons .b-2 { animation-delay: -1s; }
+        .menu-balloons .b-3 { animation-delay: -2s; }
+
+        /* Tampilan khusus kalau dibuka di layar HP kecil */
+        @media (max-width: 600px) {
+            .menu-balloons {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            .menu-balloons .balloon {
+                width: 105px;
+                height: 135px;
+                font-size: 0.85rem;
+            }
+            .menu-balloons .string {
+                height: 50px;
+            }
+        }
+
+        /* Animasi Balon Terbang Masuk dari Bawah */
+        .reveal .balloon-group {
+            animation: terbangMasuk 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+        .reveal .b-1 { animation-delay: 0s; }
+        .reveal .b-2 { animation-delay: 0.2s; }
+        .reveal .b-3 { animation-delay: 0.4s; }
+
+        @keyframes terbangMasuk {
+            0% { transform: translateY(700px) scale(0.5); opacity: 0; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        /* UTILITY */
+        .hidden {
+            display: none !important;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Efek Gelombang Kejut Saat Meledak -->
-    <div class="shockwave" id="shockwave"></div>
-
-    <!-- Wrapper Utama untuk Efek Guncangan Layar (Screen Shake) -->
-    <div class="shake-container" id="screen">
-        
-        <!-- BACKGROUND: Langit Atmosferik -->
-        <div class="sky" id="skyBg">
-            <div class="aurora"></div>
-            <div class="mist m1"></div>
-            <div class="mist m2"></div>
-        </div>
-
-        <!-- KONTEN -->
-        <div class="container">
-            
-            <!-- TAHAP 1: Balon Inti "Mulai" (Gaya Kaca Neon) -->
-            <div id="balloon-start" class="orb-wrapper">
-                <div class="main-orb">
-                    <div class="pulse-glow"></div>
-                    <div class="orb-text">Mulai 🎓</div>
-                </div>
-                <div class="energy-line"></div>
-            </div>
-
-            <!-- TAHAP 2: 3 Pod Pilihan Premium (Awalnya Tersembunyi) -->
-            <div id="balloon-choices" class="menu-container hidden">
-                
-                <div class="card-pod pod-blue">
-                    <div class="icon">📸</div>
-                    <h3>Foto Kenangan</h3>
-                    <p>Memori Indah</p>
-                </div>
-
-                <div class="card-pod pod-green">
-                    <div class="icon">🏆</div>
-                    <h3>Catatan Ranking</h3>
-                    <p>Peringkat & Nilai</p>
-                </div>
-
-                <div class="card-pod pod-gold">
-                    <div class="icon">📜</div>
-                    <h3>Catatan Prestasi</h3>
-                    <p>Penghargaan Epik</p>
-                </div>
-
-            </div>
-
-        </div>
+    <!-- BACKGROUND -->
+    <div class="sky" id="skyBg">
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+        <div class="cloud cloud3"></div>
     </div>
 
-    <script>
-        const startBalloon = document.getElementById('balloon-start');
-        const screen = document.getElementById('screen');
-        const skyBg = document.getElementById('skyBg');
-        const shockwave = document.getElementById('shockwave');
-        const choicesContainer = document.getElementById('balloon-choices');
+    <!-- KONTEN -->
+    <div class="container">
+        
+        <!-- BALON UTAMA (MULAI) -->
+        <div id="start-node" class="balloon-group">
+            <div class="balloon red">Mulai? 🎈</div>
+            <div class="string"></div>
+        </div>
 
-        startBalloon.addEventListener('click', (e) => {
-            // 1. Dapatkan posisi klik untuk pusat gelombang kejut
-            const rect = startBalloon.getBoundingClientRect();
-            shockwave.style.left = (rect.left + rect.width / 2) + 'px';
-            shockwave.style.top = (rect.top + rect.height / 2) + 'px';
+        <!-- 3 BALON MENU (AWALNYA COLOSED/HIDDEN) -->
+        <div id="menu-node" class="menu-balloons hidden">
             
-            // 2. Aktifkan Efek Ledakan, Guncangan, dan Shockwave
-            startBalloon.classList.add('implode');
-            screen.classList.add('action-shake');
-            shockwave.classList.add('wave-blast');
-            skyBg.classList.add('hyper-drive');
+            <div class="balloon-group b-1">
+                <div class="balloon blue">Foto<br>Kenangan 📸</div>
+                <div class="string"></div>
+            </div>
 
-            // 3. Durasi Transisi Sinematik
+            <div class="balloon-group b-2">
+                <div class="balloon green">Catatan<br>Ranking 🏆</div>
+                <div class="string"></div>
+            </div>
+
+            <div class="balloon-group b-3">
+                <div class="balloon yellow">Catatan<br>Prestasi 📜</div>
+                <div class="string"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- LOGIKA INTERAKSI -->
+    <script>
+        const startNode = document.getElementById('start-node');
+        const menuNode = document.getElementById('menu-node');
+        const skyBg = document.getElementById('skyBg');
+
+        startNode.addEventListener('click', () => {
+            // 1. Balon merah meledak
+            startNode.classList.add('meledak');
+            
+            // 2. Awan bergerak super cepat
+            skyBg.classList.add('cepat');
+
+            // 3. Jeda transisi selama 1.2 detik
             setTimeout(() => {
-                startBalloon.classList.add('hidden');
-                screen.classList.remove('action-shake');
-                skyBg.classList.remove('hyper-drive');
-                shockwave.classList.remove('wave-blast');
+                startNode.classList.add('hidden');
+                skyBg.classList.remove('cepat');
                 
-                // 4. Munculkan Menu Pilihan dengan Animasi Masuk yang Halus
-                choicesContainer.classList.remove('hidden');
-                choicesContainer.classList.add('reveal-menu');
-            }, 1000);
+                // 4. Munculkan 3 balon menu dari bawah
+                menuNode.classList.remove('hidden');
+                menuNode.classList.add('reveal');
+                
+                // Kembalikan animasi melayang normal setelah balon masuk
+                setTimeout(() => {
+                    const allBalloons = menuNode.querySelectorAll('.balloon-group');
+                    allBalloons.forEach((b, idx) => {
+                        b.style.animation = `ayunBalon 3s ease-in-out infinite alternate`;
+                        b.style.animationDelay = `-${idx}s`;
+                    });
+                }, 1200);
+
+            }, 1200);
         });
     </script>
 </body>
