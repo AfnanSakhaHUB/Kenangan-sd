@@ -280,23 +280,30 @@
         const menuNode = document.getElementById('menu-node');
         const skyBg = document.getElementById('skyBg');
         const windSfx = document.getElementById('windSfx');
-
-        // PANTUAN DETIK AUDIO (Fitur Pemotong Otomatis Real-time)
-        windSfx.addEventListener('timeupdate', function() {
-            // Begitu waktu putar asli mencapai atau melewati 3 detik, matikan!
-            if (this.currentTime >= 3) {
-                this.pause();
-                this.currentTime = 0; // Reset ke awal agar siap dipakai lagi nanti
-            }
-        });
+        
+        let audioTracker; // Variabel pemantau waktu internet
 
         startNode.addEventListener('click', () => {
-            // Reset ke detik 0 sebelum di-play
+            // Skenario reset total audio sebelum mulai
+            windSfx.pause();
             windSfx.currentTime = 0;
-            windSfx.play().catch(error => {
-                console.log("Audio diblokir browser:", error);
+
+            // Putar audio
+            windSfx.play().then(() => {
+                // METODE INDEPENDEN: Cek waktu manual tiap 100ms (Anti-Throttling HP)
+                clearInterval(audioTracker);
+                audioTracker = setInterval(() => {
+                    if (windSfx.currentTime >= 3.0) {
+                        windSfx.pause();
+                        windSfx.currentTime = 0;
+                        clearInterval(audioTracker); // Matikan pelacak jika sudah sukses dipotong
+                    }
+                }, 100);
+            }).catch(error => {
+                console.log("Audio sempat tertahan sistem proteksi browser:", error);
             });
 
+            // Jalankan animasi visual
             startNode.classList.add('meledak');
             skyBg.classList.add('cepat');
 
