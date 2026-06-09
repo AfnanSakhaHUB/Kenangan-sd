@@ -1,4 +1,8 @@
-/* --- RESET & DASAR --- */
+/* ==========================================================================
+   KODE CSS LENGKAP - HALAMAN KELULUSAN EPIK 2026
+   ========================================================================== */
+
+/* --- 1. RESET & DASAR --- */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -10,10 +14,10 @@ body, html {
     height: 100vh;
     overflow: hidden;
     font-family: 'Arial', sans-serif;
-    background-color: #3a8ffd; /* Supaya kalau loading tidak hitam */
+    background-color: #3a8ffd;
 }
 
-/* --- BACKGROUND LANGIT BIRU INDAH --- */
+/* --- 2. BACKGROUND LANGIT BIRU & AWAN --- */
 .sky {
     position: fixed;
     top: 0;
@@ -23,16 +27,15 @@ body, html {
     background: linear-gradient(to bottom, #3a8ffd 0%, #6cb2ff 60%, #b4ecff 100%);
     z-index: 1;
     overflow: hidden;
-    transition: all 0.8s ease;
 }
 
-/* Desain Awan Minimalis Fluffy */
 .cloud {
     position: absolute;
     background: rgba(255, 255, 255, 0.95);
     border-radius: 100px;
     filter: drop-shadow(0 8px 16px rgba(0,0,0,0.05));
 }
+
 .cloud::before, .cloud::after {
     content: '';
     position: absolute;
@@ -40,33 +43,35 @@ body, html {
     border-radius: 50%;
 }
 
-/* Posisi & Kecepatan Awan Normal */
-.cloud1 { width: 170px; height: 60px; top: 15%; left: -200px; animation: jalanAwan 25s linear infinite; }
+/* Animasi & Posisi Awan 1 */
+.cloud1 { 
+    width: 170px; 
+    height: 60px; 
+    top: 15%; 
+    left: -200px; 
+    animation: jalanAwan 25s linear infinite; 
+}
 .cloud1::before { width: 80px; height: 80px; top: -40px; left: 20px; }
 .cloud1::after { width: 60px; height: 60px; top: -25px; right: 20px; }
 
-.cloud2 { width: 230px; height: 75px; top: 35%; left: -300px; animation: jalanAwan 35s linear infinite; animation-delay: 5s; }
+/* Animasi & Posisi Awan 2 */
+.cloud2 { 
+    width: 230px; 
+    height: 75px; 
+    top: 35%; 
+    left: -300px; 
+    animation: jalanAwan 35s linear infinite; 
+    animation-delay: 5s; 
+}
 .cloud2::before { width: 100px; height: 100px; top: -50px; left: 30px; }
 .cloud2::after { width: 80px; height: 80px; top: -30px; right: 30px; }
-
-.cloud3 { width: 130px; height: 45px; top: 60%; left: -150px; animation: jalanAwan 20s linear infinite; animation-delay: 10s; }
-.cloud3::before { width: 60px; height: 60px; top: -30px; left: 15px; }
-.cloud3::after { width: 50px; height: 50px; top: -20px; right: 15px; }
 
 @keyframes jalanAwan {
     0% { left: -300px; }
     100% { left: 110%; }
 }
 
-/* TRANSISI AWAN CEPAT (WARP EFFECT) */
-.sky.cepat .cloud {
-    animation-duration: 0.5s !important;
-    transform: scaleX(4) skewX(-10deg);
-    opacity: 0.7;
-    filter: blur(2px);
-}
-
-/* --- KONTEN UTAMA --- */
+/* --- 3. KONTEN UTAMA --- */
 .container {
     position: relative;
     z-index: 2;
@@ -78,7 +83,7 @@ body, html {
     padding: 20px;
 }
 
-/* --- STRUKTUR BALON 3D REALISTIS --- */
+/* --- 4. STYLE BALON GAMBAR PNG --- */
 .balloon-group {
     display: flex;
     flex-direction: column;
@@ -88,128 +93,96 @@ body, html {
 }
 
 .balloon {
-    width: 140px;
-    height: 175px;
-    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
     position: relative;
+    width: 160px; /* Lebar ideal balon gambar */
+    height: 210px; /* Tinggi ideal balon gambar */
+    background: url('1000017857-removebg-preview.png') no-repeat center center;
+    background-size: contain;
     display: flex;
     justify-content: center;
     align-items: center;
+    user-select: none;
+}
+
+/* Teks melayang pas di tengah perut balon */
+.balloon-text {
+    position: absolute;
+    top: 40%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
     color: white;
     font-weight: bold;
     font-size: 1.1rem;
     text-align: center;
-    padding: 10px;
-    box-shadow: inset -10px -15px 25px rgba(0,0,0,0.35), 0 10px 20px rgba(0,0,0,0.15);
-    transition: transform 0.2s;
-    user-select: none;
-}
-
-/* Efek Kilap Cahaya pada Balon */
-.balloon::before {
-    content: '';
-    position: absolute;
-    top: 8%; left: 12%;
-    width: 20px; height: 40px;
-    background: rgba(255,255,255,0.5);
-    border-radius: 50%;
-    transform: rotate(-20deg);
-}
-
-/* Simpul di bawah balon */
-.balloon::after {
-    content: "";
-    position: absolute;
-    bottom: -8px; left: 50%;
-    transform: translateX(-50%);
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-}
-
-/* Tali Balon */
-.string {
-    width: 2px;
-    height: 90px;
-    background: rgba(0, 0, 0, 0.15);
-}
-
-/* WARNA BALON */
-.red { background: radial-gradient(circle at 35% 35%, #ff4d4d, #cc0000); }
-.red::after { border-bottom: 12px solid #cc0000; }
-
-.blue { background: radial-gradient(circle at 35% 35%, #3498db, #1f618d); }
-.blue::after { border-bottom: 12px solid #1f618d; }
-
-.green { background: radial-gradient(circle at 35% 35%, #2ecc71, #1e8449); }
-.green::after { border-bottom: 12px solid #1e8449; }
-
-.yellow { background: radial-gradient(circle at 35% 35%, #f1c40f, #b7950b); }
-.yellow::after { border-bottom: 12px solid #b7950b; }
-
-/* ANIMASI MELAYANG */
-@keyframes ayunBalon {
-    0% { transform: translateY(0px) rotate(-1deg); }
-    100% { transform: translateY(-15px) rotate(1deg); }
-}
-
-.balloon-group:hover .balloon {
-    transform: scale(1.06);
-}
-
-/* ANIMASI MELEDAK */
-.balloon-group.meledak {
-    animation: pop 0.2s forwards ease-out;
+    width: 80%;
+    /* Efek shadow hitam tebal agar teks putih selalu kontras & terbaca jelas */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), -2px -2px 4px rgba(0, 0, 0, 0.8);
+    z-index: 5;
     pointer-events: none;
 }
+
+/* --- 5. ANIMASI BALON (AYUN & POP MELEDAK) --- */
+@keyframes ayunBalon {
+    0% { transform: translateY(0px) rotate(-1.5deg); }
+    100% { transform: translateY(-15px) rotate(1.5deg); }
+}
+
+.balloon-group:hover {
+    transform: scale(1.06);
+    transition: transform 0.2s;
+}
+
+/* Animasi meledak pop di tempat */
+.balloon-group.meledak {
+    animation: pop 0.3s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: none;
+}
+
 @keyframes pop {
     0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.4); filter: brightness(1.3); }
+    40% { transform: scale(1.2); filter: brightness(1.2); }
     100% { transform: scale(0); opacity: 0; }
 }
 
-/* --- LAYOUT 3 BALON MENU (RESPONSIF HP) --- */
+/* --- 6. LAYOUT MENU UTAMA & ANIMASI MASUK --- */
 .menu-balloons {
     display: flex;
-    gap: 30px;
+    gap: 40px;
     justify-content: center;
     align-items: center;
     width: 100%;
 }
 
-.menu-balloons .b-1 { animation-delay: 0s; }
-.menu-balloons .b-2 { animation-delay: -1s; }
-.menu-balloons .b-3 { animation-delay: -2s; }
+/* Animasi terbang lurus dari bawah ke atas saat menu muncul */
+.reveal .balloon-group {
+    animation: terbangMasuk 1.2s cubic-bezier(0.075, 0.82, 0.165, 1) both;
+}
+.reveal .b-1 { animation-delay: 0s; }
+.reveal .b-2 { animation-delay: 0.15s; }
+.reveal .b-3 { animation-delay: 0.3s; }
 
-/* Tampilan khusus HP layar kecil */
+@keyframes terbangMasuk {
+    0% { transform: translateY(800px) scale(0.6); opacity: 0; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* --- 7. UTILITY CLASSES --- */
+.hidden {
+    display: none !important;
+}
+
+/* --- 8. RESPONSIVE LAYOUT UNTUK HP --- */
 @media (max-width: 600px) {
     .menu-balloons {
         flex-direction: row;
         flex-wrap: wrap;
-        gap: 15px;
+        gap: 20px;
     }
-    .menu-balloons .balloon {
-        width: 105px;
-        height: 135px;
-        font-size: 0.85rem;
+    .balloon {
+        width: 120px; /* Balon mengecil otomatis di HP agar tidak meluber */
+        height: 160px;
     }
-    .menu-balloons .string {
-        height: 50px;
+    .balloon-text {
+        font-size: 0.9rem;
     }
-}
-
-/* Animasi Balon Terbang Masuk */
-.reveal .balloon-group {
-    animation: terbangMasuk 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
-}
-.reveal .b-1 { animation-delay: 0s; }
-.reveal .b-2 { animation-delay: 0.2s; }
-.reveal .b-3 { animation-delay: 0.4s; }
-
-@keyframes terbangMasuk {
-    0% { transform: translateY(700px) scale(0.5); opacity: 0; }
-    100% { transform: translateY(0) scale(1); opacity: 1; }
-}
-
-.hidden {
-    display: none !important;
 }
