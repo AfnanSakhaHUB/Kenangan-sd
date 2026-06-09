@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Kelulusan Interaktif</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="sky" id="skyBg">
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+        <div class="cloud cloud3"></div>
+    </div>
+
+    <div class="container">
+        
+        <div id="balloon-start" class="balloon red-balloon">
+            <span>Mulai?</span>
+        </div>
+
+        <div id="balloon-choices" class="choices-container hidden">
+            
+            <div class="balloon-wrapper wrapper1">
+                <div class="balloon choice-balloon blue">
+                    <span>Foto Kenangan</span>
+                </div>
+            </div>
+
+            <div class="balloon-wrapper wrapper2">
+                <div class="balloon choice-balloon green">
+                    <span>Catatan Ranking</span>
+                </div>
+            </div>
+
+            <div class="balloon-wrapper wrapper3">
+                <div class="balloon choice-balloon yellow">
+                    <span>Catatan Prestasi</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        const startBalloon = document.getElementById('balloon-start');
+        const skyBg = document.getElementById('skyBg');
+        const choicesContainer = document.getElementById('balloon-choices');
+
+        startBalloon.addEventListener('click', () => {
+            // 1. Jalankan animasi meledak pada balon merah
+            startBalloon.classList.add('exploded');
+            
+            // 2. Ubah gerakan awan menjadi sangat cepat (efek transisi)
+            skyBg.classList.add('fast-clouds');
+
+            // 3. Tunggu selama 1.5 detik (1500 milidetik) saat transisi berlangsung
+            setTimeout(() => {
+                startBalloon.classList.add('hidden'); // Sembunyikan balon merah total
+                skyBg.classList.remove('fast-clouds'); // Kembalikan kecepatan awan ke normal
+                
+                // 4. Munculkan 3 balon baru dari bawah
+                choicesContainer.classList.remove('hidden');
+                choicesContainer.classList.add('fade-in-balloons');
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
