@@ -32,7 +32,6 @@
             overflow: hidden;
         }
 
-        /* Awan Bergerak Santai */
         .cloud {
             position: absolute;
             background: rgba(255, 255, 255, 0.95);
@@ -71,7 +70,7 @@
             padding: 20px;
         }
 
-        /* --- BALON STYLE AWAL (TIDAK DIUBAH) --- */
+        /* --- BALON STYLE ORIGINAL (SESUAI GAMBAR) --- */
         .balloon-group {
             display: flex;
             flex-direction: column;
@@ -100,7 +99,7 @@
             user-select: none;
         }
 
-        /* Pantulan Cahaya Utama (Glossy) */
+        /* Efek Kilauan Glossy */
         .balloon::before {
             content: '';
             position: absolute;
@@ -111,7 +110,6 @@
             transform: rotate(-25deg);
         }
 
-        /* Pantulan Cahaya Sekunder */
         .balloon::after {
             content: "";
             position: absolute;
@@ -122,7 +120,6 @@
             filter: blur(1px);
         }
 
-        /* Simpul Tali Balon */
         .knot {
             width: 0; height: 0;
             border-left: 8px solid transparent;
@@ -132,14 +129,13 @@
             margin-top: -1px;
         }
 
-        /* Tali Balon */
         .string {
             width: 2px;
             height: 80px;
             background: rgba(0, 0, 0, 0.15);
         }
 
-        /* KATEGORI WARNA GRADASI BALON */
+        /* KODE WARNA BALON */
         .red { background: radial-gradient(circle at 35% 35%, #ff5252 0%, #cc0000 80%); }
         .red + .knot { border-bottom: 12px solid #cc0000; }
 
@@ -152,7 +148,7 @@
         .yellow { background: radial-gradient(circle at 35% 35%, #ffca28 0%, #f57f17 80%); }
         .yellow + .knot { border-bottom: 12px solid #f57f17; }
 
-        /* ANIMASI MELAYANG SANTAI */
+        /* ANIMASI AYUNAN SANTAI */
         @keyframes ayunBalon {
             0% { transform: translateY(0px) rotate(-1.5deg); }
             100% { transform: translateY(-15px) rotate(1.5deg); }
@@ -164,7 +160,7 @@
 
         /* ANIMASI MELEDAK POP DI TEMPAT */
         .balloon-group.meledak {
-            animation: pop 0.3s forwards ease-out;
+            animation: pop 0.3s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
             pointer-events: none;
         }
         @keyframes pop {
@@ -173,7 +169,7 @@
             100% { transform: scale(0); opacity: 0; }
         }
 
-        /* --- LAYOUT 3 BALON MENU --- */
+        /* --- LAYOUT MENU UTAMA --- */
         .menu-balloons {
             display: flex;
             gap: 30px;
@@ -182,7 +178,7 @@
             width: 100%;
         }
 
-        /* Responsif HP */
+        /* RESPONSIVE LAYOUT HP */
         @media (max-width: 600px) {
             .menu-balloons {
                 flex-direction: row;
@@ -199,16 +195,16 @@
             }
         }
 
-        /* TRANSISI UTAMA: ANIMASI TERBANG MASUK DARI BAWAH KE ATAS */
+        /* ANIMASI TERBANG LURUS DARI BAWAH KE ATAS */
         .reveal .balloon-group {
-            animation: terbangMasuk 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+            animation: terbangMasuk 1.2s cubic-bezier(0.075, 0.82, 0.165, 1) both;
         }
         .reveal .b-1 { animation-delay: 0s; }
         .reveal .b-2 { animation-delay: 0.15s; }
         .reveal .b-3 { animation-delay: 0.3s; }
 
         @keyframes terbangMasuk {
-            0% { transform: translateY(800px) scale(0.5); opacity: 0; }
+            0% { transform: translateY(800px) scale(0.6); opacity: 0; }
             100% { transform: translateY(0) scale(1); opacity: 1; }
         }
 
@@ -239,19 +235,19 @@
         <div id="menu-node" class="menu-balloons hidden">
             
             <div class="balloon-group b-1">
-                <div class="balloon blue">Foto<br>Kenangan 📸</div>
+                <div class="balloon blue">Foto<br>Kenangan</div>
                 <div class="knot"></div>
                 <div class="string"></div>
             </div>
 
             <div class="balloon-group b-2">
-                <div class="balloon green">Catatan<br>Ranking 🏆</div>
+                <div class="balloon green">Catatan<br>Ranking</div>
                 <div class="knot"></div>
                 <div class="string"></div>
             </div>
 
             <div class="balloon-group b-3">
-                <div class="balloon yellow">Catatan<br>Prestasi 📜</div>
+                <div class="balloon yellow">Catatan<br>Prestasi</div>
                 <div class="knot"></div>
                 <div class="string"></div>
             </div>
@@ -268,7 +264,7 @@
         let audioTracker;
 
         startNode.addEventListener('click', () => {
-            // Putar audio & batasi maksimal 3 detik otomatis
+            // Pengaturan audio
             windSfx.pause();
             windSfx.currentTime = 0;
 
@@ -281,20 +277,20 @@
                         clearInterval(audioTracker);
                     }
                 }, 100);
-            }).catch(error => console.log("Audio diblokir browser:", error));
+            }).catch(error => console.log("Audio terblokir:", error));
 
             // 1. Memicu efek letusan pop di tempat
             startNode.classList.add('meledak');
 
-            // 2. Transisi ganti menu tepat setelah balon merah selesai meledak (0.3 detik)
+            // 2. Transisi langsung berjalan setelah letusan selesai (0.3 detik)
             setTimeout(() => {
                 startNode.classList.add('hidden');
                 
-                // 3. Memunculkan 3 balon meluncur mulus naik dari bawah ke atas
+                // 3. Menampilkan menu baru yang langsung meluncur terbang dari bawah ke atas
                 menuNode.classList.remove('hidden');
                 menuNode.classList.add('reveal');
                 
-                // 4. Setelah selesai meluncur naik, kembalikan ke efek ayunan melayang santai
+                // 4. Setelah selesai meluncur naik, aktifkan goyangan lembutnya secara otomatis
                 setTimeout(() => {
                     const allBalloons = menuNode.querySelectorAll('.balloon-group');
                     allBalloons.forEach((b, idx) => {
