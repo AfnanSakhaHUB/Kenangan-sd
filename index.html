@@ -281,18 +281,21 @@
         const skyBg = document.getElementById('skyBg');
         const windSfx = document.getElementById('windSfx');
 
+        // PANTUAN DETIK AUDIO (Fitur Pemotong Otomatis Real-time)
+        windSfx.addEventListener('timeupdate', function() {
+            // Begitu waktu putar asli mencapai atau melewati 3 detik, matikan!
+            if (this.currentTime >= 3) {
+                this.pause();
+                this.currentTime = 0; // Reset ke awal agar siap dipakai lagi nanti
+            }
+        });
+
         startNode.addEventListener('click', () => {
-            // 1. Putar musik dari detik ke-0
+            // Reset ke detik 0 sebelum di-play
             windSfx.currentTime = 0;
             windSfx.play().catch(error => {
-                console.log("Audio diblokir browser, butuh interaksi fisik:", error);
+                console.log("Audio diblokir browser:", error);
             });
-
-            // 2. TIMEOUT UNTUK MEMOTONG AUDIO TEPAT DI DETIK KE-3 (3000 ms)
-            setTimeout(() => {
-                windSfx.pause();
-                windSfx.currentTime = 0; 
-            }, 3000);
 
             startNode.classList.add('meledak');
             skyBg.classList.add('cepat');
