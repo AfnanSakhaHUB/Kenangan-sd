@@ -21,7 +21,7 @@
             color: #fff;
         }
 
-        /* --- PARALLAX ANTARIKSA BERGERAK DOAWNWARD --- */
+        /* --- BACKGROUND ANTARIKSA BERGERAK TURUN --- */
         .space-bg {
             position: absolute;
             width: 100%;
@@ -33,7 +33,7 @@
                 radial-gradient(circle at 50% 10%, rgba(255,255,255,0.4) 2px, transparent 40px),
                 radial-gradient(circle at 85% 85%, #fff 1px, transparent 2px);
             background-size: 300px 300px, 400px 400px;
-            animation: spaceScroll 20s linear infinite;
+            animation: spaceScroll 25s linear infinite;
             z-index: 1;
         }
 
@@ -42,7 +42,6 @@
             100% { transform: translateY(-50%); }
         }
 
-        /* --- NEBULA CAHAYA ESTETIK --- */
         .nebula {
             position: absolute;
             width: 500px; height: 500px;
@@ -98,7 +97,7 @@
         /* --- BINGKAI FOTO FILM & NARASI --- */
         .memory-card {
             width: 90%;
-            max-width: 550px;
+            max-width: 500px;
             background: rgba(15, 23, 42, 0.65);
             border: 2px solid rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(15px);
@@ -119,8 +118,9 @@
         }
 
         .image-wrapper {
+            position: relative;
             width: 100%;
-            height: 320px;
+            height: 350px;
             border-radius: 16px;
             overflow: hidden;
             margin-bottom: 20px;
@@ -129,19 +129,18 @@
             background: #000;
         }
 
-        .image-wrapper img {
+        #photoSlot {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 6s linear;
-        }
-
-        .memory-card.active .image-wrapper img {
-            transform: scale(1.12) rotate(1deg);
+            transform: scale(1);
+            filter: blur(0px);
+            opacity: 1;
+            transition: transform 6s linear, filter 0.4s ease, opacity 0.4s ease;
         }
 
         .narrative-text {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             line-height: 1.6;
             color: #f1f5f9;
             font-weight: 500;
@@ -152,65 +151,72 @@
             justify-content: center;
         }
 
-        /* --- ANIMASI ROKET MAJU KE DEPAN --- */
-        .rocket-booster {
+        /* --- DETIL TRIGER ELEMEN ASAP & ROKET TERBANG TRANSISI --- */
+        .trans-rocket {
             position: absolute;
-            bottom: -200px; /* Sembunyi dulu di bawah */
-            left: 10%;
-            width: 100px;
-            height: 180px;
-            z-index: 4;
-            transition: bottom 3s cubic-bezier(0.1, 0.8, 0.3, 1);
-            animation: rocketShake 0.15s infinite alternate;
+            z-index: 50;
+            width: 50px;
+            height: 100px;
+            pointer-events: none;
+            transform: translate(-50%, -50%) rotate(45deg); /* Arah serong kanan atas */
         }
 
-        .rocket-booster.fly-in {
-            bottom: 80px; /* Berhenti mengambang di atas ground sedikit */
+        .smoke-particle {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, rgba(241, 245, 249, 0.9) 0%, rgba(148, 163, 184, 0.5) 50%, transparent 100%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 40;
+            animation: smokePuff 0.9s forwards ease-out;
         }
 
-        /* Desain Roket Menggunakan CSS Murni */
+        @keyframes smokePuff {
+            0% { transform: scale(1) translate(0, 0); opacity: 0.8; filter: blur(2px); }
+            40% { opacity: 1; filter: blur(6px); }
+            100% { transform: scale(6) translate(-30px, 20px); opacity: 0; filter: blur(15px); }
+        }
+
+        /* --- DESAIN ROKET ENGINE (CSS MURNI) --- */
         .rocket-body {
-            width: 50px; height: 100px;
-            background: linear-gradient(to right, #e2e8f0, #cbd5e1);
+            width: 30px; height: 65px;
+            background: linear-gradient(to right, #f8fafc, #cbd5e1);
             border-radius: 50% 50% 4px 4px / 70% 70% 4px 4px;
             position: relative; margin: 0 auto;
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
         }
         .rocket-window {
-            width: 18px; height: 18px;
-            background: #38bdf8; border: 3px solid #94a3b8;
+            width: 10px; height: 10px;
+            background: #38bdf8; border: 2px solid #94a3b8;
             border-radius: 50%; position: absolute;
-            top: 25px; left: 16px;
+            top: 18px; left: 8px;
         }
         .rocket-wing-left {
             width: 0; height: 0;
-            border-right: 20px solid #ef4444;
-            border-top: 40px solid transparent;
-            position: absolute; bottom: 0; left: -20px;
+            border-right: 12px solid #ef4444;
+            border-top: 25px solid transparent;
+            position: absolute; bottom: 0; left: -12px;
         }
         .rocket-wing-right {
             width: 0; height: 0;
-            border-left: 20px solid #ef4444;
-            border-top: 40px solid transparent;
-            position: absolute; bottom: 0; right: -20px;
+            border-left: 12px solid #ef4444;
+            border-top: 25px solid transparent;
+            position: absolute; bottom: 0; right: -12px;
         }
-        /* Semburan Api Roket */
         .rocket-fire {
-            width: 24px; height: 50px;
-            background: linear-gradient(to bottom, #f97316, #ef4444, transparent);
-            margin: 0 auto; border-radius: 0 0 12px 12px;
-            animation: fireBurn 0.1s infinite alternate;
+            width: 14px; height: 30px;
+            background: linear-gradient(to bottom, #ffdd1a, #ef4444, transparent);
+            margin: -2px auto 0; border-radius: 0 0 8px 8px;
+            animation: fireBurn 0.08s infinite alternate;
         }
 
-        @keyframes rocketShake {
-            0% { transform: translateY(0) translateX(-1px); }
-            100% { transform: translateY(-3px) translateX(1px); }
-        }
         @keyframes fireBurn {
-            0% { height: 45px; opacity: 0.8; filter: blur(1px); }
-            100% { height: 60px; opacity: 1; filter: blur(2px); }
+            0% { height: 25px; opacity: 0.9; }
+            100% { height: 35px; opacity: 1; filter: blur(1px); }
         }
 
-        /* --- WATERMARK / KETERANGAN PROGRESS --- */
+        /* --- WATERMARK PROGRESS --- */
         .progress-indicator {
             position: absolute;
             top: 20px;
@@ -223,174 +229,261 @@
 </head>
 <body>
 
+    <!-- TOMBOL PEMBUKA GESTURE AUDIO -->
     <div id="interaction-layer">
         <div class="play-box" id="btnMulaiSkenario">
             <h2 style="color: #ffdd1a; margin-bottom: 10px;">🚀 Buka Lembar Kenangan 🌟</h2>
-            <p style="font-size: 0.9rem; color: #94a3b8;">Ketuk layar untuk menyalakan roket & musik memories</p>
+            <p style="font-size: 0.9rem; color: #94a3b8;">Ketuk layar untuk memulai perjalanan sinematik</p>
         </div>
     </div>
 
+    <!-- BACKGROUND ENGINE -->
     <div class="space-bg"></div>
     <div class="nebula"></div>
 
+    <!-- AUDIO ENGINE -->
     <audio id="memoriesAudio" preload="auto">
         <source src="one-piece-song_ed01-memories-maki-otsuki.mp3" type="audio/mpeg">
     </audio>
 
+    <!-- CINEMATIC STAGE -->
     <div class="cinema-container">
-        
-        <div class="progress-indicator" id="progText">Perjalanan Dimulai...</div>
+        <div class="progress-indicator" id="progText">Bersiap Meluncur...</div>
 
+        <!-- BINGKAI FOTO UTAMA -->
         <div class="memory-card" id="displayBox">
-            <div class="image-wrapper">
+            <div class="image-wrapper" id="wrapperZone">
                 <img src="" id="photoSlot" alt="Memories">
             </div>
             <div class="narrative-text" id="captionSlot">Mempersiapkan mesin waktu...</div>
         </div>
-
-    </div>
-
-    <div class="rocket-booster" id="spaceRocket">
-        <div class="rocket-body">
-            <div class="rocket-window"></div>
-            <div class="rocket-wing-left"></div>
-            <div class="rocket-wing-right"></div>
-        </div>
-        <div class="rocket-fire"></div>
     </div>
 
     <script>
         const btnMulaiSkenario = document.getElementById('btnMulaiSkenario');
         const interactionLayer = document.getElementById('interaction-layer');
         const memoriesAudio = document.getElementById('memoriesAudio');
-        const spaceRocket = document.getElementById('spaceRocket');
         const displayBox = document.getElementById('displayBox');
+        const wrapperZone = document.getElementById('wrapperZone');
         const photoSlot = document.getElementById('photoSlot');
         const captionSlot = document.getElementById('captionSlot');
         const progText = document.getElementById('progText');
 
         // ==========================================================================
-        // DATABASE TIMELINE ALUR CERITA (DISINKRONISASI DENGAN DETIK LAGU MEMORIES)
-        // Kamu bisa tukar-tukar urutan nama file gambar di bawah ini jika posisinya tertukar.
+        // DATABASE TIMELINE KRONOLOGIS BERDASARKAN DETIK LAGU MEMORIES (100% AKURAT)
         // ==========================================================================
         const memoryTimeline = [
+            // --- BABAK I: MPLS ---
             {
-                time: 1, // detik ke-1
-                img: "1000018097.jpg", // Foto Merah Putih MPLS 1
-                text: "Langkah awal kita dimulai di sini... Masih ingat saat masa MPLS dahulu? Berbaju merah putih, saling menatap canggung penuh tanda tanya.",
-                phase: "Babak I: Masa Perkenalan (MPLS)"
+                time: 1, 
+                img: "IMG-20260609-WA0041.jpg",
+                text: "Langkah awal perjalanan kita dimulai dari sini... Masih ingat kan momen MPLS yang penuh kepolosan dengan baju merah putih ini?",
+                phase: "Babak I: Awal Cerita (MPLS)"
             },
             {
-                time: 15, // detik ke-15
-                img: "1000018098.jpg", // Foto Merah Putih MPLS 2
-                text: "Dari yang awalnya tidak kenal sama sekali, perlahan takdir mengikat kita dalam sebuah ikatan bernama kebersamaan.",
-                phase: "Babak I: Masa Perkenalan (MPLS)"
+                time: 15, 
+                img: "IMG-20260609-WA0052.jpg",
+                text: "Berdiri berjejer, menatap masa depan yang masih misterius. Di titik inilah takdir mempertemukan kita semua dalam satu ikatan kelas.",
+                phase: "Babak I: Awal Cerita (MPLS)"
+            },
+
+            // --- BABAK II: FOTO BERSAMA KELAS 5 ---
+            {
+                time: 35, 
+                img: "IMG-20260609-WA0010.jpg",
+                text: "Waktu berlalu cepat hingga kita menginjak bangku Kelas 5. Berdiri tegak bersama, mulai kompak dan memahami arti kebersamaan.",
+                phase: "Babak II: Kebersamaan Kelas 5"
             },
             {
-                time: 32, // detik ke-32
-                img: "1000018104.jpg", // Foto Hari Batik 1
-                text: "Hari terus berjalan, seragam berganti. Ingatkah saat Hari Batik Nasional tiba? Kita mengenakan mahakarya bangsa ini penuh rasa bangga.",
-                phase: "Babak II: Mengukir Cerita Bersama"
+                time: 55, 
+                img: "IMG-20260609-WA0042.jpg",
+                text: "Formasi lengkap foto sekelas! Senyum-senyum di wajah kita menggambarkan hari-hari sekolah yang penuh warna dan canda tawa.",
+                phase: "Babak II: Kebersamaan Kelas 5"
+            },
+
+            // --- BABAK III: STUDYTOUR YOGYAKARTA PAS KELAS 5 ---
+            {
+                time: 75, 
+                img: "IMG-20260609-WA0050.jpg",
+                text: "Nah, ini dia petualangan terbesar kita pas kelas 5! Studytour seru ke Yogyakarta dengan seragam biru kebanggaan kita.",
+                phase: "Babak III: Petualangan Jogja (Kelas 5)"
             },
             {
-                time: 50, // detik ke-50
-                img: "1000018107.jpg", // Foto Hari Batik 2
-                text: "Di sela-sela kepenatan tugas sekolah, selalu ada candaan acak yang berhasil meluluhkan tawa kita bersama.",
-                phase: "Babak II: Mengukir Cerita Bersama"
+                time: 95, 
+                img: "IMG-20260609-WA0058.jpg",
+                text: "Menyusuri tempat bersejarah di Jogja bareng teman-teman terdekat. Capeknya jalan kaki langsung hilang karena kita lewati bareng-bareng.",
+                phase: "Babak III: Petualangan Jogja (Kelas 5)"
+            },
+
+            // --- BABAK IV: BUKA BERSAMA DI RUMAH BU KHAYA ---
+            {
+                time: 120, 
+                img: "IMG-20260609-WA0022.jpg",
+                text: "Momen legendaris bulan Ramadhan di rumah wali kelas kita, Bu Khaya. Berbondong-bondong datang demi silaturahmi sekaligus mengincar takjil.",
+                phase: "Babak IV: Bukber Rumah Bu Khaya"
             },
             {
-                time: 68, // detik ke-68
-                img: "1000018108.jpg", // Foto Hari Batik 3
-                text: "Setiap sudut kelas, bangku, dan dinding menjadi saksi bisu tumbuh kembangnya impian kita satu per satu.",
-                phase: "Babak II: Mengukir Cerita Bersama"
+                time: 140, 
+                img: "IMG-20260609-WA0027.jpg",
+                text: "Kocaknya pas momen war takjil di sini, kita cuma kebagian dikit doang! Sampai-sampai lupa dapet berapa karena rebutan saking serunya haha.",
+                phase: "Babak IV: Bukber Rumah Bu Khaya"
+            },
+
+            // --- BABAK V: BUKA BERSAMA DI RUMAH LULA ---
+            {
+                time: 165, 
+                img: "IMG-20260609-WA0015.jpg",
+                text: "Kalau yang ini pas kita bukber di rumah Lula! Di sini aman, nggak ada drama war takjil rebutan makanan, soalnya hidangan di rumah Lula enak-enak banget!",
+                phase: "Babak V: Bukber Rumah Lula"
+            },
+
+            // --- BABAK VI: PERAYAAN MAULID NABI ---
+            {
+                time: 190, 
+                img: "IMG-20260609-WA0014.jpg",
+                text: "Kembali ke momen religius sekolah saat memperingati Maulid Nabi. Adem banget melihat semuanya kompak memakai baju muslim dan gamis.",
+                phase: "Babak VI: Berkah Maulid Nabi"
             },
             {
-                time: 85, // detik ke-85 (Mulai mengarah ke puncak lagu/reff senada jogja)
-                img: "1000018109.jpg", // Foto Studytour Jogja 1
-                text: "Hingga tibalah momen emas yang paling membekas di relung hati terasing kita... Perjalanan menuju Yogyakarta.",
-                phase: "Babak III: Jejak Tawa Jogja (Studytour)"
+                time: 210, 
+                img: "IMG-20260609-WA0034.jpg",
+                text: "Duduk bersama mendengarkan ceramah dan bersholawat. Kedekatan kita bukan cuma soal main, tapi juga dalam momentum kebaikan.",
+                phase: "Babak VI: Berkah Maulid Nabi"
+            },
+
+            // --- BABAK VII: HARI BATIK NASIONAL & OUTRO ---
+            {
+                time: 230, 
+                img: "IMG-20260609-WA0049.jpg",
+                text: "Hari Batik Nasional! Gagah dan anggun berbalut warisan budaya. Kita yang dulu anak-anak polos, kini sudah tumbuh semakin dewasa.",
+                phase: "Babak VII: Hari Batik Nasional"
             },
             {
-                time: 105, // detik ke-105
-                img: "1000018110.jpg", // Foto Studytour Jogja 2 (Baju Biru)
-                text: "Ingatkah saat kita studytour dahulu di Yogyakarta? Dengan kaos biru kompak kita, itu penuh tawa, kehangatan, dan kebahagiaan murni.",
-                phase: "Babak III: Jejak Tawa Jogja (Studytour)"
-            },
-            {
-                time: 125, // detik ke-125
-                img: "1000018111.jpg", // Foto Studytour Jogja 3
-                text: "Malam-malam di sudut Jogja terasa amat singkat saat dihabiskan bersamamu. Rasanya waktu tak ingin kita biarkan berlalu.",
-                phase: "Babak III: Jejak Tawa Jogja (Studytour)"
-            },
-            {
-                time: 145, // detik ke-145 s/d lagu selesai/diulang
-                img: "1000018112.jpg", // Foto Kelulusan / Memori Final
-                text: "Kini, roket impian kita telah meluncur tinggi menembus atmosfer batas sekolah. Kita melesat tinggi ke angkasa luas demi cita-cita masa depan. Terima kasih atas memori indah ini! ✨🚀",
-                phase: "Akhir: Menembus Batas Angkasa"
+                time: 250, 
+                img: "IMG-20260609-WA0061.jpg",
+                text: "Waktu boleh berlalu dan sekolah kita boleh usai, tapi roket kenangan ini akan terus terbang tinggi membawa nama persahabatan kita ke angkasa. Terima kasih untuk memori indah ini! ✨🚀",
+                phase: "Akhir Perjalanan: Menuju Masa Depan"
             }
         ];
 
-        // ================= ACTION CORE ENGINE =================
-        const startCinematicScene = () => {
-            // 1. Hilangkan layar prompt utama
-            interactionLayer.style.opacity = '0';
-            setTimeout(() => interactionLayer.classList.add('hidden'), 1000);
+        // ================= ENGINE TRANSISI ROKET & KEPULAN ASAP =================
+        const triggerRocketTransition = (targetData) => {
+            // 1. Gambar lama langsung masuk fase redup & blur
+            photoSlot.style.opacity = '0.1';
+            photoSlot.style.filter = 'blur(15px) scale(0.95)';
 
-            // 2. Putar lagu Memories
-            memoriesAudio.play().catch(err => console.log("Audio Error:", err));
+            // 2. Spawn objek roket transisi
+            const rocket = document.createElement('div');
+            rocket.className = 'trans-rocket';
+            rocket.innerHTML = `
+                <div class="rocket-body">
+                    <div class="rocket-window"></div>
+                    <div class="rocket-wing-left"></div>
+                    <div class="rocket-wing-right"></div>
+                </div>
+                <div class="rocket-fire"></div>
+            `;
+            wrapperZone.appendChild(rocket);
 
-            // 3. Terbangkan Roket dari bawah ke atas posisi stand-by
-            setTimeout(() => {
-                spaceRocket.classList.add('fly-in');
-            }, 500);
+            // Parameter Dimensi Lintasan Serong
+            const wWidth = wrapperZone.offsetWidth;
+            const wHeight = wrapperZone.offsetHeight;
+            
+            const startX = -60;
+            const startY = wHeight + 60;
+            const endX = wWidth + 60;
+            const endY = -60;
 
-            // 4. Jalankan siklus monitoring timeline
-            initTimelineTracker();
+            let startTime = null;
+            let lastSmokeTime = 0;
+            let dataSwapped = false;
+            const duration = 1000; // Durasi roket melesat melewati layar (1 detik)
+
+            function runFlight(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const progress = timestamp - startTime;
+                const percent = Math.min(progress / duration, 1);
+
+                // Hitung koordinat pergerakan linear serong
+                const currentX = startX + (endX - startX) * percent;
+                const currentY = startY + (endY - startY) * percent;
+
+                rocket.style.left = `${currentX}px`;
+                rocket.style.top = `${currentY}px`;
+
+                // Spawn partikel asap secara berkala saat roket bergerak
+                if (timestamp - lastSmokeTime > 20 && percent < 0.95) {
+                    lastSmokeTime = timestamp;
+                    const smoke = document.createElement('div');
+                    smoke.className = 'smoke-particle';
+                    
+                    // Berikan variasi sebaran agar asap terasa bervolume alami
+                    const jitterX = (Math.random() - 0.5) * 25;
+                    const jitterY = (Math.random() - 0.5) * 25;
+                    
+                    smoke.style.left = `${currentX - 12 + jitterX}px`;
+                    smoke.style.top = `${currentY + 15 + jitterY}px`;
+                    
+                    wrapperZone.appendChild(smoke);
+                    setTimeout(() => smoke.remove(), 900); // Bersihkan sisa asap
+                }
+
+                // MOMEN EMAS: Ketika roket berada tepat di tengah layar (asap menutupi gambar)
+                if (percent >= 0.5 && !dataSwapped) {
+                    dataSwapped = true;
+                    // Tukar konten internal di balik kabut asap
+                    photoSlot.src = targetData.img;
+                    captionSlot.innerHTML = targetData.text;
+                    progText.innerText = targetData.phase;
+
+                    // Buat gambar baru materialisasi keluar dari blur secara estetik
+                    photoSlot.style.opacity = '1';
+                    photoSlot.style.filter = 'blur(0px) scale(1)';
+                }
+
+                if (progress < duration) {
+                    requestAnimationFrame(runFlight);
+                } else {
+                    rocket.remove(); // Hapus objek roket setelah keluar layar
+                }
+            }
+            requestAnimationFrame(runFlight);
         };
 
-        const initTimelineTracker = () => {
+        // ================= TIMELINE TRACKER CORE ENGINE =================
+        const startCinematicScene = () => {
+            interactionLayer.style.opacity = '0';
+            setTimeout(() => interactionLayer.style.display = 'none', 1000);
+
+            memoriesAudio.play().catch(err => console.log("Audio Error:", err));
+            displayBox.classList.add('active');
+
             let currentActiveIndex = -1;
 
-            // Membaca pergerakan real-time dari musik
             memoriesAudio.addEventListener('timeupdate', () => {
                 const currentTime = memoriesAudio.currentTime;
-                
-                // Cari item data yang paling pas dengan waktu lagu saat ini
                 let targetIndex = currentActiveIndex;
+
                 for (let i = 0; i < memoryTimeline.length; i++) {
                     if (currentTime >= memoryTimeline[i].time) {
                         targetIndex = i;
                     }
                 }
 
-                // Jika terdeteksi pergantian slide kenangan baru
+                // Trigger perubahan slide jika waktu mencukupi & indeks berubah
                 if (targetIndex !== currentActiveIndex && targetIndex !== -1) {
                     currentActiveIndex = targetIndex;
-                    const activeData = memoryTimeline[currentActiveIndex];
-
-                    // Jalankan efek fade-out transisi
-                    displayBox.classList.remove('active');
-
-                    setTimeout(() => {
-                        // Pasang file gambar & teks baru
-                        photoSlot.src = activeData.img;
-                        captionSlot.innerHTML = activeData.text;
-                        progText.innerText = activeData.phase;
-
-                        // Beri efek fade-in kembali secara smooth
-                        displayBox.classList.add('active');
-                    }, 800); // Sinkronisasi jeda kedipan transisi
+                    triggerRocketTransition(memoryTimeline[currentActiveIndex]);
                 }
             });
 
-            // Jika lagu habis, loop kembali dari awal atau tahan di memori terakhir
+            // Loop Otomatis jika lagu habis
             memoriesAudio.addEventListener('ended', () => {
                 memoriesAudio.currentTime = 0;
                 memoriesAudio.play();
             });
         };
 
-        // Pasang event pemicu klik/sentuhan
         btnMulaiSkenario.addEventListener('click', startCinematicScene);
     </script>
 </body>
