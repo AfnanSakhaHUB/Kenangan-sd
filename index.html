@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kenangan - Perjalanan Luar Angkasa</title>
+    <title>Menu Utama - Izur Memories</title>
     <style>
         * {
             margin: 0;
@@ -15,118 +15,150 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Roboto, sans-serif;
             background-color: #000;
         }
 
-        /* CONTAINER UTAMA (Membungkus seluruh tingkat langit) */
-        .space-container {
+        /* CONTAINER UTAMA (Membungkus background langit gradient 3 tingkat) */
+        .main-wrapper {
             position: absolute;
             width: 100%;
-            height: 300vh; /* 3x tinggi layar untuk efek naik */
+            height: 300vh; /* 3x tinggi layar untuk simulasi naik ke angkasa */
             bottom: 0;
             left: 0;
-            /* Transisi langit dari bawah (siang/sore) ke atas (luar angkasa pekat) */
+            /* Gradasi dari langit awal (bawah), atmosfer (tengah), ke antariksa (atas) */
             background: linear-gradient(to top, 
-                #f1c40f 0%, 
-                #e67e22 20%, 
-                #2c3e50 50%, 
-                #1a1a2e 75%, 
+                #2980b9 0%, 
+                #2c3e50 35%, 
+                #111726 65%, 
                 #000000 100%
             );
-            transition: transform 5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 5s cubic-bezier(0.45, 0.05, 0.55, 0.95);
         }
 
-        /* Trigger saat kamera bergerak naik ke angkasa */
-        .space-container.launching {
+        /* Efek Kamera Meluncur Naik */
+        .main-wrapper.launch-to-space {
             transform: translateY(200vh);
         }
 
-        /* AREA GROUND / START (Tampilan awal di layar bawah) */
-        .ground-scene {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        /* BALON FOTO KENANGAN */
-        .memory-balloon {
-            width: 140px;
-            height: 165px;
-            background: radial-gradient(circle at 30% 30%, #ff7675, #d63031);
-            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
-            cursor: pointer;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            animation: floatAnimation 4s ease-in-out infinite;
-            transition: transform 0.3s ease;
-            z-index: 10;
-        }
-
-        /* Tulisan di dalam balon */
-        .memory-balloon span {
-            color: white;
-            font-size: 0.9rem;
-            font-weight: bold;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
-            user-select: none;
-        }
-
-        /* Tali Balon */
-        .memory-balloon::after {
-            content: "";
-            position: absolute;
-            bottom: -40px;
-            left: 50%;
-            width: 2px;
-            height: 40px;
-            background: linear-gradient(to bottom, #ffffff, rgba(255,255,255,0.2));
-        }
-
-        /* Animasi balon melesat ke atas langit */
-        .memory-balloon.fly-away {
-            animation: flyToSpace 5s forwards cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* LAYER BINTANG (Hanya muncul di paling atas / luar angkasa) */
-        .star-layer {
+        /* LAYER BINTANG LUAR ANGKASA (Ada di bagian paling atas) */
+        .starfield {
             position: absolute;
             top: 0;
             width: 100%;
             height: 100vh;
             background-image: 
-                radial-gradient(circle at 50% 50%, white 1px, transparent 2px),
-                radial-gradient(circle at 20% 30%, white 1.5px, transparent 3px),
-                radial-gradient(circle at 80% 70%, white 1px, transparent 2px);
-            background-size: 200px 200px, 300px 300px, 150px 150px;
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                radial-gradient(white, rgba(255,255,255,.15) 1.5px, transparent 30px);
+            background-size: 300px 300px, 200px 200px;
             opacity: 0;
-            transition: opacity 3.5s ease;
+            transition: opacity 3s ease;
         }
 
-        /* Bintang muncul perlahan saat langit menggelap */
-        .space-container.launching .star-layer {
+        /* Bintang muncul perlahan saat langit mulai menggelap pekat */
+        .main-wrapper.launch-to-space .starfield {
             opacity: 1;
-            transition-delay: 2s;
+            transition-delay: 1.5s;
         }
 
-        /* ANIMASI */
-        @keyframes floatAnimation {
-            0% { transform: translateY(0px) rotate(-1deg); }
-            50% { transform: translateY(-15px) rotate(1deg); }
-            100% { transform: translateY(0px) rotate(-1deg); }
+        /* TAMPILAN HALAMAN UTAMA (Di posisi layar paling bawah) */
+        .ui-screen {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 60px 20px;
         }
 
-        @keyframes flyToSpace {
+        /* TOMBOL START UTAMA */
+        .start-title-box {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn-start {
+            padding: 15px 40px;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #fff;
+            background: linear-gradient(45deg, #f1c40f, #f39c12);
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            transition: transform 0.2s;
+        }
+
+        .btn-start:hover {
+            transform: scale(1.05);
+        }
+
+        /* CONTAINER 3 BALON */
+        .balloon-group {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 50px;
+        }
+
+        /* KELAS DASAR BALON */
+        .balloon {
+            width: 110px;
+            height: 135px;
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 10px;
+            box-shadow: inset -8px -8px 0 rgba(0,0,0,0.08), 0 10px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+
+        /* Efek Mengambang Acak untuk Ketiga Balon */
+        .balloon:nth-child(1) { background-color: #3498db; animation: float1 4s ease-in-out infinite; }
+        .balloon:nth-child(2) { background-color: #e74c3c; animation: float2 3.5s ease-in-out infinite; } /* Balon Foto Kenangan */
+        .balloon:nth-child(3) { background-color: #2ecc71; animation: float3 4.2s ease-in-out infinite; }
+
+        .balloon span {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            user-select: none;
+        }
+
+        /* Tali Balon */
+        .balloon::after {
+            content: "";
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            width: 2px;
+            height: 30px;
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Ketika Balon Foto Kenangan Di-klik, Melesat Terbang Duluan */
+        .balloon.triggered-fly {
+            animation: flyAwayToSky 4s forwards cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+
+        /* ANIMASI FLOAT (MENGAMBANG) */
+        @keyframes float1 { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        @keyframes float2 { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-18px); } }
+        @keyframes float3 { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        /* ANIMASI BALON TERBANG KE ATAS */
+        @keyframes flyAwayToSky {
             0% { transform: translateY(0) scale(1); }
             100% { transform: translateY(-200vh) scale(0.4); opacity: 0; }
         }
@@ -134,18 +166,30 @@
 </head>
 <body>
 
-    <!-- CONTAINER LANGIT LUAR ANGKASA -->
-    <div class="space-container" id="spaceContainer">
+    <div class="main-wrapper" id="mainWrapper">
         
-        <!-- Lapisan Luar Angkasa (Paling Atas) -->
-        <div class="star-layer"></div>
+        <div class="starfield"></div>
 
-        <!-- Lapisan Awal (Paling Bawah) -->
-        <div class="ground-scene">
+        <div class="ui-screen">
             
-            <!-- Balon Foto Kenangan milikmu -->
-            <div class="memory-balloon" id="btnKenangan">
-                <span>Foto-Foto Kenangan 🎈</span>
+            <div class="start-title-box">
+                <button class="btn-start">START</button>
+            </div>
+
+            <div class="balloon-group">
+                
+                <div class="balloon" id="balon-mini">
+                    <span>Mini Game 🎮</span>
+                </div>
+
+                <div class="balloon" id="balon-kenangan">
+                    <span>Foto-Foto Kenangan 📸</span>
+                </div>
+
+                <div class="balloon" id="balon-credits">
+                    <span>Credits 🌟</span>
+                </div>
+
             </div>
 
         </div>
@@ -153,25 +197,27 @@
     </div>
 
     <script>
-        const btnKenangan = document.getElementById('btnKenangan');
-        const spaceContainer = document.getElementById('spaceContainer');
+        const balonKenangan = document.getElementById('balon-kenangan');
+        const mainWrapper = document.getElementById('mainWrapper');
 
-        const startLaunch = () => {
-            // Memicu efek balon terbang dan layar bergulir ke atas (langit menggelap)
-            btnKenangan.classList.add('fly-away');
-            spaceContainer.classList.add('launching');
+        const triggerSpaceLaunch = () => {
+            // 1. Jalankan efek animasi balon melesat ke atas langit langit
+            balonKenangan.classList.add('triggered-fly');
+            
+            // 2. Tarik layar ke atas & gelapkan atmosfer menjadi luar angkasa
+            mainWrapper.classList.add('launch-to-space');
 
-            // Setelah masuk luar angkasa, pindah ke start.html
+            // 3. Setelah masuk luar angkasa seutuhnya, redirect ke start.html
             setTimeout(() => {
                 window.location.href = "start.html";
-            }, 5000); // 5 detik disesuaikan dengan durasi transisi CSS
+            }, 5000); // 5000ms = 5 detik sesuai durasi transisi CSS
         };
 
-        // Mendukung klik mouse dan sentuhan layar HP
-        btnKenangan.addEventListener('click', startLaunch);
-        btnKenangan.addEventListener('touchstart', (e) => {
+        // Suppport klik (Laptop) & touchstart (HP Mobile anti-delay)
+        balonKenangan.addEventListener('click', triggerSpaceLaunch);
+        balonKenangan.addEventListener('touchstart', (e) => {
             e.preventDefault();
-            startLaunch();
+            triggerSpaceLaunch();
         });
     </script>
 </body>
