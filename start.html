@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perjalanan Kenangan Kita 🚀</title>
+    <style>
+        /* --- RESET & SPACE THEME --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #020208;
+            color: #fff;
+        }
+
+        /* --- PARALLAX ANTARIKSA BERGERAK DOAWNWARD --- */
+        .space-bg {
+            position: absolute;
+            width: 100%;
+            height: 200%;
+            top: 0; left: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, #fff 1px, transparent 2px),
+                radial-gradient(circle at 75% 60%, #fff 1.5px, transparent 3px),
+                radial-gradient(circle at 50% 10%, rgba(255,255,255,0.4) 2px, transparent 40px),
+                radial-gradient(circle at 85% 85%, #fff 1px, transparent 2px);
+            background-size: 300px 300px, 400px 400px;
+            animation: spaceScroll 20s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes spaceScroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+
+        /* --- NEBULA CAHAYA ESTETIK --- */
+        .nebula {
+            position: absolute;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(58, 143, 253, 0.15) 0%, transparent 70%);
+            top: 20%; left: -10%;
+            border-radius: 50%;
+            z-index: 2;
+            animation: floatNebula 10s ease-in-out infinite alternate;
+        }
+        @keyframes floatNebula {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 30px) scale(1.2); }
+        }
+
+        /* --- CONTAINER UTAMA CINEMATIC --- */
+        .cinema-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* --- INTERACTIVE PROMPT LAYER --- */
+        #interaction-layer {
+            position: absolute;
+            width: 100%; height: 100%;
+            background: rgba(2, 2, 8, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 1s ease;
+        }
+        .play-box {
+            text-align: center;
+            cursor: pointer;
+            padding: 30px;
+            border: 2px dashed #ffdd1a;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            animation: pulseBox 2s infinite alternate;
+        }
+        @keyframes pulseBox {
+            0% { transform: scale(1); box-shadow: 0 0 10px rgba(255,221,26,0.2); }
+            100% { transform: scale(1.03); box-shadow: 0 0 30px rgba(255,221,26,0.5); }
+        }
+
+        /* --- BINGKAI FOTO FILM & NARASI --- */
+        .memory-card {
+            width: 90%;
+            max-width: 550px;
+            background: rgba(15, 23, 42, 0.65);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10;
+        }
+
+        .memory-card.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .image-wrapper {
+            width: 100%;
+            height: 320px;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 4px solid #fff;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            background: #000;
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 6s linear;
+        }
+
+        .memory-card.active .image-wrapper img {
+            transform: scale(1.12) rotate(1deg);
+        }
+
+        .narrative-text {
+            font-size: 1.15rem;
+            line-height: 1.6;
+            color: #f1f5f9;
+            font-weight: 500;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- ANIMASI ROKET MAJU KE DEPAN --- */
+        .rocket-booster {
+            position: absolute;
+            bottom: -200px; /* Sembunyi dulu di bawah */
+            left: 10%;
+            width: 100px;
+            height: 180px;
+            z-index: 4;
+            transition: bottom 3s cubic-bezier(0.1, 0.8, 0.3, 1);
+            animation: rocketShake 0.15s infinite alternate;
+        }
+
+        .rocket-booster.fly-in {
+            bottom: 80px; /* Berhenti mengambang di atas ground sedikit */
+        }
+
+        /* Desain Roket Menggunakan CSS Murni */
+        .rocket-body {
+            width: 50px; height: 100px;
+            background: linear-gradient(to right, #e2e8f0, #cbd5e1);
+            border-radius: 50% 50% 4px 4px / 70% 70% 4px 4px;
+            position: relative; margin: 0 auto;
+        }
+        .rocket-window {
+            width: 18px; height: 18px;
+            background: #38bdf8; border: 3px solid #94a3b8;
+            border-radius: 50%; position: absolute;
+            top: 25px; left: 16px;
+        }
+        .rocket-wing-left {
+            width: 0; height: 0;
+            border-right: 20px solid #ef4444;
+            border-top: 40px solid transparent;
+            position: absolute; bottom: 0; left: -20px;
+        }
+        .rocket-wing-right {
+            width: 0; height: 0;
+            border-left: 20px solid #ef4444;
+            border-top: 40px solid transparent;
+            position: absolute; bottom: 0; right: -20px;
+        }
+        /* Semburan Api Roket */
+        .rocket-fire {
+            width: 24px; height: 50px;
+            background: linear-gradient(to bottom, #f97316, #ef4444, transparent);
+            margin: 0 auto; border-radius: 0 0 12px 12px;
+            animation: fireBurn 0.1s infinite alternate;
+        }
+
+        @keyframes rocketShake {
+            0% { transform: translateY(0) translateX(-1px); }
+            100% { transform: translateY(-3px) translateX(1px); }
+        }
+        @keyframes fireBurn {
+            0% { height: 45px; opacity: 0.8; filter: blur(1px); }
+            100% { height: 60px; opacity: 1; filter: blur(2px); }
+        }
+
+        /* --- WATERMARK / KETERANGAN PROGRESS --- */
+        .progress-indicator {
+            position: absolute;
+            top: 20px;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="interaction-layer">
+        <div class="play-box" id="btnMulaiSkenario">
+            <h2 style="color: #ffdd1a; margin-bottom: 10px;">🚀 Buka Lembar Kenangan 🌟</h2>
+            <p style="font-size: 0.9rem; color: #94a3b8;">Ketuk layar untuk menyalakan roket & musik memories</p>
+        </div>
+    </div>
+
+    <div class="space-bg"></div>
+    <div class="nebula"></div>
+
+    <audio id="memoriesAudio" preload="auto">
+        <source src="one-piece-song_ed01-memories-maki-otsuki.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="cinema-container">
+        
+        <div class="progress-indicator" id="progText">Perjalanan Dimulai...</div>
+
+        <div class="memory-card" id="displayBox">
+            <div class="image-wrapper">
+                <img src="" id="photoSlot" alt="Memories">
+            </div>
+            <div class="narrative-text" id="captionSlot">Mempersiapkan mesin waktu...</div>
+        </div>
+
+    </div>
+
+    <div class="rocket-booster" id="spaceRocket">
+        <div class="rocket-body">
+            <div class="rocket-window"></div>
+            <div class="rocket-wing-left"></div>
+            <div class="rocket-wing-right"></div>
+        </div>
+        <div class="rocket-fire"></div>
+    </div>
+
+    <script>
+        const btnMulaiSkenario = document.getElementById('btnMulaiSkenario');
+        const interactionLayer = document.getElementById('interaction-layer');
+        const memoriesAudio = document.getElementById('memoriesAudio');
+        const spaceRocket = document.getElementById('spaceRocket');
+        const displayBox = document.getElementById('displayBox');
+        const photoSlot = document.getElementById('photoSlot');
+        const captionSlot = document.getElementById('captionSlot');
+        const progText = document.getElementById('progText');
+
+        // ==========================================================================
+        // DATABASE TIMELINE ALUR CERITA (DISINKRONISASI DENGAN DETIK LAGU MEMORIES)
+        // Kamu bisa tukar-tukar urutan nama file gambar di bawah ini jika posisinya tertukar.
+        // ==========================================================================
+        const memoryTimeline = [
+            {
+                time: 1, // detik ke-1
+                img: "1000018097.jpg", // Foto Merah Putih MPLS 1
+                text: "Langkah awal kita dimulai di sini... Masih ingat saat masa MPLS dahulu? Berbaju merah putih, saling menatap canggung penuh tanda tanya.",
+                phase: "Babak I: Masa Perkenalan (MPLS)"
+            },
+            {
+                time: 15, // detik ke-15
+                img: "1000018098.jpg", // Foto Merah Putih MPLS 2
+                text: "Dari yang awalnya tidak kenal sama sekali, perlahan takdir mengikat kita dalam sebuah ikatan bernama kebersamaan.",
+                phase: "Babak I: Masa Perkenalan (MPLS)"
+            },
+            {
+                time: 32, // detik ke-32
+                img: "1000018104.jpg", // Foto Hari Batik 1
+                text: "Hari terus berjalan, seragam berganti. Ingatkah saat Hari Batik Nasional tiba? Kita mengenakan mahakarya bangsa ini penuh rasa bangga.",
+                phase: "Babak II: Mengukir Cerita Bersama"
+            },
+            {
+                time: 50, // detik ke-50
+                img: "1000018107.jpg", // Foto Hari Batik 2
+                text: "Di sela-sela kepenatan tugas sekolah, selalu ada candaan acak yang berhasil meluluhkan tawa kita bersama.",
+                phase: "Babak II: Mengukir Cerita Bersama"
+            },
+            {
+                time: 68, // detik ke-68
+                img: "1000018108.jpg", // Foto Hari Batik 3
+                text: "Setiap sudut kelas, bangku, dan dinding menjadi saksi bisu tumbuh kembangnya impian kita satu per satu.",
+                phase: "Babak II: Mengukir Cerita Bersama"
+            },
+            {
+                time: 85, // detik ke-85 (Mulai mengarah ke puncak lagu/reff senada jogja)
+                img: "1000018109.jpg", // Foto Studytour Jogja 1
+                text: "Hingga tibalah momen emas yang paling membekas di relung hati terasing kita... Perjalanan menuju Yogyakarta.",
+                phase: "Babak III: Jejak Tawa Jogja (Studytour)"
+            },
+            {
+                time: 105, // detik ke-105
+                img: "1000018110.jpg", // Foto Studytour Jogja 2 (Baju Biru)
+                text: "Ingatkah saat kita studytour dahulu di Yogyakarta? Dengan kaos biru kompak kita, itu penuh tawa, kehangatan, dan kebahagiaan murni.",
+                phase: "Babak III: Jejak Tawa Jogja (Studytour)"
+            },
+            {
+                time: 125, // detik ke-125
+                img: "1000018111.jpg", // Foto Studytour Jogja 3
+                text: "Malam-malam di sudut Jogja terasa amat singkat saat dihabiskan bersamamu. Rasanya waktu tak ingin kita biarkan berlalu.",
+                phase: "Babak III: Jejak Tawa Jogja (Studytour)"
+            },
+            {
+                time: 145, // detik ke-145 s/d lagu selesai/diulang
+                img: "1000018112.jpg", // Foto Kelulusan / Memori Final
+                text: "Kini, roket impian kita telah meluncur tinggi menembus atmosfer batas sekolah. Kita melesat tinggi ke angkasa luas demi cita-cita masa depan. Terima kasih atas memori indah ini! ✨🚀",
+                phase: "Akhir: Menembus Batas Angkasa"
+            }
+        ];
+
+        // ================= ACTION CORE ENGINE =================
+        const startCinematicScene = () => {
+            // 1. Hilangkan layar prompt utama
+            interactionLayer.style.opacity = '0';
+            setTimeout(() => interactionLayer.classList.add('hidden'), 1000);
+
+            // 2. Putar lagu Memories
+            memoriesAudio.play().catch(err => console.log("Audio Error:", err));
+
+            // 3. Terbangkan Roket dari bawah ke atas posisi stand-by
+            setTimeout(() => {
+                spaceRocket.classList.add('fly-in');
+            }, 500);
+
+            // 4. Jalankan siklus monitoring timeline
+            initTimelineTracker();
+        };
+
+        const initTimelineTracker = () => {
+            let currentActiveIndex = -1;
+
+            // Membaca pergerakan real-time dari musik
+            memoriesAudio.addEventListener('timeupdate', () => {
+                const currentTime = memoriesAudio.currentTime;
+                
+                // Cari item data yang paling pas dengan waktu lagu saat ini
+                let targetIndex = currentActiveIndex;
+                for (let i = 0; i < memoryTimeline.length; i++) {
+                    if (currentTime >= memoryTimeline[i].time) {
+                        targetIndex = i;
+                    }
+                }
+
+                // Jika terdeteksi pergantian slide kenangan baru
+                if (targetIndex !== currentActiveIndex && targetIndex !== -1) {
+                    currentActiveIndex = targetIndex;
+                    const activeData = memoryTimeline[currentActiveIndex];
+
+                    // Jalankan efek fade-out transisi
+                    displayBox.classList.remove('active');
+
+                    setTimeout(() => {
+                        // Pasang file gambar & teks baru
+                        photoSlot.src = activeData.img;
+                        captionSlot.innerHTML = activeData.text;
+                        progText.innerText = activeData.phase;
+
+                        // Beri efek fade-in kembali secara smooth
+                        displayBox.classList.add('active');
+                    }, 800); // Sinkronisasi jeda kedipan transisi
+                }
+            });
+
+            // Jika lagu habis, loop kembali dari awal atau tahan di memori terakhir
+            memoriesAudio.addEventListener('ended', () => {
+                memoriesAudio.currentTime = 0;
+                memoriesAudio.play();
+            });
+        };
+
+        // Pasang event pemicu klik/sentuhan
+        btnMulaiSkenario.addEventListener('click', startCinematicScene);
+    </script>
+</body>
+</html>
