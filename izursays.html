@@ -6,6 +6,34 @@
     <title>Izur Says - Edisi Spesial Perpisahan</title>
     <link rel="stylesheet" href="izursays.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght=700&family=Orbitron:wght=500;900&family=Poppins:wght=400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            pointer-events: auto;
+        }
+        .modal.hidden {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important; /* Agar modal minggir dan gak nge-blok klik canvas/tombol */
+        }
+        .menu-btn {
+            cursor: pointer;
+            pointer-events: auto;
+        }
+    </style>
 </head>
 <body>
 
@@ -13,7 +41,6 @@
 
     <div id="game-container">
         
-        <!-- HEADER DIALOG IZUR -->
         <div id="izur-header">
             <div id="izur-avatar-container">
                 <div id="izur-avatar">😎</div>
@@ -26,7 +53,6 @@
             </div>
         </div>
 
-        <!-- PANEL SKOR -->
         <div id="ui-panel">
             <button id="btn-back" onclick="window.location.href='index.html'">⬅ KELUAR</button>
             <div id="score-box">
@@ -35,12 +61,10 @@
             </div>
         </div>
 
-        <!-- AREA CANVAS GAME -->
         <div id="canvas-wrapper">
             <canvas id="gameCanvas" width="800" height="500"></canvas>
         </div>
 
-        <!-- VIRTUAL CONTROLLER FOR MOBILE -->
         <div id="mobile-controller">
             <div class="dpad-row">
                 <button class="dpad-btn btn-up" id="pad-up">▲</button>
@@ -55,7 +79,6 @@
             </div>
         </div>
 
-        <!-- MODAL: INPUT NAMA AWAL -->
         <div id="overlay-modal" class="modal">
             <div class="modal-content animate-pop">
                 <div class="event-tag">MEMORIES OF 2026</div>
@@ -71,7 +94,6 @@
             </div>
         </div>
 
-        <!-- MODAL: GAME OVER & LEADERBOARD -->
         <div id="gameover-modal" class="modal hidden">
             <div class="modal-content animate-pop">
                 <div class="eliminated-tag">ELIMINASI</div>
@@ -122,15 +144,14 @@
         let particles = [];
 
         // ==========================================
-        // CONFIG & PRELOAD SPRITE ANIMATION CHARACTER
+        // FIX SESUAI NAMA FILE DI GITHUB LU
         // ==========================================
         const spriteIdle = new Image();
-        spriteIdle.src = '1000018020-removebg-preview.png'; 
+        spriteIdle.src = '1000018020-removebg-preview.png'; // File gabungan di github lu
 
         const spriteRun = new Image();
-        spriteRun.src = '1000018020-removebg-preview.png';  
+        spriteRun.src = '1000018020-removebg-preview.png'; // File gabungan di github lu
 
-        // Perbaikan: Pakai fungsi aman dengan fallback angka jika gambar belum kelar loading
         const spriteConfig = {
             cols: 4,
             rows: 2,
@@ -216,25 +237,21 @@
         setupMobileButton('pad-left', 'ArrowLeft');
         setupMobileButton('pad-right', 'ArrowRight');
 
-        // Event Listener Mulai + Fitur Rahasia RESETALLSCORE
-        btnStart.addEventListener('click', () => {
+        // Klik tombol mulai + Fitur Rahasia RESETALLSCORE
+        btnStart.addEventListener('click', (e) => {
+            e.preventDefault();
             const typedName = nameInput.value.trim();
             
-            // Cek kode rahasia reset
             if(typedName.toUpperCase() === "RESETSCOREALL") {
                 localStorage.removeItem('izur_leaderboard');
-                alert("Leaderboard berhasil di-reset! Game akan direfresh.");
+                alert("Leaderboard berhasil di-reset! Game akan dimuat ulang.");
                 window.location.reload();
                 return;
             }
 
-            if(typedName !== "") {
-                playerName = typedName;
-            } else {
-                playerName = "Anonim";
-            }
+            playerName = typedName !== "" ? typedName : "Anonim";
             
-            overlayModal.classList.add('hidden');
+            overlayModal.classList.add('hidden'); // Menyembunyikan modal total via CSS
             initGame();
         });
 
@@ -389,7 +406,7 @@
             ctx.fillStyle = '#5c3d2e';
             ctx.fillRect(zones.kapal.x, zones.kapal.y, zones.kapal.w, zones.kapal.h);
             ctx.fillStyle = '#fff';
-            ctx.fillText("⛵ DECK KAPAL", zones.kapal.x + 3, zones.kapal.y + 25);
+            ctx.fillText("⛵ DECK KAPAL", zones.kapal.x + 5, zones.kapal.y + 25);
 
             // 5. Perosotan
             let slideGrad = ctx.createLinearGradient(zones.perosotan.x, zones.perosotan.y, zones.perosotan.x+zones.perosotan.w, zones.perosotan.y);
@@ -411,7 +428,7 @@
             ctx.ellipse(player.x, player.y + 22, 16, 6, 0, 0, Math.PI * 2); 
             ctx.fill();
 
-            // Render Karakter Stickman (Sprite Crop & Auto-Flip)
+            // Render Karakter Stickman dari File Tunggal GitHub Lu (Auto-Animate & Crop)
             ctx.save();
             if (player.facingLeft) {
                 ctx.translate(player.x * 2, 0);
@@ -423,9 +440,10 @@
             const drawX = player.x - (drawW / 2);
             const drawY = player.y - (drawH / 2);
 
+            let frameW = spriteConfig.getFrameWidth();
+            let frameHeight = spriteConfig.getFrameHeight();
+
             if (player.isMoving) {
-                let frameW = spriteConfig.getFrameWidth();
-                let frameHeight = spriteConfig.getFrameHeight();
                 let currentIdx = Math.floor(spriteConfig.currentFrame) % spriteConfig.totalFrames;
                 let col = currentIdx % spriteConfig.cols;
                 let row = Math.floor(currentIdx / spriteConfig.cols);
@@ -437,7 +455,12 @@
                 );
                 spriteConfig.currentFrame += spriteConfig.animSpeed;
             } else {
-                ctx.drawImage(spriteIdle, drawX, drawY, drawW, drawH);
+                // Saat IDLE (Diam), ambil frame pertama saja dari grid lembar gambar lu
+                ctx.drawImage(
+                    spriteIdle, 
+                    0, 0, frameW, frameHeight, 
+                    drawX, drawY, drawW, drawH
+                );
                 spriteConfig.currentFrame = 0;
             }
             ctx.restore();
@@ -454,6 +477,9 @@
                 ctx.fillStyle = `rgba(141, 153, 174, ${roofAlpha})`;
                 ctx.beginPath(); ctx.moveTo(rx + rw, ry); ctx.lineTo(rx + rw, ry + rh); ctx.lineTo(cx, cy); ctx.closePath(); ctx.fill();
 
+                ctx.filStyle = `rgba(141, 153, 174, ${roofAlpha})`;
+                ctx.beginPath(); ctx.moveTo(rx + rw, ry); ctx.lineTo(rx + rw, ry + rh); ctx.lineTo(cx, cy); ctx.closePath(); ctx.fill();
+
                 ctx.fillStyle = `rgba(102, 112, 133, ${roofAlpha})`;
                 ctx.beginPath(); ctx.moveTo(rx + rw, ry + rh); ctx.lineTo(rx, ry + rh); ctx.lineTo(cx, cy); ctx.closePath(); ctx.fill();
 
@@ -467,7 +493,7 @@
                 ctx.shadowBlur = 0;
             }
 
-            // Partikel
+            // Partikel di layar
             particles.forEach((p) => {
                 p.y += p.speedY; p.x += p.speedX;
                 if(p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; }
