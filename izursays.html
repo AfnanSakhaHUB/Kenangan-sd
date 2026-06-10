@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=none">
     <title>Izur Says - Edisi Spesial Perpisahan</title>
     <link rel="stylesheet" href="izursays.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Orbitron:wght@500;900&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght=700&family=Orbitron:wght=500;900&family=Poppins:wght=400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -40,7 +40,7 @@
             <canvas id="gameCanvas" width="800" height="500"></canvas>
         </div>
 
-        <!-- VIRTUAL CONTROLLER FOR MOBILE (Hanya muncul di HP) -->
+        <!-- VIRTUAL CONTROLLER FOR MOBILE -->
         <div id="mobile-controller">
             <div class="dpad-row">
                 <button class="dpad-btn btn-up" id="pad-up">▲</button>
@@ -125,18 +125,19 @@
         // CONFIG & PRELOAD SPRITE ANIMATION CHARACTER
         // ==========================================
         const spriteIdle = new Image();
-        spriteIdle.src = '1000018161-removebg-preview.png'; // Sprite Diam tunggal
+        spriteIdle.src = '1000018020-removebg-preview.png
+            '; 
 
         const spriteRun = new Image();
-        spriteRun.src = '1000018020-removebg-preview.png
-            ';  // Spritesheet Lari (4 Kolom x 2 Baris)
+        spriteRun.src = '1000018020-removebg-preview.png';  
 
+        // Perbaikan: Pakai fungsi aman dengan fallback angka jika gambar belum kelar loading
         const spriteConfig = {
             cols: 4,
             rows: 2,
             totalFrames: 8,
-            getFrameWidth: function() { return spriteRun.width / this.cols; },
-            getFrameHeight: function() { return spriteRun.height / this.rows; },
+            getFrameWidth: function() { return spriteRun.width > 0 ? spriteRun.width / this.cols : 64; },
+            getFrameHeight: function() { return spriteRun.height > 0 ? spriteRun.height / this.rows : 64; },
             animSpeed: 0.15, 
             currentFrame: 0
         };
@@ -191,6 +192,7 @@
         // D-PAD Touch Handlers
         function setupMobileButton(elementId, keyName) {
             const btn = document.getElementById(elementId);
+            if(!btn) return;
             
             btn.addEventListener('touchstart', (e) => {
                 e.preventDefault();
@@ -215,14 +217,24 @@
         setupMobileButton('pad-left', 'ArrowLeft');
         setupMobileButton('pad-right', 'ArrowRight');
 
+        // Event Listener Mulai + Fitur Rahasia RESETALLSCORE
         btnStart.addEventListener('click', () => {
-            if(nameInput.value.trim().toUpperCase() === "RESETSCOREALL") {
-        localStorage.removeItem('izur_leaderboard');
-        alert("Leaderboard berhasil di-reset! Halaman akan dimuat ulang.");
-        location.reload(); // Refresh otomatis
-        return; // Berhenti di sini, jangan lanjut ke game
+            const typedName = nameInput.value.trim();
+            
+            // Cek kode rahasia reset
+            if(typedName.toUpperCase() === "RESETSCOREALL") {
+                localStorage.removeItem('izur_leaderboard');
+                alert("Leaderboard berhasil di-reset! Game akan direfresh.");
+                window.location.reload();
+                return;
             }
-            if(nameInput.value.trim() !== "") playerName = nameInput.value.trim();
+
+            if(typedName !== "") {
+                playerName = typedName;
+            } else {
+                playerName = "Anonim";
+            }
+            
             overlayModal.classList.add('hidden');
             initGame();
         });
@@ -378,7 +390,7 @@
             ctx.fillStyle = '#5c3d2e';
             ctx.fillRect(zones.kapal.x, zones.kapal.y, zones.kapal.w, zones.kapal.h);
             ctx.fillStyle = '#fff';
-            ctx.fillText("⛵ DECK KAPAL", zones.kapal.x + 5, zones.kapal.y + 25);
+            ctx.fillText("⛵ DECK KAPAL", zones.kapal.x + 3, zones.kapal.y + 25);
 
             // 5. Perosotan
             let slideGrad = ctx.createLinearGradient(zones.perosotan.x, zones.perosotan.y, zones.perosotan.x+zones.perosotan.w, zones.perosotan.y);
