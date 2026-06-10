@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lembar Akhir Kenangan Kita 🚀</title>
+    <title>Akhir Perjalanan Kita 🚀</title>
     <style>
-        /* --- RESET & SKY THEME CONTINUATION --- */
+        /* --- RESET & THEME (Persis start_3.html) --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -17,39 +17,40 @@
             height: 100vh;
             overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* Lanjutan gradasi langit biru cerah dari overlay start.html */
-            background: linear-gradient(to bottom, #0284c7, #38bdf8, #bae6fd, #f0f9ff);
-            color: #1e293b;
+            background-color: #020208;
+            color: #fff;
         }
 
-        /* --- BACKGROUND AWAN BERGERAK --- */
+        /* --- BACKGROUND LANGIT BIRU CERAH (Lanjutan Pan-Down) --- */
         .sky-bg {
             position: absolute;
             width: 100%;
             height: 100%;
             top: 0; left: 0;
+            background: linear-gradient(to bottom, #0284c7, #38bdf8, #bae6fd, #f0f9ff);
             z-index: 1;
             overflow: hidden;
         }
 
+        /* Efek Awan Putih Estetik (Persis start_3.html) */
         .cloud {
             position: absolute;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 100px;
-            filter: blur(2px);
+            filter: blur(1px);
         }
         .cloud::before, .cloud::after {
-            content: ''; position: absolute; background: rgba(255, 255, 255, 0.85); border-radius: 50%;
+            content: ''; position: absolute; background: rgba(255, 255, 255, 0.9); border-radius: 50%;
         }
-        .cloud1 { width: 350px; height: 90px; top: 15%; left: -100px; opacity: 0.8; animation: floatClouds 35s linear infinite; }
-        .cloud2 { width: 250px; height: 70px; top: 60%; right: -100px; opacity: 0.6; animation: floatClouds 25s linear infinite reverse; }
+        .cloud1 { width: 300px; height: 80px; top: 25%; left: -50px; opacity: 0.8; animation: floatClouds 30s linear infinite; }
+        .cloud2 { width: 200px; height: 60px; top: 50%; right: -50px; opacity: 0.6; animation: floatClouds 20s linear infinite reverse; }
 
         @keyframes floatClouds {
-            0% { transform: translateX(-150px); }
-            100% { transform: translateX(115vw); }
+            0% { transform: translateX(-100px); }
+            100% { transform: translateX(110vw); }
         }
 
-        /* --- CONTAINER UTAMA CINEMATIC --- */
+        /* --- CONTAINER UTAMA CINEMATIC (Persis start_3.html) --- */
         .cinema-container {
             position: relative;
             width: 100%;
@@ -60,14 +61,13 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-            transition: all 1s ease;
         }
 
-        /* --- INTERACTIVE PROMPT LAYER (WAJIB UNTUK AUTOPLAY) --- */
+        /* --- INTERACTIVE PROMPT LAYER (Persis start_3.html) --- */
         #interaction-layer {
             position: absolute;
             width: 100%; height: 100%;
-            background: rgba(2, 132, 199, 0.95);
+            background: rgba(2, 2, 8, 0.95);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -78,27 +78,27 @@
             text-align: center;
             cursor: pointer;
             padding: 30px;
-            border: 2px dashed #ffffff;
+            border: 2px dashed #ffdd1a;
             border-radius: 20px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
             animation: pulseBox 2s infinite alternate;
         }
         @keyframes pulseBox {
-            0% { transform: scale(1); box-shadow: 0 0 15px rgba(255,255,255,0.3); }
-            100% { transform: scale(1.03); box-shadow: 0 0 35px rgba(255,255,255,0.7); }
+            0% { transform: scale(1); box-shadow: 0 0 10px rgba(255,221,26,0.2); }
+            100% { transform: scale(1.03); box-shadow: 0 0 30px rgba(255,221,26,0.5); }
         }
 
-        /* --- BINGKAI FOTO FILM & NARASI (GLASSMORPHISM PREMIUM) --- */
+        /* --- BINGKAI FOTO FILM & NARASI (Persis start_3.html) --- */
         .memory-card {
             width: 90%;
             max-width: 500px;
-            background: rgba(255, 255, 255, 0.45);
-            border: 2px solid rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(15, 23, 42, 0.65);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border-radius: 24px;
             padding: 25px;
-            box-shadow: 0 20px 50px rgba(2, 75, 114, 0.25);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             text-align: center;
             opacity: 0;
             transform: translateY(30px) scale(0.95);
@@ -119,8 +119,8 @@
             overflow: hidden;
             margin-bottom: 20px;
             border: 4px solid #fff;
-            box-shadow: 0 8px 24px rgba(2, 75, 114, 0.2);
-            background: #e2e8f0;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            background: #000;
         }
 
         #photoSlot {
@@ -134,17 +134,53 @@
         }
 
         .narrative-text {
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             line-height: 1.6;
-            color: #0f172a;
-            font-weight: 600;
+            color: #f1f5f9;
+            font-weight: 500;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
             min-height: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* --- ENGINE TRANSISI ROKET (SAMA PERSIS DENGAN START.HTML) --- */
+        /* --- TOMBOL SELESAI / KEMBALI (Persis gaya btnLanjut start_3.html) --- */
+        #btnSelesai {
+            display: none;
+            margin-top: 25px;
+            padding: 14px 40px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #020208;
+            background: #ffdd1a;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 221, 26, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 80;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: bounceBtn 1s infinite alternate;
+            text-decoration: none;
+        }
+        #btnSelesai.show {
+            display: inline-block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        #btnSelesai:hover {
+            transform: scale(1.06) translateY(-2px);
+            box-shadow: 0 0 30px rgba(255, 221, 26, 0.9);
+            background: #fff;
+        }
+        @keyframes bounceBtn {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-4px); }
+        }
+
+        /* --- DETIL ELEMEN ASAP & ROKET TRANSISI (Persis start_3.html) --- */
         .trans-rocket {
             position: absolute;
             z-index: 50;
@@ -158,7 +194,7 @@
             position: absolute;
             width: 25px;
             height: 25px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(186, 230, 253, 0.6) 50%, transparent 100%);
+            background: radial-gradient(circle, rgba(241, 245, 249, 0.9) 0%, rgba(148, 163, 184, 0.5) 50%, transparent 100%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 40;
@@ -166,22 +202,22 @@
         }
 
         @keyframes smokePuff {
-            0% { transform: scale(1) translate(0, 0); opacity: 0.85; filter: blur(1px); }
-            40% { opacity: 1; filter: blur(4px); }
-            100% { transform: scale(6) translate(-30px, 20px); opacity: 0; filter: blur(12px); }
+            0% { transform: scale(1) translate(0, 0); opacity: 0.8; filter: blur(2px); }
+            40% { opacity: 1; filter: blur(6px); }
+            100% { transform: scale(6) translate(-30px, 20px); opacity: 0; filter: blur(15px); }
         }
 
-        /* ROKET CSS ENGINE MURNI */
+        /* --- DESAIN ROKET ENGINE (Persis start_3.html) --- */
         .rocket-body {
             width: 30px; height: 65px;
-            background: linear-gradient(to right, #ffffff, #cbd5e1);
+            background: linear-gradient(to right, #f8fafc, #cbd5e1);
             border-radius: 50% 50% 4px 4px / 70% 70% 4px 4px;
             position: relative; margin: 0 auto;
-            box-shadow: 0 0 12px rgba(255,255,255,0.8);
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
         }
         .rocket-window {
             width: 10px; height: 10px;
-            background: #0284c7; border: 2px solid #cbd5e1;
+            background: #38bdf8; border: 2px solid #94a3b8;
             border-radius: 50%; position: absolute;
             top: 18px; left: 8px;
         }
@@ -199,7 +235,7 @@
         }
         .rocket-fire {
             width: 14px; height: 30px;
-            background: linear-gradient(to bottom, #f59e0b, #ef4444, transparent);
+            background: linear-gradient(to bottom, #ffdd1a, #ef4444, transparent);
             margin: -2px auto 0; border-radius: 0 0 8px 8px;
             animation: fireBurn 0.08s infinite alternate;
         }
@@ -213,122 +249,47 @@
             position: absolute;
             top: 20px;
             font-size: 0.85rem;
-            color: #0369a1;
-            font-weight: 700;
+            color: rgba(255,255,255,0.6);
             letter-spacing: 2px;
             text-transform: uppercase;
         }
-
-        /* --- GRAND FINALE GRID DISCOVERY (MUNCUL DI AKHIR TIMELINE) --- */
-        .final-grid-layer {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: linear-gradient(to bottom, #0284c7, #0f172a);
-            z-index: 90;
-            display: none;
-            overflow-y: auto;
-            padding: 40px 20px;
-            color: #fff;
-        }
-        .grid-title {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        .grid-title h2 { font-size: 2.2rem; margin-bottom: 10px; color: #bae6fd; }
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .grid-card {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-        .grid-card img { width: 100%; height: auto; display: block; }
-        .grid-card p { padding: 10px; font-size: 0.75rem; font-family: monospace; background: rgba(0,0,0,0.3); word-break: break-all; text-align: center; }
-
-        #btnBukaGrid {
-            display: none;
-            margin-top: 25px;
-            padding: 14px 40px;
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #ffffff;
-            background: #ef4444;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
-            transition: all 0.3s ease;
-            z-index: 80;
-            animation: bounceBtn 1s infinite alternate;
-        }
-        #btnBukaGrid.show { display: inline-block; }
-        @keyframes bounceBtn { 0% { transform: translateY(0); } 100% { transform: translateY(-4px); } }
     </style>
 </head>
 <body>
 
+    <!-- TOMBOL PEMBUKA GESTURE AUDIO (Persis) -->
     <div id="interaction-layer">
         <div class="play-box" id="btnMulaiSkenario">
-            <h2 style="color: #ffffff; margin-bottom: 10px;">🚀 Mendarat di Masa Depan 🌟</h2>
-            <p style="font-size: 0.9rem; color: #bae6fd;">Ketuk layar untuk melanjutkan penjelajahan memori</p>
+            <h2 style="color: #ffdd1a; margin-bottom: 10px;">🎬 Lihat Memoar Akhir Semesta 🌟</h2>
+            <p style="font-size: 0.9rem; color: #94a3b8;">Ketuk layar untuk memutar bagian penutup</p>
         </div>
     </div>
 
+    <!-- BACKGROUND ENGINE LANGIT -->
     <div class="sky-bg">
         <div class="cloud cloud1"></div>
         <div class="cloud cloud2"></div>
     </div>
 
+    <!-- AUDIO ENGINE (Lagu Penutup) -->
     <audio id="memoriesAudio" preload="auto">
-        <source src="7!! - Orange (Lirik dan terjemah) (320).mp3" type="audio/mpeg">
+        <source src="VID-20260610-WA0019.mp3" type="audio/mpeg">
     </audio>
 
+    <!-- CINEMATIC STAGE (Persis) -->
     <div class="cinema-container">
-        <div class="progress-indicator" id="progText">Membuka Lembar Akhir...</div>
+        <div class="progress-indicator" id="progText">Memulai Lembar Akhir...</div>
 
+        <!-- BINGKAI FOTO UTAMA (Persis 100% Sesuai File Kiriman Lu) -->
         <div class="memory-card" id="displayBox">
             <div class="image-wrapper" id="wrapperZone">
                 <img src="" id="photoSlot" alt="Memories">
             </div>
-            <div class="narrative-text" id="captionSlot">Menyinkronkan memori penjelajahan...</div>
+            <div class="narrative-text" id="captionSlot">Membuka memoar penutup...</div>
         </div>
 
-        <button id="btnBukaGrid">Lihat Semua Album ➡️</button>
-    </div>
-
-    <div class="final-grid-layer" id="finalGridLayer">
-        <div class="grid-title">
-            <h2>Gerbang Masa Depan Telah Terbuka ✨</h2>
-            <p>Terima kasih atas segala memori indah yang terukir bersama di SD Negeri Slarang 02</p>
-        </div>
-        <div class="gallery-grid">
-            <div class="grid-card"><img src="Screenshot_2026-06-10-09-34-46-907_cn.wps.xiaomi.abroad.lite-edit.jpg"><p>Screenshot_2026-06-10-09-34-46-907_cn.wps.xiaomi.abroad.lite-edit.jpg</p></div>
-            <div class="grid-card"><img src="Screenshot_2026-06-10-09-35-05-804_cn.wps.xiaomi.abroad.lite-edit.jpg"><p>Screenshot_2026-06-10-09-35-05-804_cn.wps.xiaomi.abroad.lite-edit.jpg</p></div>
-            <div class="grid-card"><img src="Screenshot_2026-06-10-09-35-14-407_cn.wps.xiaomi.abroad.lite.jpg"><p>Screenshot_2026-06-10-09-35-14-407_cn.wps.xiaomi.abroad.lite.jpg</p></div>
-            <div class="grid-card"><img src="Screenshot_2026-06-10-09-35-20-411_cn.wps.xiaomi.abroad.lite-edit.jpg"><p>Screenshot_2026-06-10-09-35-20-411_cn.wps.xiaomi.abroad.lite-edit.jpg</p></div>
-            <div class="grid-card"><img src="Screenshot_2026-06-10-09-35-30-928_cn.wps.xiaomi.abroad.lite-edit.jpg"><p>Screenshot_2026-06-10-09-35-30-928_cn.wps.xiaomi.abroad.lite-edit.jpg</p></div>
-            <div class="grid-card"><img src="Screenshot_2026-06-10-09-35-42-111_cn.wps.xiaomi.abroad.lite-edit.jpg"><p>Screenshot_2026-06-10-09-35-42-111_cn.wps.xiaomi.abroad.lite-edit.jpg</p></div>
-            <div class="grid-card"><img src="Screenshot_2026-06-10-09-35-56-311_cn.wps.xiaomi.abroad.lite-edit.jpg"><p>Screenshot_2026-06-10-09-35-56-311_cn.wps.xiaomi.abroad.lite-edit.jpg</p></div>
-            <div class="grid-card"><img src="Screenshot_2026-06-10-09-36-09-591_cn.wps.xiaomi.abroad.lite-edit.jpg"><p>Screenshot_2026-06-10-09-36-09-591_cn.wps.xiaomi.abroad.lite-edit.jpg</p></div>
-            <div class="grid-card"><img src="Screenshot_2026-06-10-09-36-18-771_cn.wps.xiaomi.abroad.lite-edit.jpg"><p>Screenshot_2026-06-10-09-36-18-771_cn.wps.xiaomi.abroad.lite-edit.jpg</p></div>
-            <div class="grid-card"><img src="Screenshot_2026-06-10-09-36-30-733_cn.wps.xiaomi.abroad.lite-edit.jpg"><p>Screenshot_2026-06-10-09-36-30-733_cn.wps.xiaomi.abroad.lite-edit.jpg</p></div>
-            <div class="grid-card"><img src="Screenshot_2026-06-10-09-41-03-739_cn.wps.xiaomi.abroad.lite-edit.jpg"><p>Screenshot_2026-06-10-09-41-03-739_cn.wps.xiaomi.abroad.lite-edit.jpg</p></div>
-            <div class="grid-card"><img src="Screenshot_2026-06-10-09-41-19-641_cn.wps.xiaomi.abroad.lite-edit.jpg"><p>Screenshot_2026-06-10-09-41-19-641_cn.wps.xiaomi.abroad.lite-edit.jpg</p></div>
-            <div class="grid-card"><img src="Screenshot_2026-06-10-09-41-33-861_cn.wps.xiaomi.abroad.lite-edit.jpg"><p>Screenshot_2026-06-10-09-41-33-861_cn.wps.xiaomi.abroad.lite-edit.jpg</p></div>
-            <div class="grid-card"><img src="Screenshot_2026-06-10-09-41-47-544_cn.wps.xiaomi.abroad.lite-edit.jpg"><p>Screenshot_2026-06-10-09-41-47-544_cn.wps.xiaomi.abroad.lite-edit.jpg</p></div>
-            <div class="grid-card"><img src="Screenshot_2026-06-10-09-42-00-399_cn.wps.xiaomi.abroad.lite-edit.jpg"><p>Screenshot_2026-06-10-09-42-00-399_cn.wps.xiaomi.abroad.lite-edit.jpg</p></div>
-            <div class="grid-card"><img src="Screenshot_2026-06-10-09-42-13-182_cn.wps.xiaomi.abroad.lite-edit.jpg"><p>Screenshot_2026-06-10-09-42-13-182_cn.wps.xiaomi.abroad.lite-edit.jpg</p></div>
-            <div class="grid-card"><img src="Screenshot_2026-06-10-09-42-22-990_cn.wps.xiaomi.abroad.lite-edit.jpg"><p>Screenshot_2026-06-10-09-42-22-990_cn.wps.xiaomi.abroad.lite-edit.jpg</p></div>
-            <div class="grid-card"><img src="Screenshot_2026-06-10-09-42-35-047_cn.wps.xiaomi.abroad.lite-edit.jpg"><p>Screenshot_2026-06-10-09-42-35-047_cn.wps.xiaomi.abroad.lite-edit.jpg</p></div>
-        </div>
+        <!-- TOMBOL SELESAI KEMBALI KERSIS GAYA SEBELUMNYA -->
+        <a href="index.html" id="btnSelesai">Kembali ke Beranda 🏠</a>
     </div>
 
     <script>
@@ -340,34 +301,55 @@
         const photoSlot = document.getElementById('photoSlot');
         const captionSlot = document.getElementById('captionSlot');
         const progText = document.getElementById('progText');
-        const btnBukaGrid = document.getElementById('btnBukaGrid');
-        const finalGridLayer = document.getElementById('finalGridLayer');
+        const btnSelesai = document.getElementById('btnSelesai');
 
-        // ==========================================================================
-        // DATABASE TIMELINE KRONOLOGIS REKUES SINKRON DENGAN 18 FOTO DAN LAGU ORANGE
-        // ==========================================================================
+        // TIMELINE MEMOAR PENUTUP BERDASARKAN DETIK AUDIO (BERSIH TANPA NAMA SISWA)
         const memoryTimeline = [
-            { time: 1, img: "Screenshot_2026-06-10-09-34-46-907_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Menyimpan coretan kisah yang pertama, saat tawa kita masih terdengar malu-malu...", phase: "Kisah I: Coretan Awal" },
-            { time: 12, img: "Screenshot_2026-06-10-09-35-05-804_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Ada kalanya kita belajar serius, tapi lebih banyak bercandanya di sudut ruang kelas.", phase: "Kisah II: Sudut Kelas" },
-            { time: 24, img: "Screenshot_2026-06-10-09-35-14-407_cn.wps.xiaomi.abroad.lite.jpg", text: "Lembar demi lembar catatan ini menjadi saksi bisu perjuangan kita mengejar mimpi bersama.", phase: "Kisah III: Lembar Catatan" },
-            { time: 36, img: "Screenshot_2026-06-10-09-35-20-411_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Senyuman polos yang terekam secara tidak sengaja. Momen sederhana ini yang bakal paling dikangenin.", phase: "Kisah IV: Detik Spontan" },
-            { time: 48, img: "Screenshot_2026-06-10-09-35-30-928_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Kekompakan yang mulai terbentuk nyata, saling bantu saat ada tugas kelompok yang bikin pusing.", phase: "Kisah V: Bahu Membahu" },
-            { time: 60, img: "Screenshot_2026-06-10-09-35-42-111_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Setiap sudut sekolah punya cerita sendiri, tempat kita berbagi bekal makan siang bersama.", phase: "Kisah VI: Ruang Berbagi" },
-            { time: 72, img: "Screenshot_2026-06-10-09-35-56-311_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Langkah kaki kita semakin seirama, mengarungi hari-hari penuh warna di SD Negeri Slarang 02.", phase: "Kisah VII: Jejak Langkah" },
-            { time: 84, img: "Screenshot_2026-06-10-09-36-09-591_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Matahari sore saksi kebersamaan kita pulang sekolah bareng menyusuri jalanan desa.", phase: "Kisah VIII: Sinar Sore" },
-            { time: 96, img: "Screenshot_2026-06-10-09-36-18-771_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Kilas balik perjuangan ujian sekolah, saling menyemangati biar lulus bareng-bareng.", phase: "Kisah IX: Menembus Batas" },
-            { time: 108, img: "Screenshot_2026-06-10-09-36-30-733_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Waktu seakan berjalan terlalu cepat saat kita mulai menyadari hari perpisahan kian dekat.", phase: "Kisah X: Detik Berharga" },
-            { time: 120, img: "Screenshot_2026-06-10-09-41-03-739_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Momen dokumentasi persiapan kelulusan, seragam putih ini sebentar lagi akan disimpan rapat.", phase: "Kisah XI: Putih Merah Akhir" },
-            { time: 132, img: "Screenshot_2026-06-10-09-41-19-641_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Ingatkah pose andalan kita waktu itu? Rasanya baru kemarin kita bingung milih gaya foto.", phase: "Kisah XII: Gaya Andalan" },
-            { time: 144, img: "Screenshot_2026-06-10-09-41-33-861_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Tertawa lepas tanpa beban, momen mahal yang tidak akan bisa dibeli kembali dengan uang.", phase: "Kisah XIII: Tawa Abadi" },
-            { time: 156, img: "Screenshot_2026-06-10-09-41-47-544_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Di balik kebersamaan kita, ada guru-guru hebat yang sabar membimbing kenakalan kita.", phase: "Kisah XIV: Restu Guru" },
-            { time: 168, img: "Screenshot_2026-06-10-09-42-00-399_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Formasi barisan persahabatan sejati, janji untuk tidak saling melupakan setelah ini.", phase: "Kisah XV: Ikatan Kuat" },
-            { time: 180, img: "Screenshot_2026-06-10-09-42-13-182_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Mata mulai berkaca-kaca menatap album ini. Begitu banyak kenangan yang terpatri erat.", phase: "Kisah XVI: Haru Kenangan" },
-            { time: 192, img: "Screenshot_2026-06-10-09-42-22-990_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Satu langkah terakhir di halaman sekolah sebelum kita melangkah keluar menuju SMP.", phase: "Kisah XVII: Batas Senja" },
-            { time: 204, img: "Screenshot_2026-06-10-09-42-35-047_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Roket persahabatan kita telah mendarat dengan selamat di pelabuhan masa depan. Sukses selalu kawan! 🎓✨", phase: "Masa Depan: Sukses Mulia" }
+            {
+                time: 1, 
+                img: "IMG-20260609-WA0061.jpg",
+                text: "Setiap perjalanan hebat selalu memiliki landasan pacu pertamanya. Enam tahun lalu kita datang ke sini dengan langkah kecil penuh kepolosan.",
+                phase: "Memoar I: Langkah Awal"
+            },
+            {
+                time: 15, 
+                img: "IMG-20260609-WA0042.jpg",
+                text: "Hari-hari berganti, menganyam tawa di sela jam istirahat, hingga menyatukan ego menjadi ikatan keluarga besar Kelas VI SD Negeri Slarang 02.",
+                phase: "Memoar II: Ikatan Kabin"
+            },
+            {
+                time: 35, 
+                img: "IMG-20260609-WA0061.jpg",
+                text: "Kebersamaan kita selama ini ibarat sebuah Pesawat Penumpang. Armada hangat tempat kita duduk berdampingan melintasi tahun-tahun sekolah.",
+                phase: "Memoar III: Pesawat Kenangan"
+            },
+            {
+                time: 55, 
+                img: "IMG-20260609-WA0042.jpg",
+                text: "Kini, pesawat kenangan itu telah mendarat dengan sangat sempurna di gerbang kelulusan. Pintu kabin terbuka, menandakan tugasnya usai.",
+                phase: "Memoar IV: Gerbang Kelulusan"
+            },
+            {
+                time: 75, 
+                img: "IMG-20260609-WA0061.jpg",
+                text: "Namun ingatlah, jika masa lalu adalah Pesawat yang harus mendarat, maka cita-cita dan impian di dalam dada kita adalah sebuah ROKET!",
+                phase: "Memoar V: Energi Impian"
+            },
+            {
+                time: 95, 
+                img: "IMG-20260609-WA0042.jpg",
+                text: "Sebuah Roket tidak mengenal kata mendarat. Ia dirancang untuk melesat menembus atmosfer ketakutan dan meraih mimpi paling tinggi di angkasa.",
+                phase: "Memoar VI: Melesat Tinggi"
+            },
+            {
+                time: 115, 
+                img: "IMG-20260609-WA0061.jpg",
+                text: "Penerbangan bersama kita resmi berakhir di sini, namun penjelajahan ruang angkasa masa depan baru saja dimulai. Sampai jumpa di masa depan! ✨🚀",
+                phase: "Selesai: Menuju Angkasa Masa Depan"
+            }
         ];
 
-        // ================= ENGINE TRANSISI ROKET & KEPULAN ASAP (100% IDENTIK) =================
+        // ================= CORE ENGINE TRANSISI ROKET (Persis) =================
         const triggerRocketTransition = (targetData) => {
             photoSlot.style.opacity = '0.1';
             photoSlot.style.filter = 'blur(15px) scale(0.95)';
@@ -442,12 +424,12 @@
             requestAnimationFrame(runFlight);
         };
 
-        // ================= TIMELINE TRACKER CORE ENGINE =================
+        // ================= TIMELINE TRACKER CORE ENGINE (Persis) =================
         const startCinematicScene = () => {
             interactionLayer.style.opacity = '0';
             setTimeout(() => interactionLayer.style.display = 'none', 1000);
 
-            memoriesAudio.play().catch(err => console.log("Audio Playback Blocked:", err));
+            memoriesAudio.play().catch(err => console.log("Audio Error:", err));
             displayBox.classList.add('active');
 
             let currentActiveIndex = -1;
@@ -466,22 +448,18 @@
                     currentActiveIndex = targetIndex;
                     triggerRocketTransition(memoryTimeline[currentActiveIndex]);
 
-                    // JIKA SAMPAI DI SLIDE AKHIR, MUNCULKAN TOMBOL GRAND FINALE
+                    // Jika sampai di slide paling akhir, munculkan tombol selesai
                     if (currentActiveIndex === memoryTimeline.length - 1) {
                         setTimeout(() => {
-                            btnBukaGrid.classList.add('show');
-                        }, 2000);
+                            btnSelesai.classList.add('show');
+                        }, 1500);
                     }
                 }
             });
         };
 
-        // INTERAKSI AKHIR: BUKA GRID SELURUH FOTO SECARA MEGAH
-        btnBukaGrid.addEventListener('click', () => {
-            finalGridLayer.style.display = 'block';
-        });
-
         btnMulaiSkenario.addEventListener('click', startCinematicScene);
     </script>
 </body>
-</html>
+    </html>
+    
