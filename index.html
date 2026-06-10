@@ -3,519 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelulusan Epik 2026</title>
+    <title>Perjalanan ke Luar Angkasa</title>
     <style>
-        /* --- RESET & DASAR --- */
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body, html {
             width: 100%;
-            height: 100vh;
+            height: 100%;
             overflow: hidden;
-            font-family: 'Arial', sans-serif;
-            background-color: #3a8ffd;
+            font-family: sans-serif;
         }
 
-        /* --- VIEWPORT ENGINE (UNTUK EFEK KAMERA TURUN) --- */
-        #main-viewport {
+        /* DUNIA/LANGIT (Tinggi ke atas untuk efek scrolling) */
+        .world {
+            position: absolute;
             width: 100%;
-            height: 200vh; /* Dua kali tinggi layar (Langit + Darat) */
-            position: absolute;
-            top: 0;
-            left: 0;
-            transition: transform 2s cubic-bezier(0.76, 0, 0.24, 1); /* Efek kamera turun cinematic */
-        }
-
-        /* Trigger saat balon mini game diklik */
-        .camera-down {
-            transform: translateY(-100vh);
-        }
-
-        /* --- KELOMPOK SCENE 1: LANGIT --- */
-        #sky-scene {
-            width: 100%;
-            height: 100vh;
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(to bottom, #3a8ffd 0%, #6cb2ff 60%, #b4ecff 100%);
-        }
-
-        .sun {
-            position: absolute;
-            top: 40px;
-            right: 40px;
-            width: 100px;
-            height: 100px;
-            background: #ffdd1a;
-            border-radius: 50%;
-            box-shadow: 0 0 40px #ffea4a, 0 0 80px #ffea4a, 0 0 120px #ffea4a;
-            animation: pendarMatahari 4s ease-in-out infinite alternate;
-        }
-        @keyframes pendarMatahari {
-            0% { transform: scale(1); box-shadow: 0 0 40px #ffea4a; }
-            100% { transform: scale(1.05); box-shadow: 0 0 60px #ffea4a, 0 0 120px #ffea4a; }
-        }
-
-        .bird {
-            position: absolute;
-            width: 70px;
-            height: 70px;
-            background: url('200w.webp') no-repeat center center;
-            background-size: contain;
-            pointer-events: none;
-            z-index: 2;
-        }
-        .bird1 { top: 15%; left: -100px; animation: terbangBurung 7s linear infinite; }
-        .bird2 { width: 50px; height: 50px; top: 25%; left: -100px; animation: terbangBurung 9s linear infinite; animation-delay: 3s; }
-
-        @keyframes terbangBurung {
-            0% { left: -100px; transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-            100% { left: 110%; transform: translateY(0); }
-        }
-
-        .cloud {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 100px;
-            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.05));
-            z-index: 1;
-        }
-        .cloud::before, .cloud::after { content: ''; position: absolute; background: inherit; border-radius: 50%; }
-        .cloud1 { width: 170px; height: 60px; top: 30%; left: -200px; animation: jalanAwan 25s linear infinite; }
-        .cloud1::before { width: 80px; height: 80px; top: -40px; left: 20px; }
-        .cloud1::after { width: 60px; height: 60px; top: -25px; right: 20px; }
-        .cloud2 { width: 230px; height: 75px; top: 50%; left: -300px; animation: jalanAwan 35s linear infinite; animation-delay: 3s; }
-        .cloud2::before { width: 100px; height: 100px; top: -50px; left: 30px; }
-        .cloud2::after { width: 80px; height: 80px; top: -30px; right: 30px; }
-
-        @keyframes jalanAwan {
-            0% { left: -300px; }
-            100% { left: 110%; }
-        }
-
-        .container {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        /* --- BALON SETTINGS --- */
-        .balloon-group {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            animation: ayunBalon 3s ease-in-out infinite alternate;
-            cursor: pointer;
-        }
-        .balloon {
-            position: relative;
-            width: 160px; 
-            height: 210px;
-            background: url('1000017857-removebg-preview.png') no-repeat center center;
-            background-size: contain;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            user-select: none;
-        }
-        .balloon-text {
-            position: absolute;
-            top: 40%; left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-weight: bold;
-            font-size: 1.1rem;
-            text-align: center;
-            width: 80%;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), -2px -2px 4px rgba(0, 0, 0, 0.8);
-            z-index: 5;
-            pointer-events: none;
-        }
-
-        @keyframes ayunBalon {
-            0% { transform: translateY(0px) rotate(-1.5deg); }
-            100% { transform: translateY(-15px) rotate(1.5deg); }
-        }
-        .balloon-group:hover { transform: scale(1.06); transition: transform 0.2s; }
-        
-        .balloon-group.meledak {
-            animation: pop 0.3s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            pointer-events: none;
-        }
-        @keyframes pop {
-            0% { transform: scale(1); opacity: 1; }
-            40% { transform: scale(1.2); filter: brightness(1.2); }
-            100% { transform: scale(0); opacity: 0; }
-        }
-
-        .menu-balloons { display: flex; gap: 40px; justify-content: center; align-items: center; width: 100%; }
-        .reveal .balloon-group { animation: terbangMasuk 1.2s cubic-bezier(0.075, 0.82, 0.165, 1) both; }
-        .reveal .b-1 { animation-delay: 0s; }
-        .reveal .b-2 { animation-delay: 0.15s; }
-        .reveal .b-3 { animation-delay: 0.3s; }
-
-        @keyframes terbangMasuk {
-            0% { transform: translateY(800px) scale(0.6); opacity: 0; }
-            100% { transform: translateY(0) scale(1); opacity: 1; }
-        }
-        .hidden { display: none !important; }
-
-
-        /* ==========================================================================
-           KELOMPOK SCENE 2: GAME DARATAN (MINI GAMES SCENE)
-           ========================================================================== */
-        #game-scene {
-            width: 100%;
-            height: 100vh;
-            position: relative;
-            background: linear-gradient(to bottom, #b4ecff 0%, #e2f7ff 50%, #7db941 50%, #579e23 100%);
-            overflow: hidden;
-        }
-
-        /* --- PARALLAX GUNUNG BERGERAK --- */
-        .mountain-track {
-            position: absolute;
-            bottom: 50%;
-            width: 200%;
-            height: 160px;
-            display: flex;
-            align-items: flex-end;
-            animation: gerakMundur 25s linear infinite;
-            z-index: 1;
-        }
-        .mountain {
-            width: 0; height: 0;
-            border-left: 180px solid transparent;
-            border-right: 180px solid transparent;
-            border-bottom: 150px solid #487534;
-            margin-right: -90px;
-        }
-        .mountain.back {
-            border-bottom-color: #3b612a;
-            transform: scale(0.8);
-            margin-bottom: -10px;
-        }
-
-        /* --- PARALLAX POHON BERGERAK --- */
-        .tree-track {
-            position: absolute;
-            bottom: 140px;
-            width: 200%;
-            height: 90px;
-            display: flex;
-            animation: gerakMundur 10s linear infinite;
-            z-index: 3;
-        }
-        .tree { position: relative; width: 60px; height: 90px; margin-right: 120px; }
-        .tree-leaves {
-            width: 0; height: 0;
-            border-left: 25px solid transparent;
-            border-right: 25px solid transparent;
-            border-bottom: 60px solid #2d6a4f;
-        }
-        .tree-trunk {
-            width: 10px; height: 30px;
-            background: #5c3d2e;
-            margin: 0 auto;
-        }
-
-        @keyframes gerakMundur {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        /* --- JALAN RAYA --- */
-        .road {
-            position: absolute;
+            height: 300vh; /* 3 kali tinggi layar */
             bottom: 0;
             left: 0;
+            /* Gradient dari langit siang (bawah), atmosfer (tengah), ke luar angkasa (atas) */
+            background: linear-gradient(to top, #74b9ff 0%, #0984e3 40%, #2d3436 70%, #000000 100%);
+            transition: transform 4s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+        }
+
+        /* Efek Kamera Naik: Menggeser seluruh dunia ke bawah */
+        .world.move-up {
+            transform: translateY(200vh);
+        }
+
+        /* AREA PEMAIN (Di bagian paling bawah/langit siang) */
+        .ground-level {
+            position: absolute;
+            bottom: 0;
             width: 100%;
-            height: 150px;
-            background: #333;
-            border-top: 6px solid #ffdd1a;
-            z-index: 4;
-        }
-        .road-lines {
-            position: absolute;
-            top: 50%; left: 0;
-            width: 200%; height: 6px;
-            background: linear-gradient(to right, #fff 50%, transparent 50%);
-            background-size: 80px 100%;
-            animation: jalanNgebut 0.4s linear infinite;
-        }
-        @keyframes jalanNgebut {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-80px); }
-        }
-
-        /* --- MOBIL MERAH CSS GAME --- */
-        .red-car {
-            position: absolute;
-            bottom: 45px;
-            left: 8%;
-            width: 140px;
-            height: 65px;
-            z-index: 5;
-            animation: mobilGoyang 0.15s infinite alternate;
-        }
-        .car-cabin {
-            background: #e63946;
-            width: 75px; height: 30px;
-            position: absolute; top: 0; left: 25px;
-            border-radius: 20px 20px 0 0;
-            border: 4px solid #1d3557;
-            border-bottom: none;
-        }
-        .car-body {
-            background: #e63946;
-            width: 140px; height: 35px;
-            position: absolute; bottom: 8px; left: 0;
-            border-radius: 10px 25px 8px 8px;
-            box-shadow: inset -10px 0 0 rgba(0,0,0,0.15);
-        }
-        .car-wheel {
-            background: #1d3557;
-            width: 26px; height: 26px;
-            border-radius: 50%;
-            position: absolute; bottom: 0;
-            border: 4px solid #f1faee;
-            animation: rodaBerputar 0.2s linear infinite;
-        }
-        .wheel-back { left: 20px; }
-        .wheel-front { right: 25px; }
-
-        @keyframes mobilGoyang {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-3px); }
-        }
-        @keyframes rodaBerputar {
-            100% { transform: rotate(360deg); }
-        }
-
-        /* --- MAIN MENU SIDEBAR GAME --- */
-        .game-sidebar {
-            position: absolute;
-            right: 40px;
-            top: 10%;
-            width: 42%; /* Hampir setengah layar sesuai request */
-            height: 80%;
-            background: rgba(15, 23, 42, 0.92);
-            border: 5px solid #ffdd1a;
-            border-radius: 25px;
-            padding: 40px 30px;
+            height: 100vh;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            z-index: 10;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-            transform: translateX(600px); /* Mulai dari luar layar */
-            transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s; /* Muncul setelah kamera turun */
-        }
-        
-        /* Animasi sidebar slide-in saat masuk daratan */
-        .camera-down .game-sidebar {
-            transform: translateX(0);
+            flex-direction: column;
         }
 
-        .game-title {
-            font-size: 2.2rem;
-            font-weight: 900;
-            color: #ffdd1a;
-            text-align: center;
-            margin-bottom: 50px;
-            text-shadow: 4px 4px 0px #000;
-            letter-spacing: 3px;
-            font-family: 'Arial Black', sans-serif;
-            animation: detakJudul 1s ease-in-out infinite alternate;
-        }
-        @keyframes detakJudul {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.03); color: #fff37a; }
-        }
-
-        .game-btn {
+        /* BINTANG-BINTANG (Hanya muncul saat sudah di luar angkasa / atas) */
+        .stars {
+            position: absolute;
+            top: 0;
             width: 100%;
-            padding: 18px;
-            margin-bottom: 20px;
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #fff;
-            background: linear-gradient(to bottom, #3a8ffd, #1a6fd4);
-            border: 3px solid #fff;
-            border-radius: 15px;
-            cursor: pointer;
-            box-shadow: 0 5px 0 #0f4c94, 0 8px 15px rgba(0,0,0,0.3);
-            transition: all 0.1s ease;
-            text-align: center;
-        }
-        .game-btn:hover:not(:disabled) {
-            background: linear-gradient(to bottom, #ffdd1a, #e6c200);
-            color: #222;
-            box-shadow: 0 5px 0 #b39700, 0 8px 15px rgba(0,0,0,0.3);
-            transform: translateY(-2px);
-        }
-        .game-btn:active:not(:disabled) {
-            transform: translateY(3px);
-            box-shadow: 0 2px 0 #b39700;
-        }
-        .game-btn:disabled {
-            background: #475569;
-            color: #94a3b8;
-            border-color: #64748b;
-            box-shadow: none;
-            cursor: not-allowed;
-            font-style: italic;
+            height: 100vh;
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 20px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+            opacity: 0;
+            transition: opacity 3s ease;
         }
 
-        /* --- RESPONSIVE LAYOUT HP --- */
-        @media (max-width: 768px) {
-            .menu-balloons { flex-direction: row; flex-wrap: wrap; gap: 20px; }
-            .balloon { width: 120px; height: 160px; }
-            .balloon-text { font-size: 0.9rem; }
-            .sun { width: 70px; height: 70px; top: 20px; right: 20px; }
-            .game-sidebar { width: 90%; right: 5%; left: 5%; top: 15%; height: 70%; }
-            .game-title { font-size: 1.6rem; }
-            .red-car { transform: scale(0.7); bottom: 30px; left: 2%; }
+        .world.move-up .stars {
+            opacity: 1;
+            transition-delay: 2s; /* Muncul perlahan setelah langit menggelap */
+        }
+
+        /* BALON */
+        .balloon {
+            width: 100px;
+            height: 120px;
+            background-color: #ff7675;
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            cursor: pointer;
+            position: relative;
+            box-shadow: inset -10px -10px 0 rgba(0,0,0,0.07);
+            animation: float 3s ease-in-out infinite;
+            transition: transform 0.2s;
+        }
+
+        .balloon:active {
+            transform: scale(0.9);
+        }
+
+        /* Tali Balon */
+        .balloon::after {
+            content: "";
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            width: 2px;
+            height: 30px;
+            background-color: #2d3436;
+        }
+
+        /* Efek Balon Terbang Cepat saat disentuh */
+        .balloon.fly-away {
+            animation: flyUp 4s forwards cubic-bezier(0.45, 0.05, 0.55, 0.95);
+        }
+
+        /* PETUNJUK */
+        .instruction {
+            color: white;
+            margin-top: 50px;
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+            pointer-events: none;
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        /* ANIMASI-ANIMASI */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes flyUp {
+            0% { transform: translateY(0px) scale(1); }
+            100% { transform: translateY(-200vh) scale(0.5); opacity: 0.5; }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            100% { opacity: 1; }
         }
     </style>
 </head>
 <body>
 
-    <div id="main-viewport">
+    <!-- DUNIA GAME -->
+    <div class="world" id="gameWorld">
+        
+        <!-- Lapisan Bintang di Luar Angkasa (Paling Atas) -->
+        <div class="stars"></div>
 
-        <div id="sky-scene">
-            <audio id="windSfx" preload="auto">
-                <source src="dragon-studio-wind-blowing-sfx-01-423673.mp3" type="audio/mpeg">
-            </audio>
-
-            <div class="sky">
-                <div class="sun"></div>
-                <div class="bird bird1"></div>
-                <div class="bird bird2"></div>
-                <div class="cloud cloud1"></div>
-                <div class="cloud cloud2"></div>
-            </div>
-
-            <div class="container">
-                <div id="start-node" class="balloon-group">
-                    <div class="balloon">
-                        <div class="balloon-text">Mulai?</div>
-                    </div>
-                </div>
-
-                <div id="menu-node" class="menu-balloons hidden">
-                    <div class="balloon-group b-1">
-                        <div class="balloon"><div class="balloon-text">Foto<br>Kenangan</div></div>
-                    </div>
-                    <div class="balloon-group b-2">
-                        <div class="balloon"><div class="balloon-text">Catatan<br>Ranking</div></div>
-                    </div>
-                    <div id="btn-minigames" class="balloon-group b-3">
-                        <div class="balloon"><div class="balloon-text">Mini games</div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="game-scene">
-            
-            <div class="mountain-track">
-                <div class="mountain back"></div>
-                <div class="mountain"></div>
-                <div class="mountain back"></div>
-                <div class="mountain"></div>
-            </div>
-
-            <div class="tree-track">
-                <div class="tree"><div class="tree-leaves"></div><div class="tree-trunk"></div></div>
-                <div class="tree"><div class="tree-leaves"></div><div class="tree-trunk"></div></div>
-                <div class="tree"><div class="tree-leaves"></div><div class="tree-trunk"></div></div>
-                <div class="tree"><div class="tree-leaves"></div><div class="tree-trunk"></div></div>
-            </div>
-
-            <div class="red-car">
-                <div class="car-cabin"></div>
-                <div class="car-body"></div>
-                <div class="car-wheel wheel-back"></div>
-                <div class="car-wheel wheel-front"></div>
-            </div>
-
-            <div class="road">
-                <div class="road-lines"></div>
-            </div>
-
-            <div class="game-sidebar">
-                <div class="game-title">SEKOLAH MINIGAMES</div>
-                
-                <button class="game-btn" onclick="window.location.href='izursays.html'">Izur says</button>
-                
-                <button class="game-btn" disabled>Dan sisanya akan ku pikirkan.</button>
-            </div>
-
+        <!-- Area Awal Pemain (Paling Bawah) -->
+        <div class="ground-level">
+            <div class="balloon" id="playerBalloon"></div>
+            <div class="instruction">Sentuh Balon untuk Terbang</div>
         </div>
 
     </div>
 
     <script>
-        const startNode = document.getElementById('start-node');
-        const menuNode = document.getElementById('menu-node');
-        const btnMinigames = document.getElementById('btn-minigames');
-        const mainViewport = document.getElementById('main-viewport');
-        const windSfx = document.getElementById('windSfx');
-        
-        let audioTracker;
+        const balloon = document.getElementById('playerBalloon');
+        const world = document.getElementById('gameWorld');
 
-        // Logika Tombol Mulai Awal
-        startNode.addEventListener('click', () => {
-            windSfx.pause(); windSfx.currentTime = 0;
-            windSfx.play().then(() => {
-                clearInterval(audioTracker);
-                audioTracker = setInterval(() => {
-                    if (windSfx.currentTime >= 3.0) {
-                        windSfx.pause(); windSfx.currentTime = 0;
-                        clearInterval(audioTracker);
-                    }
-                }, 100);
-            }).catch(error => console.log("Audio terblokir:", error));
+        // Mendeteksi event sentuh (Touch untuk HP, Click untuk Laptop)
+        const triggerTransition = () => {
+            // 1. Tambahkan kelas animasi ke balon dan dunia
+            balloon.classList.add('fly-away');
+            world.classList.add('move-up');
 
-            startNode.classList.add('meledak');
-
+            // 2. Tunggu animasi selesai (4 detik / 4000ms), lalu pindah halaman
             setTimeout(() => {
-                startNode.classList.add('hidden');
-                menuNode.classList.remove('hidden');
-                menuNode.classList.add('reveal');
-                
-                setTimeout(() => {
-                    const allBalloons = menuNode.querySelectorAll('.balloon-group');
-                    allBalloons.forEach((b, idx) => {
-                        b.style.animation = `ayunBalon 3s ease-in-out infinite alternate`;
-                        b.style.animationDelay = `-${idx}s`;
-                    });
-                }, 1200);
-            }, 300); 
-        });
+                window.location.href = "start.html";
+            }, 4300); // Diberi jeda sedikit agar transisi luar angkasa terlihat penuh dulu
+        };
 
-        // ================= ACTION UTAMA MINI GAMES =================
-        btnMinigames.addEventListener('click', () => {
-            // 1. Jalankan animasi balon meletup di tempat
-            btnMinigames.classList.add('meledak');
-
-            // 2. Kamera langsung bergerak turun drastis (Viewport meluncur naik)
-            setTimeout(() => {
-                mainViewport.classList.add('camera-down');
-            }, 300);
+        balloon.addEventListener('click', triggerTransition);
+        balloon.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Mencegah double-click pada perangkat mobile
+            triggerTransition();
         });
     </script>
 </body>
 </html>
-    
