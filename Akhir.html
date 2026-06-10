@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Akhir Perjalanan Kita 🚀</title>
     <style>
-        /* --- RESET & THEME (Persis start_3.html) --- */
+        /* --- RESET & SPACE THEME (100% Persis start.html) --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -21,36 +21,44 @@
             color: #fff;
         }
 
-        /* --- BACKGROUND LANGIT BIRU CERAH (Lanjutan Pan-Down) --- */
-        .sky-bg {
+        /* --- BACKGROUND ANTARIKSA BERGERAK TURUN (100% Persis start.html) --- */
+        .space-bg {
             position: absolute;
             width: 100%;
-            height: 100%;
+            height: 200%;
             top: 0; left: 0;
-            background: linear-gradient(to bottom, #0284c7, #38bdf8, #bae6fd, #f0f9ff);
+            background-image: 
+                radial-gradient(circle at 20% 30%, #fff 1px, transparent 2px),
+                radial-gradient(circle at 75% 60%, #fff 1.5px, transparent 3px),
+                radial-gradient(circle at 50% 10%, rgba(255,255,255,0.4) 2px, transparent 40px),
+                radial-gradient(circle at 85% 85%, #fff 1px, transparent 2px);
+            background-size: 300px 300px, 400px 400px;
+            animation: spaceScroll 25s linear infinite;
             z-index: 1;
-            overflow: hidden;
+            transition: transform 2s cubic-bezier(0.45, 0, 0.55, 1);
         }
 
-        /* Efek Awan Putih Estetik (Persis start_3.html) */
-        .cloud {
+        @keyframes spaceScroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+
+        .nebula {
             position: absolute;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 100px;
-            filter: blur(1px);
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(58, 143, 253, 0.15) 0%, transparent 70%);
+            top: 20%; left: -10%;
+            border-radius: 50%;
+            z-index: 2;
+            animation: floatNebula 10s ease-in-out infinite alternate;
+            transition: transform 2s cubic-bezier(0.45, 0, 0.55, 1);
         }
-        .cloud::before, .cloud::after {
-            content: ''; position: absolute; background: rgba(255, 255, 255, 0.9); border-radius: 50%;
-        }
-        .cloud1 { width: 300px; height: 80px; top: 25%; left: -50px; opacity: 0.8; animation: floatClouds 30s linear infinite; }
-        .cloud2 { width: 200px; height: 60px; top: 50%; right: -50px; opacity: 0.6; animation: floatClouds 20s linear infinite reverse; }
-
-        @keyframes floatClouds {
-            0% { transform: translateX(-100px); }
-            100% { transform: translateX(110vw); }
+        @keyframes floatNebula {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 30px) scale(1.2); }
         }
 
-        /* --- CONTAINER UTAMA CINEMATIC (Persis start_3.html) --- */
+        /* --- CONTAINER UTAMA CINEMATIC (100% Persis start.html) --- */
         .cinema-container {
             position: relative;
             width: 100%;
@@ -61,9 +69,10 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            transition: transform 2s cubic-bezier(0.45, 0, 0.55, 1);
         }
 
-        /* --- INTERACTIVE PROMPT LAYER (Persis start_3.html) --- */
+        /* --- INTERACTIVE PROMPT LAYER (100% Persis start.html) --- */
         #interaction-layer {
             position: absolute;
             width: 100%; height: 100%;
@@ -88,7 +97,7 @@
             100% { transform: scale(1.03); box-shadow: 0 0 30px rgba(255,221,26,0.5); }
         }
 
-        /* --- BINGKAI FOTO FILM & NARASI (Persis start_3.html) --- */
+        /* --- BINGKAI FOTO FILM & NARASI (100% Persis start.html) --- */
         .memory-card {
             width: 90%;
             max-width: 500px;
@@ -145,8 +154,8 @@
             justify-content: center;
         }
 
-        /* --- TOMBOL SELESAI / KEMBALI (Persis gaya btnLanjut start_3.html) --- */
-        #btnSelesai {
+        /* --- TOMBOL LANJUT / KEMBALI (100% Persis gaya btnLanjut start.html) --- */
+        #btnLanjut {
             display: none;
             margin-top: 25px;
             padding: 14px 40px;
@@ -165,12 +174,12 @@
             animation: bounceBtn 1s infinite alternate;
             text-decoration: none;
         }
-        #btnSelesai.show {
+        #btnLanjut.show {
             display: inline-block;
             opacity: 1;
             transform: translateY(0);
         }
-        #btnSelesai:hover {
+        #btnLanjut:hover {
             transform: scale(1.06) translateY(-2px);
             box-shadow: 0 0 30px rgba(255, 221, 26, 0.9);
             background: #fff;
@@ -180,7 +189,29 @@
             100% { transform: translateY(-4px); }
         }
 
-        /* --- DETIL ELEMEN ASAP & ROKET TRANSISI (Persis start_3.html) --- */
+        /* --- LAPISAN LANGIT SEBAGAI EMBED PENUTUP --- */
+        .sky-overlay {
+            position: fixed;
+            top: 100vh;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(to bottom, #0284c7, #38bdf8, #bae6fd, #f0f9ff);
+            z-index: 99;
+            transition: transform 2s cubic-bezier(0.45, 0, 0.55, 1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* --- TRIGGER RENDERING GERAKAN (100% Persis start.html) --- */
+        body.pan-down-active .cinema-container { transform: translateY(-100vh); }
+        body.pan-down-active .space-bg { transform: translateY(-50vh); }
+        body.pan-down-active .nebula { transform: translateY(-50vh); }
+        body.pan-down-active .sky-overlay { transform: translateY(-100vh); }
+
+        /* --- DETIL TRIGGER ELEMEN ASAP & ROKET TRANSISI (100% Persis start.html) --- */
         .trans-rocket {
             position: absolute;
             z-index: 50;
@@ -207,7 +238,7 @@
             100% { transform: scale(6) translate(-30px, 20px); opacity: 0; filter: blur(15px); }
         }
 
-        /* --- DESAIN ROKET ENGINE (Persis start_3.html) --- */
+        /* --- DESAIN ROKET ENGINE (100% Persis start.html) --- */
         .rocket-body {
             width: 30px; height: 65px;
             background: linear-gradient(to right, #f8fafc, #cbd5e1);
@@ -249,7 +280,7 @@
             position: absolute;
             top: 20px;
             font-size: 0.85rem;
-            color: rgba(255,255,255,0.6);
+            color: rgba(255,255,255,0.4);
             letter-spacing: 2px;
             text-transform: uppercase;
         }
@@ -257,39 +288,35 @@
 </head>
 <body>
 
-    <!-- TOMBOL PEMBUKA GESTURE AUDIO (Persis) -->
     <div id="interaction-layer">
         <div class="play-box" id="btnMulaiSkenario">
-            <h2 style="color: #ffdd1a; margin-bottom: 10px;">🎬 Lihat Memoar Akhir Semesta 🌟</h2>
-            <p style="font-size: 0.9rem; color: #94a3b8;">Ketuk layar untuk memutar bagian penutup</p>
+            <h2 style="color: #ffdd1a; margin-bottom: 10px;">🚀 Buka Lembar Kenangan Penutup 🌟</h2>
+            <p style="font-size: 0.9rem; color: #94a3b8;">Ketuk layar untuk mengakhiri perjalanan sinematik</p>
         </div>
     </div>
 
-    <!-- BACKGROUND ENGINE LANGIT -->
-    <div class="sky-bg">
-        <div class="cloud cloud1"></div>
-        <div class="cloud cloud2"></div>
-    </div>
+    <div class="space-bg"></div>
+    <div class="nebula"></div>
 
-    <!-- AUDIO ENGINE (Lagu Penutup) -->
     <audio id="memoriesAudio" preload="auto">
         <source src="VID-20260610-WA0019.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- CINEMATIC STAGE (Persis) -->
     <div class="cinema-container">
-        <div class="progress-indicator" id="progText">Memulai Lembar Akhir...</div>
+        <div class="progress-indicator" id="progText">Menyiapkan Lembar Akhir...</div>
 
-        <!-- BINGKAI FOTO UTAMA (Persis 100% Sesuai File Kiriman Lu) -->
         <div class="memory-card" id="displayBox">
             <div class="image-wrapper" id="wrapperZone">
                 <img src="" id="photoSlot" alt="Memories">
             </div>
-            <div class="narrative-text" id="captionSlot">Membuka memoar penutup...</div>
+            <div class="narrative-text" id="captionSlot">Membuka lembaran memori terakhir...</div>
         </div>
 
-        <!-- TOMBOL SELESAI KEMBALI KERSIS GAYA SEBELUMNYA -->
-        <a href="index.html" id="btnSelesai">Kembali ke Beranda 🏠</a>
+        <a href="index.html" id="btnLanjut">Selesai 🏠</a>
+    </div>
+
+    <div class="sky-overlay" id="skyOverlay">
+        <h2 style="color: #fff; font-size: 2rem; text-shadow: 0 4px 10px rgba(0,0,0,0.15); font-weight: 800; letter-spacing: 1px;">Sampai Jumpa di Masa Depan... ✨</h2>
     </div>
 
     <script>
@@ -301,55 +328,59 @@
         const photoSlot = document.getElementById('photoSlot');
         const captionSlot = document.getElementById('captionSlot');
         const progText = document.getElementById('progText');
-        const btnSelesai = document.getElementById('btnSelesai');
+        const btnLanjut = document.getElementById('btnLanjut');
 
-        // TIMELINE MEMOAR PENUTUP BERDASARKAN DETIK AUDIO (BERSIH TANPA NAMA SISWA)
+        // ==========================================================================
+        // DATA TIMELINE KRONOLOGIS: 43 FOTO ELEMEN PENUTUP (BERSIH DARI NAMA SISWA)
+        // Berjalan bergantian otomatis mengikuti durasi detik lagu penutup.
+        // ==========================================================================
         const memoryTimeline = [
-            {
-                time: 1, 
-                img: "IMG-20260609-WA0061.jpg",
-                text: "Setiap perjalanan hebat selalu memiliki landasan pacu pertamanya. Enam tahun lalu kita datang ke sini dengan langkah kecil penuh kepolosan.",
-                phase: "Memoar I: Langkah Awal"
-            },
-            {
-                time: 15, 
-                img: "IMG-20260609-WA0042.jpg",
-                text: "Hari-hari berganti, menganyam tawa di sela jam istirahat, hingga menyatukan ego menjadi ikatan keluarga besar Kelas VI SD Negeri Slarang 02.",
-                phase: "Memoar II: Ikatan Kabin"
-            },
-            {
-                time: 35, 
-                img: "IMG-20260609-WA0061.jpg",
-                text: "Kebersamaan kita selama ini ibarat sebuah Pesawat Penumpang. Armada hangat tempat kita duduk berdampingan melintasi tahun-tahun sekolah.",
-                phase: "Memoar III: Pesawat Kenangan"
-            },
-            {
-                time: 55, 
-                img: "IMG-20260609-WA0042.jpg",
-                text: "Kini, pesawat kenangan itu telah mendarat dengan sangat sempurna di gerbang kelulusan. Pintu kabin terbuka, menandakan tugasnya usai.",
-                phase: "Memoar IV: Gerbang Kelulusan"
-            },
-            {
-                time: 75, 
-                img: "IMG-20260609-WA0061.jpg",
-                text: "Namun ingatlah, jika masa lalu adalah Pesawat yang harus mendarat, maka cita-cita dan impian di dalam dada kita adalah sebuah ROKET!",
-                phase: "Memoar V: Energi Impian"
-            },
-            {
-                time: 95, 
-                img: "IMG-20260609-WA0042.jpg",
-                text: "Sebuah Roket tidak mengenal kata mendarat. Ia dirancang untuk melesat menembus atmosfer ketakutan dan meraih mimpi paling tinggi di angkasa.",
-                phase: "Memoar VI: Melesat Tinggi"
-            },
-            {
-                time: 115, 
-                img: "IMG-20260609-WA0061.jpg",
-                text: "Penerbangan bersama kita resmi berakhir di sini, namun penjelajahan ruang angkasa masa depan baru saja dimulai. Sampai jumpa di masa depan! ✨🚀",
-                phase: "Selesai: Menuju Angkasa Masa Depan"
-            }
+            { time: 1, img: "IMG-20260609-WA0001.jpg", text: "Setiap kisah hebat selalu berawal dari sebuah langkah kecil penuh harapan.", phase: "Memori 1/43" },
+            { time: 5, img: "IMG-20260609-WA0002.jpg", text: "Waktu demi waktu terlewati di bawah atap sekolah tempat kita berteduh.", phase: "Memori 2/43" },
+            { time: 9, img: "IMG-20260609-WA0003.jpg", text: "Tawa yang tercipta di sela bangku kelas menjadi bumbu berharga.", phase: "Memori 3/43" },
+            { time: 13, img: "IMG-20260609-WA0004.jpg", text: "Ada kalanya kita belajar serius, menatap masa depan yang masih misteri.", phase: "Memori 4/43" },
+            { time: 17, img: "IMG-20260609-WA0005.jpg", text: "Berbagi cerita, bertukar pemikiran, perlahan membentuk diri kita.", phase: "Memori 5/43" },
+            { time: 21, img: "IMG-20260609-WA0006.jpg", text: "Kebersamaan sederhana di sudut teras sekolah yang akan dirindukan.", phase: "Memori 6/43" },
+            { time: 25, img: "IMG-20260609-WA0007.jpg", text: "Langkah kaki kita beriringan menapaki lorong waktu selama enam tahun.", phase: "Memori 7/43" },
+            { time: 29, img: "IMG-20260609-WA0008.jpg", text: "Setiap candaan kecil spontan sukses mencairkan suasana yang kaku.", phase: "Memori 8/43" },
+            { time: 33, img: "IMG-20260609-WA0009.jpg", text: "Menyimpan sejuta kenangan berharga dalam jepretan kamera sederhana.", phase: "Memori 9/43" },
+            { time: 37, img: "IMG-20260609-WA0011.jpg", text: "Berdiri bersama, menyatukan tujuan tanpa membedakan satu sama lain.", phase: "Memori 10/43" },
+            { time: 41, img: "IMG-20260609-WA0012.jpg", text: "Kompak dalam setiap kegiatan menjadi ciri khas angkatan kebanggaan.", phase: "Memori 11/43" },
+            { time: 45, img: "IMG-20260609-WA0013.jpg", text: "Momen hangat saat merayakan hari besar bersama bapak dan ibu guru.", phase: "Memori 12/43" },
+            { time: 49, img: "IMG-20260609-WA0016.jpg", text: "Wajah-wajah ceria yang selalu menghiasi ruang kelas setiap harinya.", phase: "Memori 13/43" },
+            { time: 53, img: "IMG-20260609-WA0017.jpg", text: "Kerja kelompok penuh dinamika, kadang berdebat tapi berakhir tertawa.", phase: "Memori 14/43" },
+            { time: 57, img: "IMG-20260609-WA0018.jpg", text: "Momen keagamaan yang membawa kedamaian dan keteduhan di hati kita.", phase: "Memori 15/43" },
+            { time: 61, img: "IMG-20260609-WA0019.jpg", text: "Berbalut seragam kebanggaan, kita tumbuh menjadi pribadi yang mandiri.", phase: "Memori 16/43" },
+            { time: 65, img: "IMG-20260609-WA0020.jpg", text: "Kunjungan, senyuman, dan pelukan hangat di ruang lingkup sekolah dasar.", phase: "Memori 17/43" },
+            { time: 69, img: "IMG-20260609-WA0021.jpg", text: "Petualangan luar kelas yang mengajarkan kita tentang arti dunia luar.", phase: "Memori 18/43" },
+            { time: 73, img: "IMG-20260609-WA0023.jpg", text: "Menikmati hidangan bersama saat momen silaturahmi penuh berkah.", phase: "Memori 19/43" },
+            { time: 77, img: "IMG-20260609-WA0024.jpg", text: "Setiap sudut sekolah ini punya cerita tersendiri yang tak tergantikan.", phase: "Memori 20/43" },
+            { time: 81, img: "IMG-20260609-WA0025.jpg", text: "Berpose penuh gaya, melepas penat setelah seharian belajar keras.", phase: "Memori 21/43" },
+            { time: 85, img: "IMG-20260609-WA0026.jpg", text: "Keceriaan acak yang membuktikan betapa indahnya masa-masa anak-anak.", phase: "Memori 22/43" },
+            { time: 89, img: "IMG-20260609-WA0028.jpg", text: "Saat-saat seru berebut momentum kebahagiaan bersama sahabat dekat.", phase: "Memori 23/43" },
+            { time: 93, img: "IMG-20260609-WA0029.jpg", text: "Kekompakan yang solid teruji dalam berbagai rintangan tugas sekolah.", phase: "Memori 24/43" },
+            { time: 97, img: "IMG-20260609-WA0030.jpg", text: "Upacara dan kedisiplinan yang melatih jiwa nasionalisme di dada.", phase: "Memori 25/43" },
+            { time: 101, img: "IMG-20260609-WA0031.jpg", text: "Senyum simpul penuh arti menatap kamera, menyimpan detik waktu.", phase: "Memori 26/43" },
+            { time: 105, img: "IMG-20260609-WA0032.jpg", text: "Melangkah maju menyongsong kelulusan dengan keyakinan penuh.", phase: "Memori 27/43" },
+            { time: 109, img: "IMG-20260609-WA0033.jpg", text: "Dukungan penuh dari bapak ibu guru yang tak lelah menuntun arah.", phase: "Memori 28/43" },
+            { time: 113, img: "IMG-20260609-WA0035.jpg", text: "Momen peringatan hari besar nasional dengan identitas budaya lokal.", phase: "Memori 29/43" },
+            { time: 117, img: "IMG-20260609-WA0036.jpg", text: "Kain batik dan kebaya yang menambah keanggunan serta kegagahan.", phase: "Memori 30/43" },
+            { time: 121, img: "IMG-20260609-WA0037.jpg", text: "Formasi berjajar rapi, saksi bisu tumbuh kembang fisik dan mental.", phase: "Memori 31/43" },
+            { time: 125, img: "IMG-20260609-WA0038.jpg", text: "Rasa kekeluargaan yang tertanam kuat mengalahkan ego masing-masing.", phase: "Memori 32/43" },
+            { time: 129, img: "IMG-20260609-WA0039.jpg", text: "Kilas balik perjalanan panjang yang terasa berjalan begitu singkat.", phase: "Memori 33/43" },
+            { time: 133, img: "IMG-20260609-WA0040.jpg", text: "Hari esok mungkin berbeda, namun memori di sini tetap abadi.", phase: "Memori 34/43" },
+            { time: 137, img: "IMG-20260609-WA0043.jpg", text: "Persahabatan murni terjalin tulus tanpa mengharapkan pamrih apapun.", phase: "Memori 35/43" },
+            { time: 141, img: "IMG-20260609-WA0044.jpg", text: "Bersiap mengemasi buku dan kenangan untuk dibawa ke tingkat lanjut.", phase: "Memori 36/43" },
+            { time: 145, img: "IMG-20260609-WA0045.jpg", text: "Setiap sudut ruangan menyimpan gema tawa dan bisikan impian kita.", phase: "Memori 37/43" },
+            { time: 149, img: "IMG-20260609-WA0046.jpg", text: "Terima kasih untuk pelukan hangat dan jabat tangan erat penguat jiwa.", phase: "Memori 38/43" },
+            { time: 153, img: "IMG-20260609-WA0047.jpg", text: "Landasan pacu pertama kita telah sukses dilewati dengan selamat.", phase: "Memori 39/43" },
+            { time: 157, img: "IMG-20260609-WA0048.jpg", text: "Kini pintu masa depan terbuka lebar menyambut petualangan baru.", phase: "Memori 40/43" },
+            { time: 161, img: "IMG-20260609-WA0051.jpg", text: "Jika masa lalu kita adalah pesawat terbang yang mendarat di gerbang sekolah...", phase: "Memori 41/43" },
+            { time: 165, img: "IMG-20260609-WA0053.jpg", text: "Maka impian kita di masa depan adalah Roket yang meluncur menembus batas langit!", phase: "Memori 42/43" },
+            { time: 169, img: "IMG-20260609-WA0061.jpg", text: "Terima kasih Kelas VI SD Negeri Slarang 02. Sampai jumpa di puncak kesuksesan! 🚀✨", phase: "Memori Akhir: 43/43" }
         ];
 
-        // ================= CORE ENGINE TRANSISI ROKET (Persis) =================
+        // ================= ENGINE TRANSISI ROKET & KEPULAN ASAP (100% Persis start.html) =================
         const triggerRocketTransition = (targetData) => {
             photoSlot.style.opacity = '0.1';
             photoSlot.style.filter = 'blur(15px) scale(0.95)';
@@ -369,7 +400,7 @@
             const wWidth = wrapperZone.offsetWidth;
             const wHeight = wrapperZone.offsetHeight;
             
-            const startX = -60;
+          const startX = -60;
             const startY = wHeight + 60;
             const endX = wWidth + 60;
             const endY = -60;
@@ -424,7 +455,7 @@
             requestAnimationFrame(runFlight);
         };
 
-        // ================= TIMELINE TRACKER CORE ENGINE (Persis) =================
+        // ================= TIMELINE TRACKER CORE ENGINE (100% Persis) =================
         const startCinematicScene = () => {
             interactionLayer.style.opacity = '0';
             setTimeout(() => interactionLayer.style.display = 'none', 1000);
@@ -448,11 +479,11 @@
                     currentActiveIndex = targetIndex;
                     triggerRocketTransition(memoryTimeline[currentActiveIndex]);
 
-                    // Jika sampai di slide paling akhir, munculkan tombol selesai
+                    // JIKA SAMPAI DI SLIDE PALING AKHIR (FOTO KE-43)
                     if (currentActiveIndex === memoryTimeline.length - 1) {
                         setTimeout(() => {
-                            btnSelesai.classList.add('show');
-                        }, 1500);
+                            btnLanjut.classList.add('show');
+                        }, 2000);
                     }
                 }
             });
@@ -461,5 +492,4 @@
         btnMulaiSkenario.addEventListener('click', startCinematicScene);
     </script>
 </body>
-    </html>
-    
+</html>
