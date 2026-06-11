@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akhir Perjalanan Kita 🚀</title>
+    <title>Perjalanan Kenangan Kita ✈️</title>
     <style>
-        /* --- RESET & SPACE THEME (100% Persis start.html) --- */
+        /* --- RESET & SKY THEME --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -17,48 +17,38 @@
             height: 100vh;
             overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #020208;
+            background: linear-gradient(to bottom, #7dd3fc, #38bdf8, #0284c7);
             color: #fff;
         }
 
-        /* --- BACKGROUND ANTARIKSA BERGERAK TURUN (100% Persis start.html) --- */
-        .space-bg {
+        /* --- BACKGROUND LANGIT & AWAN BERGERAK --- */
+        .sky-bg {
             position: absolute;
             width: 100%;
-            height: 200%;
+            height: 100%;
             top: 0; left: 0;
-            background-image: 
-                radial-gradient(circle at 20% 30%, #fff 1px, transparent 2px),
-                radial-gradient(circle at 75% 60%, #fff 1.5px, transparent 3px),
-                radial-gradient(circle at 50% 10%, rgba(255,255,255,0.4) 2px, transparent 40px),
-                radial-gradient(circle at 85% 85%, #fff 1px, transparent 2px);
-            background-size: 300px 300px, 400px 400px;
-            animation: spaceScroll 25s linear infinite;
             z-index: 1;
-            transition: transform 2s cubic-bezier(0.45, 0, 0.55, 1);
+            overflow: hidden;
         }
 
-        @keyframes spaceScroll {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-50%); }
-        }
-
-        .nebula {
+        .cloud-bg {
             position: absolute;
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(58, 143, 253, 0.15) 0%, transparent 70%);
-            top: 20%; left: -10%;
-            border-radius: 50%;
-            z-index: 2;
-            animation: floatNebula 10s ease-in-out infinite alternate;
-            transition: transform 2s cubic-bezier(0.45, 0, 0.55, 1);
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 100px;
+            filter: blur(4px);
         }
-        @keyframes floatNebula {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(50px, 30px) scale(1.2); }
+        .cloud-bg::before, .cloud-bg::after {
+            content: ''; position: absolute; background: rgba(255, 255, 255, 0.7); border-radius: 50%;
+        }
+        .cb1 { width: 400px; height: 120px; top: 15%; left: -10%; animation: floatBgClouds 45s linear infinite; }
+        .cb2 { width: 300px; height: 90px; top: 60%; right: -10%; animation: floatBgClouds 35s linear infinite reverse; }
+
+        @keyframes floatBgClouds {
+            0% { transform: translateX(-150px); }
+            100% { transform: translateX(115vw); }
         }
 
-        /* --- CONTAINER UTAMA CINEMATIC (100% Persis start.html) --- */
+        /* --- CONTAINER UTAMA CINEMATIC --- */
         .cinema-container {
             position: relative;
             width: 100%;
@@ -69,14 +59,14 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-            transition: transform 2s cubic-bezier(0.45, 0, 0.55, 1);
+            transition: all 2s ease;
         }
 
-        /* --- INTERACTIVE PROMPT LAYER (100% Persis start.html) --- */
+        /* --- INTERACTIVE PROMPT LAYER --- */
         #interaction-layer {
             position: absolute;
             width: 100%; height: 100%;
-            background: rgba(2, 2, 8, 0.95);
+            background: rgba(2, 30, 49, 0.95);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -86,28 +76,28 @@
         .play-box {
             text-align: center;
             cursor: pointer;
-            padding: 30px;
+            padding: 35px;
             border: 2px dashed #ffdd1a;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.05);
             animation: pulseBox 2s infinite alternate;
         }
         @keyframes pulseBox {
-            0% { transform: scale(1); box-shadow: 0 0 10px rgba(255,221,26,0.2); }
-            100% { transform: scale(1.03); box-shadow: 0 0 30px rgba(255,221,26,0.5); }
+            0% { transform: scale(1); box-shadow: 0 0 15px rgba(255,221,26,0.2); }
+            100% { transform: scale(1.03); box-shadow: 0 0 35px rgba(255,221,26,0.6); }
         }
 
-        /* --- BINGKAI FOTO FILM & NARASI (100% Persis start.html) --- */
+        /* --- BINGKAI FOTO FILM & NARASI --- */
         .memory-card {
             width: 90%;
             max-width: 500px;
-            background: rgba(15, 23, 42, 0.65);
-            border: 2px solid rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-radius: 24px;
             padding: 25px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
             text-align: center;
             opacity: 0;
             transform: translateY(30px) scale(0.95);
@@ -128,161 +118,190 @@
             overflow: hidden;
             margin-bottom: 20px;
             border: 4px solid #fff;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-            background: #000;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            background: #f0fdfa;
         }
 
         #photoSlot {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transform: scale(1);
-            filter: blur(0px);
-            opacity: 1;
             transition: transform 6s linear, filter 0.4s ease, opacity 0.4s ease;
         }
 
         .narrative-text {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #f1f5f9;
-            font-weight: 500;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-            min-height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* --- TOMBOL LANJUT / KEMBALI (100% Persis gaya btnLanjut start.html) --- */
-        #btnLanjut {
-            display: none;
-            margin-top: 25px;
-            padding: 14px 40px;
             font-size: 1.05rem;
-            font-weight: 700;
-            color: #020208;
-            background: #ffdd1a;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(255, 221, 26, 0.5);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 80;
-            opacity: 0;
-            transform: translateY(10px);
-            animation: bounceBtn 1s infinite alternate;
-            text-decoration: none;
-        }
-        #btnLanjut.show {
-            display: inline-block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-        #btnLanjut:hover {
-            transform: scale(1.06) translateY(-2px);
-            box-shadow: 0 0 30px rgba(255, 221, 26, 0.9);
-            background: #fff;
-        }
-        @keyframes bounceBtn {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-4px); }
-        }
-
-        /* --- LAPISAN LANGIT SEBAGAI EMBED PENUTUP --- */
-        .sky-overlay {
-            position: fixed;
-            top: 100vh;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: linear-gradient(to bottom, #0284c7, #38bdf8, #bae6fd, #f0f9ff);
-            z-index: 99;
-            transition: transform 2s cubic-bezier(0.45, 0, 0.55, 1);
+            line-height: 1.6;
+            color: #ffffff;
+            font-weight: 500;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+            min-height: 90px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            overflow: hidden;
+            justify-content: center;
+            padding: 0 10px;
         }
 
-        /* --- TRIGGER RENDERING GERAKAN (100% Persis start.html) --- */
-        body.pan-down-active .cinema-container { transform: translateY(-100vh); }
-        body.pan-down-active .space-bg { transform: translateY(-50vh); }
-        body.pan-down-active .nebula { transform: translateY(-50vh); }
-        body.pan-down-active .sky-overlay { transform: translateY(-100vh); }
-
-        /* --- DETIL TRIGGER ELEMEN ASAP & ROKET TRANSISI (100% Persis start.html) --- */
-        .trans-rocket {
+        /* --- PURE CSS ANIMASI TRANSISI PESAWAT --- */
+        .trans-airplane {
             position: absolute;
             z-index: 50;
-            width: 50px;
-            height: 100px;
+            width: 80px;
+            height: 40px;
             pointer-events: none;
-            transform: translate(-50%, -50%) rotate(45deg);
+            transform: translate(-50%, -50%);
+        }
+        .plane-body {
+            width: 55px; height: 16px;
+            background: #ffffff;
+            border-radius: 8px 16px 4px 8px;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .plane-wing-top {
+            width: 12px; height: 25px;
+            background: #38bdf8;
+            position: absolute; top: -18px; left: 20px;
+            transform: skewX(-15deg);
+            border-radius: 3px;
+        }
+        .plane-wing-bottom {
+            width: 12px; height: 25px;
+            background: #0284c7;
+            position: absolute; bottom: -18px; left: 20px;
+            transform: skewX(15deg);
+            border-radius: 3px;
+        }
+        .plane-tail {
+            width: 10px; height: 14px;
+            background: #ef4444;
+            position: absolute; left: 0; top: -10px;
+            transform: skewX(-25deg);
+            border-radius: 2px;
         }
 
-        .smoke-particle {
+        .jet-trail {
             position: absolute;
-            width: 25px;
-            height: 25px;
-            background: radial-gradient(circle, rgba(241, 245, 249, 0.9) 0%, rgba(148, 163, 184, 0.5) 50%, transparent 100%);
+            width: 20px; height: 6px;
+            background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 40;
-            animation: smokePuff 0.9s forwards ease-out;
+            animation: vaporLeave 0.6s forwards ease-out;
         }
 
-        @keyframes smokePuff {
-            0% { transform: scale(1) translate(0, 0); opacity: 0.8; filter: blur(2px); }
-            40% { opacity: 1; filter: blur(6px); }
-            100% { transform: scale(6) translate(-30px, 20px); opacity: 0; filter: blur(15px); }
-        }
-
-        /* --- DESAIN ROKET ENGINE (100% Persis start.html) --- */
-        .rocket-body {
-            width: 30px; height: 65px;
-            background: linear-gradient(to right, #f8fafc, #cbd5e1);
-            border-radius: 50% 50% 4px 4px / 70% 70% 4px 4px;
-            position: relative; margin: 0 auto;
-            box-shadow: 0 0 10px rgba(255,255,255,0.5);
-        }
-        .rocket-window {
-            width: 10px; height: 10px;
-            background: #38bdf8; border: 2px solid #94a3b8;
-            border-radius: 50%; position: absolute;
-            top: 18px; left: 8px;
-        }
-        .rocket-wing-left {
-            width: 0; height: 0;
-            border-right: 12px solid #ef4444;
-            border-top: 25px solid transparent;
-            position: absolute; bottom: 0; left: -12px;
-        }
-        .rocket-wing-right {
-            width: 0; height: 0;
-            border-left: 12px solid #ef4444;
-            border-top: 25px solid transparent;
-            position: absolute; bottom: 0; right: -12px;
-        }
-        .rocket-fire {
-            width: 14px; height: 30px;
-            background: linear-gradient(to bottom, #ffdd1a, #ef4444, transparent);
-            margin: -2px auto 0; border-radius: 0 0 8px 8px;
-            animation: fireBurn 0.08s infinite alternate;
-        }
-
-        @keyframes fireBurn {
-            0% { height: 25px; opacity: 0.9; }
-            100% { height: 35px; opacity: 1; filter: blur(1px); }
+        @keyframes vaporLeave {
+            0% { transform: scale(1); opacity: 0.8; filter: blur(1px); }
+            100% { transform: scale(4); opacity: 0; filter: blur(8px); }
         }
 
         .progress-indicator {
             position: absolute;
             top: 20px;
             font-size: 0.85rem;
-            color: rgba(255,255,255,0.4);
+            color: rgba(255,255,255,0.75);
             letter-spacing: 2px;
             text-transform: uppercase;
+            font-weight: bold;
+            background: rgba(0,0,0,0.15);
+            padding: 6px 16px;
+            border-radius: 20px;
+        }
+
+        /* --- FADE OVERLAY KE HITAM --- */
+        #fadeOverlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #000;
+            z-index: 500;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 2s ease;
+        }
+        #fadeOverlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* --- CREDIT SCENE LAYER --- */
+        #credit-layer {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #000000;
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #credit-scroll {
+            position: absolute;
+            width: 85%;
+            max-width: 650px;
+            text-align: center;
+            top: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        @keyframes scrollCredits {
+            0% { top: 100%; }
+            100% { top: -220%; }
+        }
+
+        .credit-title {
+            font-size: 2rem;
+            color: #ffdd1a;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            font-weight: 800;
+        }
+
+        .credit-p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #cbd5e1;
+            margin-bottom: 25px;
+        }
+
+        .credit-final-author {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-top: 80px;
+            border-top: 2px dashed rgba(255,255,255,0.2);
+            padding-top: 30px;
+            letter-spacing: 1px;
+        }
+
+        /* TOMBOL KELUAR X */
+        .close-credit-btn {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            transition: all 0.3s ease;
+        }
+        .close-credit-btn:hover {
+            background: #ef4444;
+            border-color: #ef4444;
+            transform: scale(1.1);
         }
     </style>
 </head>
@@ -290,127 +309,141 @@
 
     <div id="interaction-layer">
         <div class="play-box" id="btnMulaiSkenario">
-            <h2 style="color: #ffdd1a; margin-bottom: 10px;">🚀 Buka Lembar Kenangan Penutup 🌟</h2>
-            <p style="font-size: 0.9rem; color: #94a3b8;">Ketuk layar untuk mengakhiri perjalanan sinematik</p>
+            <h2 style="color: #ffdd1a; margin-bottom: 10px;">✈️ Terbangkan Memori Kita 🌟</h2>
+            <p style="font-size: 0.9rem; color: #cbd5e1;">Ketuk layar untuk memulai penerbangan sinematik kenangan</p>
         </div>
     </div>
 
-    <div class="space-bg"></div>
-    <div class="nebula"></div>
+    <div class="sky-bg">
+        <div class="cloud-bg cb1"></div>
+        <div class="cloud-bg cb2"></div>
+    </div>
 
     <audio id="memoriesAudio" preload="auto">
-        <source src="VID-20260610-WA0019.mp3" type="audio/mpeg">
+        <source src="orange.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="creditsAudio" preload="auto">
+        <source src="Vid" type="audio/mpeg">
     </audio>
 
     <div class="cinema-container">
-        <div class="progress-indicator" id="progText">Menyiapkan Lembar Akhir...</div>
+        <div class="progress-indicator" id="progText">Mempersiapkan Landasan...</div>
 
         <div class="memory-card" id="displayBox">
             <div class="image-wrapper" id="wrapperZone">
                 <img src="" id="photoSlot" alt="Memories">
             </div>
-            <div class="narrative-text" id="captionSlot">Membuka lembaran memori terakhir...</div>
+            <div class="narrative-text" id="captionSlot">Membuka kembali catatan harian kita...</div>
         </div>
-
-        <a href="index.html" id="btnLanjut">Selesai 🏠</a>
     </div>
 
-    <div class="sky-overlay" id="skyOverlay">
-        <h2 style="color: #fff; font-size: 2rem; text-shadow: 0 4px 10px rgba(0,0,0,0.15); font-weight: 800; letter-spacing: 1px;">Sampai Jumpa di Masa Depan... ✨</h2>
+    <div id="fadeOverlay"></div>
+
+    <div id="credit-layer" id="creditLayer">
+        <button class="close-credit-btn" id="btnSkipCredit">X</button>
+        <div id="credit-scroll">
+            <div>
+                <div class="credit-title">MEMORI KELAS 5</div>
+                <p class="credit-p">Semua bermula dari ruang kelas kecil itu. Saat tawa pertama bersemi, saat canggung perlahan melebur menjadi pelukan persahabatan yang erat. Kita makan bersama di lantai, berlari di koridor, dan berjanji tak akan ada yang berubah.</p>
+            </div>
+            <div>
+                <div class="credit-title">LANGKAH KELAS 6</div>
+                <p class="credit-p">Ujian, tugas, dan tawa di sela-sela kepenatan. Kita belajar melangkah lebih dewasa, bersandar satu sama lain saat lelah mulai menyapa, di bawah tatapan hangat guru kita yang tak lelah menuntun arah.</p>
+            </div>
+            <div>
+                <div class="credit-title">HARU HARI PERPISAHAN</div>
+                <p class="credit-p">Dan waktu menepati janjinya untuk berlalu... Di atas panggung itu, saat lagu dinyanyikan bersama, barulah kita sadari bahwa esok hari, tidak ada lagi meja yang sama, tidak ada lagi seragam yang sama, dan tidak ada lagi hari esok yang dilewati bersama.</p>
+            </div>
+            <div>
+                <div class="credit-title">TERIMA KASIH SAHABAT</div>
+                <p class="credit-p">Terima kasih telah menjadi bagian dari lembar masa kecil yang paling indah. Di mana pun pesawat kehidupan ini mendaratkan kalian kelak, ingatlah kita pernah terbang di langit yang sama.</p>
+            </div>
+            <div class="credit-final-author">
+                Created By : Afnan.William.A
+            </div>
+        </div>
     </div>
 
     <script>
         const btnMulaiSkenario = document.getElementById('btnMulaiSkenario');
         const interactionLayer = document.getElementById('interaction-layer');
         const memoriesAudio = document.getElementById('memoriesAudio');
+        const creditsAudio = document.getElementById('creditsAudio');
         const displayBox = document.getElementById('displayBox');
         const wrapperZone = document.getElementById('wrapperZone');
         const photoSlot = document.getElementById('photoSlot');
         const captionSlot = document.getElementById('captionSlot');
         const progText = document.getElementById('progText');
-        const btnLanjut = document.getElementById('btnLanjut');
+        const fadeOverlay = document.getElementById('fadeOverlay');
+        const creditLayer = document.getElementById('credit-layer');
+        const creditScroll = document.getElementById('credit-scroll');
+        const btnSkipCredit = document.getElementById('btnSkipCredit');
 
         // ==========================================================================
-        // DATA TIMELINE KRONOLOGIS: 43 FOTO ELEMEN PENUTUP (BERSIH DARI NAMA SISWA)
-        // Berjalan bergantian otomatis mengikuti durasi detik lagu penutup.
+        // TIMELINE KRONOLOGIS (KELAS 5 -> KEGIATAN KELAS 6 -> PERSIAPAN PERPISAHAN)
+        // Disinkronkan dengan durasi lagu Orange (sekitar 350 detik)
         // ==========================================================================
         const memoryTimeline = [
-            { time: 1, img: "IMG-20260609-WA0001.jpg", text: "Setiap kisah hebat selalu berawal dari sebuah langkah kecil penuh harapan.", phase: "Memori 1/43" },
-            { time: 5, img: "IMG-20260609-WA0002.jpg", text: "Waktu demi waktu terlewati di bawah atap sekolah tempat kita berteduh.", phase: "Memori 2/43" },
-            { time: 9, img: "IMG-20260609-WA0003.jpg", text: "Tawa yang tercipta di sela bangku kelas menjadi bumbu berharga.", phase: "Memori 3/43" },
-            { time: 13, img: "IMG-20260609-WA0004.jpg", text: "Ada kalanya kita belajar serius, menatap masa depan yang masih misteri.", phase: "Memori 4/43" },
-            { time: 17, img: "IMG-20260609-WA0005.jpg", text: "Berbagi cerita, bertukar pemikiran, perlahan membentuk diri kita.", phase: "Memori 5/43" },
-            { time: 21, img: "IMG-20260609-WA0006.jpg", text: "Kebersamaan sederhana di sudut teras sekolah yang akan dirindukan.", phase: "Memori 6/43" },
-            { time: 25, img: "IMG-20260609-WA0007.jpg", text: "Langkah kaki kita beriringan menapaki lorong waktu selama enam tahun.", phase: "Memori 7/43" },
-            { time: 29, img: "IMG-20260609-WA0008.jpg", text: "Setiap candaan kecil spontan sukses mencairkan suasana yang kaku.", phase: "Memori 8/43" },
-            { time: 33, img: "IMG-20260609-WA0009.jpg", text: "Menyimpan sejuta kenangan berharga dalam jepretan kamera sederhana.", phase: "Memori 9/43" },
-            { time: 37, img: "IMG-20260609-WA0011.jpg", text: "Berdiri bersama, menyatukan tujuan tanpa membedakan satu sama lain.", phase: "Memori 10/43" },
-            { time: 41, img: "IMG-20260609-WA0012.jpg", text: "Kompak dalam setiap kegiatan menjadi ciri khas angkatan kebanggaan.", phase: "Memori 11/43" },
-            { time: 45, img: "IMG-20260609-WA0013.jpg", text: "Momen hangat saat merayakan hari besar bersama bapak dan ibu guru.", phase: "Memori 12/43" },
-            { time: 49, img: "IMG-20260609-WA0016.jpg", text: "Wajah-wajah ceria yang selalu menghiasi ruang kelas setiap harinya.", phase: "Memori 13/43" },
-            { time: 53, img: "IMG-20260609-WA0017.jpg", text: "Kerja kelompok penuh dinamika, kadang berdebat tapi berakhir tertawa.", phase: "Memori 14/43" },
-            { time: 57, img: "IMG-20260609-WA0018.jpg", text: "Momen keagamaan yang membawa kedamaian dan keteduhan di hati kita.", phase: "Memori 15/43" },
-            { time: 61, img: "IMG-20260609-WA0019.jpg", text: "Berbalut seragam kebanggaan, kita tumbuh menjadi pribadi yang mandiri.", phase: "Memori 16/43" },
-            { time: 65, img: "IMG-20260609-WA0020.jpg", text: "Kunjungan, senyuman, dan pelukan hangat di ruang lingkup sekolah dasar.", phase: "Memori 17/43" },
-            { time: 69, img: "IMG-20260609-WA0021.jpg", text: "Petualangan luar kelas yang mengajarkan kita tentang arti dunia luar.", phase: "Memori 18/43" },
-            { time: 73, img: "IMG-20260609-WA0023.jpg", text: "Menikmati hidangan bersama saat momen silaturahmi penuh berkah.", phase: "Memori 19/43" },
-            { time: 77, img: "IMG-20260609-WA0024.jpg", text: "Setiap sudut sekolah ini punya cerita tersendiri yang tak tergantikan.", phase: "Memori 20/43" },
-            { time: 81, img: "IMG-20260609-WA0025.jpg", text: "Berpose penuh gaya, melepas penat setelah seharian belajar keras.", phase: "Memori 21/43" },
-            { time: 85, img: "IMG-20260609-WA0026.jpg", text: "Keceriaan acak yang membuktikan betapa indahnya masa-masa anak-anak.", phase: "Memori 22/43" },
-            { time: 89, img: "IMG-20260609-WA0028.jpg", text: "Saat-saat seru berebut momentum kebahagiaan bersama sahabat dekat.", phase: "Memori 23/43" },
-            { time: 93, img: "IMG-20260609-WA0029.jpg", text: "Kekompakan yang solid teruji dalam berbagai rintangan tugas sekolah.", phase: "Memori 24/43" },
-            { time: 97, img: "IMG-20260609-WA0030.jpg", text: "Upacara dan kedisiplinan yang melatih jiwa nasionalisme di dada.", phase: "Memori 25/43" },
-            { time: 101, img: "IMG-20260609-WA0031.jpg", text: "Senyum simpul penuh arti menatap kamera, menyimpan detik waktu.", phase: "Memori 26/43" },
-            { time: 105, img: "IMG-20260609-WA0032.jpg", text: "Melangkah maju menyongsong kelulusan dengan keyakinan penuh.", phase: "Memori 27/43" },
-            { time: 109, img: "IMG-20260609-WA0033.jpg", text: "Dukungan penuh dari bapak ibu guru yang tak lelah menuntun arah.", phase: "Memori 28/43" },
-            { time: 113, img: "IMG-20260609-WA0035.jpg", text: "Momen peringatan hari besar nasional dengan identitas budaya lokal.", phase: "Memori 29/43" },
-            { time: 117, img: "IMG-20260609-WA0036.jpg", text: "Kain batik dan kebaya yang menambah keanggunan serta kegagahan.", phase: "Memori 30/43" },
-            { time: 121, img: "IMG-20260609-WA0037.jpg", text: "Formasi berjajar rapi, saksi bisu tumbuh kembang fisik dan mental.", phase: "Memori 31/43" },
-            { time: 125, img: "IMG-20260609-WA0038.jpg", text: "Rasa kekeluargaan yang tertanam kuat mengalahkan ego masing-masing.", phase: "Memori 32/43" },
-            { time: 129, img: "IMG-20260609-WA0039.jpg", text: "Kilas balik perjalanan panjang yang terasa berjalan begitu singkat.", phase: "Memori 33/43" },
-            { time: 133, img: "IMG-20260609-WA0040.jpg", text: "Hari esok mungkin berbeda, namun memori di sini tetap abadi.", phase: "Memori 34/43" },
-            { time: 137, img: "IMG-20260609-WA0043.jpg", text: "Persahabatan murni terjalin tulus tanpa mengharapkan pamrih apapun.", phase: "Memori 35/43" },
-            { time: 141, img: "IMG-20260609-WA0044.jpg", text: "Bersiap mengemasi buku dan kenangan untuk dibawa ke tingkat lanjut.", phase: "Memori 36/43" },
-            { time: 145, img: "IMG-20260609-WA0045.jpg", text: "Setiap sudut ruangan menyimpan gema tawa dan bisikan impian kita.", phase: "Memori 37/43" },
-            { time: 149, img: "IMG-20260609-WA0046.jpg", text: "Terima kasih untuk pelukan hangat dan jabat tangan erat penguat jiwa.", phase: "Memori 38/43" },
-            { time: 153, img: "IMG-20260609-WA0047.jpg", text: "Landasan pacu pertama kita telah sukses dilewati dengan selamat.", phase: "Memori 39/43" },
-            { time: 157, img: "IMG-20260609-WA0048.jpg", text: "Kini pintu masa depan terbuka lebar menyambut petualangan baru.", phase: "Memori 40/43" },
-            { time: 161, img: "IMG-20260609-WA0051.jpg", text: "Jika masa lalu kita adalah pesawat terbang yang mendarat di gerbang sekolah...", phase: "Memori 41/43" },
-            { time: 165, img: "IMG-20260609-WA0053.jpg", text: "Maka impian kita di masa depan adalah Roket yang meluncur menembus batas langit!", phase: "Memori 42/43" },
-            { time: 169, img: "IMG-20260609-WA0061.jpg", text: "Terima kasih Kelas VI SD Negeri Slarang 02. Sampai jumpa di puncak kesuksesan! 🚀✨", phase: "Memori Akhir: 43/43" }
+            // --- KELAS 5 ---
+            { time: 1, img: "IMG-20260610-WA0001.jpg", text: "Langkah awal kita dimulai di Kelas 5B... Senyum ceria menggunakan baju seragam biru di depan banner FLS2N, saat semua mimpi indah kita baru saja dimulai bersama.", phase: "Masa-Masa Indah Kelas 5" },
+            { time: 15, img: "IMG-20260610-WA0007.jpg", text: "Ingatkah saat anak-anak cowok bergaya keren dengan kacamata hitam di depan patung pas studytour? Betapa sederhananya arti kebahagiaan kita saat itu.", phase: "Masa-Masa Indah Kelas 5" },
+            { time: 30, img: "IMG-20260610-WA0005.jpg", text: "Foto selfie ramai-ramai satu kelas penuh sesak dengan tawa. Momen berharga yang kini menjadi harta karun memori yang tak mungkin bisa dibeli kembali.", phase: "Masa-Masa Indah Kelas 5" },
+            { time: 45, img: "IMG-20260610-WA0006.jpg", text: "Momen hangat saat kita makan lesehan bersama mengenakan baju olahraga hijau. Saling berbagi bekal, mengukir rasa persaudaraan tanpa sekat pembatas.", phase: "Masa-Masa Indah Kelas 5" },
+            { time: 60, img: "IMG-20260610-WA0008.jpg", text: "Barisan anak-anak cowok rapi memakai sarung dan baju muslim di depan papan tulis. Kesederhanaan hari itu kini bertransformasi menjadi kerinduan yang amat mendalam.", phase: "Masa-Masa Indah Kelas 5" },
+            
+            // --- KEGIATAN KELAS 6 ---
+            { time: 75, img: "IMG-20260610-WA0002.jpg", text: "Melangkah ke Kelas 6B, siswi-siswi berhijab berfoto manis bersama Ibu Guru di depan dinding 'Jendela Dunia'. Di sanalah ilmu dan ikatan kita tumbuh semakin kokoh.", phase: "Lembaran Baru Kelas 6" },
+            { time: 90, img: "IMG-20260610-WA0003.jpg", text: "Kini giliran barisan anak cowok berpakaian putih suci bersama Ibu Guru di tempat yang sama. Mengingat kembali betapa tulusnya bimbingan yang telah kita terima selama ini.", phase: "Lembaran Baru Kelas 6" },
+            { time: 105, img: "IMG-20260610-WA0009.jpg", text: "Momen syahdu Pesantren Kilat di halaman sekolah... Jari-jemari kecil kita membentuk lambang cinta, menyatukan hati dalam dekapan kebersamaan yang tulus.", phase: "Kegiatan & Kebersamaan" },
+            { time: 120, img: "IMG-20260610-WA0004.jpg", text: "Berjejer rapi di halaman sekolah dengan pose salam di dada. Mengenang tenangnya sore itu, perlahan menyadari waktu kebersamaan kita mulai berjalan mundur.", phase: "Kegiatan & Kebersamaan" },
+            { time: 135, img: "IMG-20260610-WA0010.jpg", text: "Peringatan Hari Pendidikan Nasional dengan balutan baju batik dan busana adat tradisional. Kita berdiri tegak, merayakan proses tumbuh bersama menjadi lebih dewasa.", phase: "Tumbuh Bersama" },
+            
+            // --- LATIHAN & PERSIAPAN PERPISAHAN ---
+            { time: 150, img: "IMG-20260610-WA0011.jpg", text: "Suasana penuh haru saat latihan koor perpisahan... Lembaran teks lagu digenggam erat, menyanyikan nada-nada pamit yang tanpa sadar membuat mata mulai berkaca-kaca.", phase: "Persiapan Perpisahan" },
+            { time: 165, img: "IMG-20260610-WA0013.jpg", text: "Berdiri berjejer fokus latihan vokal dipandu oleh konduktor. Di setiap bait lagu yang kita nyanyikan, ada doa dan tetes air mata tersembunyi untuk hari esok.", phase: "Persiapan Perpisahan" },
+            { time: 180, img: "IMG-20260610-WA0012.jpg", text: "Riuhnya suasana persiapan di atas panggung, anak-anak cowok sibuk membenahi baju sebelum tampil. Momen riuh penuh tawa terakhir sebelum kita benar-benar harus berpisah.", phase: "Persiapan Perpisahan" },
+            
+            // --- TASYAKURAN KELULUSAN (PUNCAK ACARA) ---
+            { time: 195, img: "Screenshot_2026-06-10-09-34-46-907_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Hari yang dinanti sekaligus ditakuti tiba. Berdiri tegak di panggung kelulusan berselimut balon warna-warni, menyadari ini adalah lembaran penutup kita.", phase: "Puncak Kelulusan & Haru" },
+            { time: 210, img: "Screenshot_2026-06-10-09-35-05-804_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Pose bebas dengan tanda peace di panggung. Mencoba tersenyum selebar mungkin hanya untuk menyembunyikan rasa sedih karena esok tak ada lagi kelas yang sama.", phase: "Puncak Kelulusan & Haru" },
+            { time: 225, img: "Screenshot_2026-06-10-09-35-30-928_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Lambaian tangan kompak menghadap kamera. Selamat tinggal ruang kelas, selamat tinggal meja dan kursi lapuk yang menjadi saksi bisu perjuangan hebat kita.", phase: "Puncak Kelulusan & Haru" },
+            { time: 240, img: "Screenshot_2026-06-10-09-36-09-591_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Berdiri erat melingkari Ibu Guru tercinta yang tak pernah lelah bersabar menuntun langkah kita. Tatapan haru beliau mengiringi langkah kita menuju masa depan.", phase: "Terima Kasih Guruku" },
+            { time: 255, img: "Screenshot_2026-06-10-09-36-40-568_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Formasi anggun siswi-siswi berhijab mengapit Ibu Guru. Terima kasih untuk segalanya sahabat, kenangan ini akan abadi tersimpan rapi di lubuk hati yang terdalam.", phase: "Kenangan Abadi" },
+            { time: 270, img: "Screenshot_2026-06-10-09-37-52-143_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Topi sekolah diangkat dan dilempar tinggi ke udara. Kita resmi lulus! Meluncurlah terbang tinggi mengejar cita-cita layaknya pesawat terbang di angkasa luas.", phase: "Terbangkan Cita-Cita" },
+            { time: 285, img: "Screenshot_2026-06-10-09-42-22-990_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Dokumentasi formasi lengkap terakhir seluruh siswa-siswi Kelas VI. Genggaman tangan kita mungkin akan terlepas hari ini, namun memori tentang kita akan hidup selamanya...", phase: "Akhir Cerita Kita" }
         ];
 
-        // ================= ENGINE TRANSISI ROKET & KEPULAN ASAP (100% Persis start.html) =================
-        const triggerRocketTransition = (targetData) => {
+        // ================= ENGINE TRANSISI PESAWAT BERGERAK =================
+        const triggerPlaneTransition = (targetData) => {
             photoSlot.style.opacity = '0.1';
             photoSlot.style.filter = 'blur(15px) scale(0.95)';
 
-            const rocket = document.createElement('div');
-            rocket.className = 'trans-rocket';
-            rocket.innerHTML = `
-                <div class="rocket-body">
-                    <div class="rocket-window"></div>
-                    <div class="rocket-wing-left"></div>
-                    <div class="rocket-wing-right"></div>
+            // Membuat element pesawat murni CSS
+            const plane = document.createElement('div');
+            plane.className = 'trans-airplane';
+            plane.innerHTML = `
+                <div class="plane-body">
+                    <div class="plane-wing-top"></div>
+                    <div class="plane-wing-bottom"></div>
+                    <div class="plane-tail"></div>
                 </div>
-                <div class="rocket-fire"></div>
             `;
-            wrapperZone.appendChild(rocket);
+            wrapperZone.appendChild(plane);
 
             const wWidth = wrapperZone.offsetWidth;
             const wHeight = wrapperZone.offsetHeight;
             
-          const startX = -60;
-            const startY = wHeight + 60;
-            const endX = wWidth + 60;
-            const endY = -60;
+            const startX = -100;
+            const startY = wHeight / 2;
+            const endX = wWidth + 100;
+            const endY = wHeight / 2 - 40;
 
             let startTime = null;
-            let lastSmokeTime = 0;
+            let lastVaporTime = 0;
             let dataSwapped = false;
-            const duration = 1000;
+            const duration = 1200; // Durasi pesawat melintas
 
-            function runFlight(timestamp) {
+            function flyPlane(timestamp) {
                 if (!startTime) startTime = timestamp;
                 const progress = timestamp - startTime;
                 const percent = Math.min(progress / duration, 1);
@@ -418,24 +451,24 @@
                 const currentX = startX + (endX - startX) * percent;
                 const currentY = startY + (endY - startY) * percent;
 
-                rocket.style.left = `${currentX}px`;
-                rocket.style.top = `${currentY}px`;
+                plane.style.left = `${currentX}px`;
+                plane.style.top = `${currentY}px`;
 
-                if (timestamp - lastSmokeTime > 20 && percent < 0.95) {
-                    lastSmokeTime = timestamp;
-                    const smoke = document.createElement('div');
-                    smoke.className = 'smoke-particle';
+                // Efek kepulan asap pesawat (Jet Vapor Trail)
+                if (timestamp - lastVaporTime > 25 && percent < 0.95) {
+                    lastVaporTime = timestamp;
+                    const vapor = document.createElement('div');
+                    vapor.className = 'jet-trail';
                     
-                    const jitterX = (Math.random() - 0.5) * 25;
-                    const jitterY = (Math.random() - 0.5) * 25;
+                    const jitterY = (Math.random() - 0.5) * 15;
+                    vapor.style.left = `${currentX - 40}px`;
+                    vapor.style.top = `${currentY + 6 + jitterY}px`;
                     
-                    smoke.style.left = `${currentX - 12 + jitterX}px`;
-                    smoke.style.top = `${currentY + 15 + jitterY}px`;
-                    
-                    wrapperZone.appendChild(smoke);
-                    setTimeout(() => smoke.remove(), 900);
+                    wrapperZone.appendChild(vapor);
+                    setTimeout(() => vapor.remove(), 600);
                 }
 
+                // Tukar foto tepat di tengah lintasan pesawat
                 if (percent >= 0.5 && !dataSwapped) {
                     dataSwapped = true;
                     photoSlot.src = targetData.img;
@@ -447,15 +480,15 @@
                 }
 
                 if (progress < duration) {
-                    requestAnimationFrame(runFlight);
+                    requestAnimationFrame(flyPlane);
                 } else {
-                    rocket.remove();
+                    plane.remove();
                 }
             }
-            requestAnimationFrame(runFlight);
+            requestAnimationFrame(flyPlane);
         };
 
-        // ================= TIMELINE TRACKER CORE ENGINE (100% Persis) =================
+        // ================= CORE TIMELINE SCENE & MUSIC TRACKER =================
         const startCinematicScene = () => {
             interactionLayer.style.opacity = '0';
             setTimeout(() => interactionLayer.style.display = 'none', 1000);
@@ -477,18 +510,44 @@
 
                 if (targetIndex !== currentActiveIndex && targetIndex !== -1) {
                     currentActiveIndex = targetIndex;
-                    triggerRocketTransition(memoryTimeline[currentActiveIndex]);
-
-                    // JIKA SAMPAI DI SLIDE PALING AKHIR (FOTO KE-43)
-                    if (currentActiveIndex === memoryTimeline.length - 1) {
-                        setTimeout(() => {
-                            btnLanjut.classList.add('show');
-                        }, 2000);
-                    }
+                    triggerPlaneTransition(memoryTimeline[currentActiveIndex]);
                 }
             });
+
+            // KETIKA LAGU ORANGE SELESAI -> FADE OUT KE HITAM DAN MASUK CREDIT SCENE AUTOMATIS
+            memoriesAudio.addEventListener('ended', startCreditSceneWorkflow);
         };
 
+        // ================= WORKFLOW CREDIT SCENE (3 MENIT) =================
+        const startCreditSceneWorkflow = () => {
+            fadeOverlay.classList.add('active');
+
+            setTimeout(() => {
+                // Sembunyikan container foto utama
+                displayBox.style.display = 'none';
+                progText.style.display = 'none';
+                
+                // Tampilkan & mainkan Credit Scene Layer
+                creditLayer.style.display = 'flex';
+                fadeOverlay.classList.remove('active'); // Lepas overlay hitam agar credit terlihat
+                
+                creditsAudio.play().catch(err => console.log("Credits Audio Error:", err));
+                
+                // Jalankan animasi scroll credit selama tepat 3 Menit (180 Detik)
+                creditScroll.style.animation = 'scrollCredits 180s linear forwards';
+
+                // Redirect otomatis ke index.html saat lagu credit selesai / waktu habis (180s)
+                creditsAudio.addEventListener('ended', redirectToIndex);
+                setTimeout(redirectToIndex, 180000);
+            }, 2000);
+        };
+
+        const redirectToIndex = () => {
+            window.location.href = 'index.html';
+        };
+
+        // Tombol Keluar (X) untuk langsung pergi ke index.html
+        btnSkipCredit.addEventListener('click', redirectToIndex);
         btnMulaiSkenario.addEventListener('click', startCinematicScene);
     </script>
 </body>
