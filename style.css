@@ -1,5 +1,5 @@
 /* ==========================================================================
-   KODE CSS LENGKAP - HALAMAN KELULUSAN EPIK 2026
+   KODE CSS LENGKAP - HALAMAN KELULUSAN EPIK 2026 WITH REALTIME GUESTBOOK
    ========================================================================== */
 
 /* --- 1. RESET & DASAR --- */
@@ -27,8 +27,13 @@ body, html {
     transition: transform 2s cubic-bezier(0.76, 0, 0.24, 1);
 }
 
-.camera-down { transform: translateY(-100vh); }
-.space-launch { transform: translateY(100vh); }
+.camera-down {
+    transform: translateY(-100vh);
+}
+
+.space-launch {
+    transform: translateY(100vh);
+}
 
 /* --- KELOMPOK SCENE 0: LUAR ANGKASA --- */
 #space-scene {
@@ -50,7 +55,7 @@ body, html {
     background-size: 240px 240px, 180px 180px;
 }
 
-/* --- KELOMPOK SCENE 1: LANGIT --- */
+/* --- 2. BACKGROUND LANGIT BIRU & AWAN --- */
 #sky-scene {
     width: 100%;
     height: 100vh;
@@ -123,11 +128,11 @@ body, html {
     100% { left: 110%; }
 }
 
-/* --- TRANSISI PERCEPATAN (EFEK CINEMATIC 3 DETIK) --- */
-.fast-speed .cloud1 { animation-duration: 3s !important; transition: animation-duration 0.5s ease-in-out; }
-.fast-speed .cloud2 { animation-duration: 4.5s !important; transition: animation-duration 0.5s ease-in-out; }
-.fast-speed .bird1 { animation-duration: 1.2s !important; transition: animation-duration 0.5s ease-in-out; }
-.fast-speed .bird2 { animation-duration: 1.5s !important; transition: animation-duration 0.5s ease-in-out; }
+/* --- OVERRIDE SPEED EFEK KAMERA SUPER CEPAT (3 DETIK) --- */
+.fast-sky .cloud1 { animation-duration: 0.8s !important; }
+.fast-sky .cloud2 { animation-duration: 1.2s !important; }
+.fast-sky .bird1 { animation-duration: 0.4s !important; }
+.fast-sky .bird2 { animation-duration: 0.5s !important; }
 
 /* --- 3. KONTEN UTAMA --- */
 .container {
@@ -149,11 +154,10 @@ body, html {
     animation: ayunBalon 3s ease-in-out infinite alternate;
     cursor: pointer;
 }
-
 .balloon {
     position: relative;
     width: 160px; 
-    height: 210px; 
+    height: 210px;
     background: url('1000017857-removebg-preview.png') no-repeat center center;
     background-size: contain;
     display: flex;
@@ -161,11 +165,9 @@ body, html {
     align-items: center;
     user-select: none;
 }
-
 .balloon-text {
     position: absolute;
-    top: 40%; 
-    left: 50%;
+    top: 40%; left: 50%;
     transform: translate(-50%, -50%);
     color: white;
     font-weight: bold;
@@ -177,48 +179,25 @@ body, html {
     pointer-events: none;
 }
 
-/* --- 5. ANIMASI BALON (AYUN & POP MELEDAK) --- */
 @keyframes ayunBalon {
     0% { transform: translateY(0px) rotate(-1.5deg); }
     100% { transform: translateY(-15px) rotate(1.5deg); }
 }
+.balloon-group:hover { transform: scale(1.06); transition: transform 0.2s; }
 
-.balloon-group:hover {
-    transform: scale(1.06);
-    transition: transform 0.2s;
-}
 
 .balloon-group.meledak {
     animation: pop 0.3s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
     pointer-events: none;
 }
-
 @keyframes pop {
     0% { transform: scale(1); opacity: 1; }
-    40% { transform: scale(1.25); filter: brightness(1.3); }
+    40% { transform: scale(1.2); filter: brightness(1.2); }
     100% { transform: scale(0); opacity: 0; }
 }
 
-/* Partikel Dinamis Ketika Balon Pecah */
-.balloon-particle {
-    position: absolute;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 999;
-}
-
-/* --- 6. LAYOUT MENU UTAMA & ANIMASI MASUK --- */
-.menu-balloons {
-    display: flex;
-    gap: 40px;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-}
-
-.reveal .balloon-group {
-    animation: terbangMasuk 1.2s cubic-bezier(0.075, 0.82, 0.165, 1) both;
-}
+.menu-balloons { display: flex; gap: 40px; justify-content: center; align-items: center; width: 100%; }
+.reveal .balloon-group { animation: terbangMasuk 1.2s cubic-bezier(0.075, 0.82, 0.165, 1) both; }
 .reveal .b-1 { animation-delay: 0s; }
 .reveal .b-2 { animation-delay: 0.15s; }
 .reveal .b-3 { animation-delay: 0.3s; }
@@ -228,258 +207,148 @@ body, html {
     100% { transform: translateY(0) scale(1); opacity: 1; }
 }
 
-/* --- 7. UTILITY CLASSES --- */
-.hidden { display: none !important; }
-
-
-/* ==========================================================================
-   HALAMAN BARU - KRITIK & SARAN UI STYLE
-   ========================================================================== */
-#kritik-scene {
+/* --- 5. HALAMAN LANGIT BIRU: PANEL KRITIK & SARAN (GLASSMORPHISM) --- */
+.kritik-panel {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    z-index: 50;
-    display: flex;
-    flex-direction: column;
-    padding: 30px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.6s ease-in-out;
-}
-
-#kritik-scene.active {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.back-btn {
-    align-self: flex-start;
-    background: rgba(255, 255, 255, 0.25);
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 50px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    backdrop-filter: blur(5px);
-    transition: all 0.2s ease;
-    z-index: 60;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-.back-btn:hover {
-    background: white;
-    color: #3a8ffd;
-    transform: translateX(-3px);
-}
-
-.kritik-container {
-    display: flex;
-    width: 100%;
-    height: calc(100vh - 90px);
-    gap: 30px;
-    margin-top: 20px;
-    z-index: 10;
-}
-
-/* Box Form Kiri */
-.kritik-form-box {
-    flex: 1;
-    min-width: 320px;
-    background: rgba(255, 255, 255, 0.15);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 1100px;
+    height: 85vh;
+    background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 24px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 25px;
+    display: flex;
     padding: 30px;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-    color: white;
+    gap: 25px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    z-index: 50;
+}
+.reveal-panel {
+    animation: panelMasuk 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+@keyframes panelMasuk {
+    0% { opacity: 0; transform: translate(-50%, -40%) scale(0.9); }
+    100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 
-.form-title {
-    font-size: 1.5rem;
-    font-weight: 800;
+.kritik-left {
+    flex: 1;
+    background: rgba(15, 23, 42, 0.45);
+    border-radius: 18px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.panel-title {
+    font-size: 1.8rem;
+    color: #ffdd1a;
+    text-shadow: 2px 2px 0px #000;
     margin-bottom: 25px;
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.15);
+}
+.form-group { margin-bottom: 20px; }
+.form-group label {
+    display: block;
     color: #fff;
-    border-bottom: 2px solid rgba(255,255,255,0.2);
-    padding-bottom: 10px;
-}
-
-.input-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-}
-.input-group label {
     font-weight: bold;
-    font-size: 0.95rem;
     margin-bottom: 8px;
 }
-.input-group input, .input-group textarea {
-    background: rgba(255, 255, 255, 0.85);
-    border: 2px solid transparent;
-    border-radius: 12px;
-    padding: 12px 16px;
-    font-size: 1rem;
-    color: #333;
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 2px solid rgba(255,255,255,0.4);
     outline: none;
-    transition: all 0.2s;
-}
-.input-group input:focus, .input-group textarea:focus {
-    background: #fff;
-    border-color: #ffdd1a;
-    box-shadow: 0 0 10px rgba(255,221,26,0.5);
-}
-.input-group .hint {
-    margin-top: 5px;
-    font-size: 0.8rem;
-    color: rgba(255,255,255,0.85);
-    text-align: right;
-}
-
-.submit-btn {
-    margin-top: auto;
-    background: linear-gradient(to bottom, #ffdd1a, #e6c200);
-    border: none;
+    background: rgba(255,255,255,0.9);
     color: #222;
-    padding: 15px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    border-radius: 14px;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-    transition: transform 0.1s, background 0.2s;
+    font-size: 1rem;
+    transition: border-color 0.2s;
 }
-.submit-btn:hover {
-    background: linear-gradient(to bottom, #fff, #ffea4a);
-    transform: translateY(-2px);
-}
-.submit-btn:active { transform: translateY(1px); }
+.form-group input:focus, .form-group textarea:focus { border-color: #ffdd1a; }
+.form-group textarea { height: 140px; resize: none; }
+.btn-back { background: linear-gradient(to bottom, #ef4444, #b91c1c); box-shadow: 0 5px 0 #7f1d1d; }
 
-/* Box Display Kanan */
-.kritik-display-box {
+.kritik-right {
     flex: 2;
     display: flex;
     flex-direction: column;
-    position: relative;
-    border-radius: 24px;
-    overflow: hidden;
 }
-
-#bubbles-viewport {
+.bubbles-area {
     flex: 1;
     position: relative;
-    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.2);
     overflow: hidden;
 }
 
-#bubbles-container {
+/* REALTIME FLOATING TEXT BUBBLE */
+.floating-bubble {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    will-change: transform;
-    transition: transform 0.1s ease-out; /* Untuk efek Parallax Kamera */
-}
-
-/* Elemen Bubble Mengapung */
-.bubble-item {
-    position: absolute;
-    background: rgba(255, 255, 255, 0.2);
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    box-shadow: inset 0 0 15px rgba(255,255,255,0.4), 0 8px 20px rgba(0,0,0,0.08);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    border-radius: 50% 45% 50% 48% / 45% 50% 48% 52%; /* Bentuk dinamis seperti sabun balon */
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 15px;
-    word-break: break-word;
-    animation: floatUpStream linear infinite;
-}
-
-.bubble-item strong {
-    color: #ffdd1a;
+    background: rgba(255, 255, 255, 0.9);
+    color: #1e293b;
+    padding: 12px 18px;
+    border-radius: 20px;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    max-width: 260px;
+    word-wrap: break-word;
     font-size: 0.95rem;
+    line-height: 1.4;
+    transition: transform 0.1s ease-out;
+    animation: bubbleAyun 3s ease-in-out infinite alternate;
+}
+.floating-bubble strong {
+    display: block;
+    color: #1a6fd4;
+    font-size: 0.85rem;
     margin-bottom: 4px;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    text-transform: uppercase;
 }
-.bubble-item p {
-    font-size: 0.8rem;
-    line-height: 1.2;
-    max-height: 70px;
-    overflow-y: auto;
-    width: 100%;
+@keyframes bubbleAyun {
+    0% { margin-top: 0px; }
+    100% { margin-top: -8px; }
 }
 
-@keyframes floatUpStream {
-    0% { transform: translateY(105vh) translateX(0) scale(0.6); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { transform: translateY(-20vh) translateX(var(--drift-x)) scale(1); opacity: 0; }
+/* MODE ADMIN UNTUK HAPUS BUBBLE (,gwAdmin) */
+.floating-bubble.admin-delete-mode {
+    border: 2px dashed #ef4444;
+    background: #fef2f2;
+    cursor: pointer;
+}
+.floating-bubble.admin-delete-mode:hover {
+    background: #fee2e2;
+    transform: scale(1.03) !important;
 }
 
-/* Tombol Navigasi Pagination */
+/* PAGINATION INTERFACE */
 .pagination-controls {
     display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 15px 0;
-    z-index: 10;
-}
-.nav-btn {
-    background: rgba(15, 23, 42, 0.7);
-    border: 2px solid #ffdd1a;
-    color: #ffdd1a;
-    padding: 10px 20px;
-    font-size: 0.9rem;
-    font-weight: bold;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.nav-btn:hover {
-    background: #ffdd1a;
-    color: #111;
-}
-
-/* MODE ADMIN RAHASIA */
-.admin-active .bubble-item {
-    border-color: #e63946;
-    cursor: pointer;
-}
-.delete-bubble-btn {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: #e63946;
-    color: white;
-    border: 2px solid white;
-    border-radius: 50%;
-    width: 26px;
-    height: 26px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    margin-top: 15px;
 }
-.delete-bubble-btn:hover { background: #ff1a2e; }
+.pag-btn { width: auto; padding: 10px 25px; margin-bottom: 0; font-size: 1rem; }
+#page-indicator { color: white; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
 
+/* SUBMIT BUBBLE LAUNCH EFFECT */
+.submit-bubble-effect {
+    position: fixed;
+    font-size: 2.5rem;
+    z-index: 999;
+    pointer-events: none;
+    animation: letupTerbangBubble 2s forwards ease-in;
+}
+@keyframes letupTerbangBubble {
+    0% { transform: translateY(0) scale(0.5); opacity: 1; }
+    100% { transform: translateY(-400px) scale(1.5); opacity: 0; }
+}
 
-/* ==========================================================================
-   KELOMPOK SCENE 2: GAME DARATAN
-   ========================================================================== */
+/* --- KELOMPOK SCENE 2: GAME DARATAN --- */
 #game-scene {
     width: 100%;
     height: 100vh;
@@ -540,10 +409,8 @@ body, html {
 
 .road {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 150px;
+    bottom: 0; left: 0;
+    width: 100%; height: 150px;
     background: #333;
     border-top: 6px solid #ffdd1a;
     z-index: 4;
@@ -563,10 +430,8 @@ body, html {
 
 .red-car {
     position: absolute;
-    bottom: 45px;
-    left: 8%;
-    width: 140px;
-    height: 65px;
+    bottom: 45px; left: 8%;
+    width: 140px; height: 65px;
     z-index: 5;
     animation: mobilGoyang 0.15s infinite alternate;
 }
@@ -606,10 +471,8 @@ body, html {
 
 .game-sidebar {
     position: absolute;
-    right: 40px;
-    top: 10%;
-    width: 42%; 
-    height: 80%;
+    right: 40px; top: 10%;
+    width: 42%; height: 80%;
     background: rgba(15, 23, 42, 0.92);
     border: 5px solid #ffdd1a;
     border-radius: 25px;
@@ -661,12 +524,23 @@ body, html {
     box-shadow: 0 5px 0 #b39700, 0 8px 15px rgba(0,0,0,0.3);
     transform: translateY(-2px);
 }
-.game-btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 2px 0 #b39700; }
+.game-btn:active:not(:disabled) {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 #b39700;
+}
 .game-btn:disabled {
-    background: #475569; color: #94a3b8; border-color: #64748b; box-shadow: none; cursor: not-allowed; font-style: italic;
+    background: #475569;
+    color: #94a3b8;
+    border-color: #64748b;
+    box-shadow: none;
+    cursor: not-allowed;
+    font-style: italic;
 }
 
-/* --- 8. RESPONSIVE LAYOUT UNTUK HP --- */
+/* --- UTILITY CLASSES --- */
+.hidden { display: none !important; }
+
+/* --- RESPONSIVE LAYOUT HP --- */
 @media (max-width: 768px) {
     .menu-balloons { flex-direction: row; flex-wrap: wrap; gap: 20px; }
     .balloon { width: 120px; height: 160px; }
@@ -676,10 +550,16 @@ body, html {
     .game-title { font-size: 1.6rem; }
     .red-car { transform: scale(0.7); bottom: 30px; left: 2%; }
     
-    /* Kritik Responsive */
-    .kritik-container { flex-direction: column; height: calc(100vh - 100px); overflow-y: auto; gap: 20px; }
-    .kritik-form-box { flex: none; width: 100%; padding: 20px; }
-    .kritik-display-box { flex: none; width: 100%; height: 380px; }
-    .form-title { font-size: 1.2rem; margin-bottom: 15px; }
-                 }
-                                 
+    /* Panel Kritik Responsif HP */
+    .kritik-panel {
+        flex-direction: column;
+        height: 92vh;
+        overflow-y: auto;
+        padding: 15px;
+        top: 4%;
+        transform: translate(-50%, 0);
+    }
+    .kritik-left, .kritik-right { flex: none; width: 100%; }
+    .bubbles-area { height: 320px; }
+    .floating-bubble { max-width: 140px; font-size: 0.8rem; padding: 8px 12px; }
+   }
