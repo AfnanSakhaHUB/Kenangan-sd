@@ -499,35 +499,27 @@
         const startNode = document.getElementById('start-node');
         const menuNode = document.getElementById('menu-node');
         const btnMinigames = document.getElementById('btn-minigames');
-        const btnKenangan = document.getElementById('btn-kenangan'); 
+        const btnKenangan = document.getElementById('btn-kenangan'); // Selector Balon Kenangan
         const mainViewport = document.getElementById('main-viewport');
         const windSfx = document.getElementById('windSfx');
         
         let audioTracker;
 
-        // Logika Tombol Mulai Awal (SUDAH DI-FIX AGAR ANTI-STUCK)
+        // Logika Tombol Mulai Awal
         startNode.addEventListener('click', () => {
-            // 1. Jalankan animasi meledak duluan secara instan tanpa tertahan logic audio
+            windSfx.pause(); windSfx.currentTime = 0;
+            windSfx.play().then(() => {
+                clearInterval(audioTracker);
+                audioTracker = setInterval(() => {
+                    if (windSfx.currentTime >= 3.0) {
+                        windSfx.pause(); windSfx.currentTime = 0;
+                        clearInterval(audioTracker);
+                    }
+                }, 100);
+            }).catch(error => console.log("Audio terblokir:", error));
+
             startNode.classList.add('meledak');
 
-            // 2. Proteksi system audio menggunakan try-catch
-            try {
-                windSfx.pause(); 
-                windSfx.currentTime = 0;
-                windSfx.play().then(() => {
-                    clearInterval(audioTracker);
-                    audioTracker = setInterval(() => {
-                        if (windSfx.currentTime >= 3.0) {
-                            windSfx.pause(); windSfx.currentTime = 0;
-                            clearInterval(audioTracker);
-                        }
-                    }, 100);
-                }).catch(error => console.log("Audio diblokir browser:", error));
-            } catch (audioError) {
-                console.log("File audio tidak ada/gagal dimuat, visual tetap dilanjutkan.");
-            }
-
-            // 3. Masuk ke transisi menu utama
             setTimeout(() => {
                 startNode.classList.add('hidden');
                 menuNode.classList.remove('hidden');
@@ -553,18 +545,15 @@
 
         // ================= ACTION UTAMA FOTO KENANGAN (KAMERA NAIK KE SPACE) =================
         btnKenangan.addEventListener('click', () => {
-            btnMinigames.classList.add('meledak');
-            setTimeout(() => {
-                mainViewport.classList.add('camera-down');
-            }, 300);
-        });
-
-        // ================= ACTION UTAMA FOTO KENANGAN (KAMERA NAIK KE SPACE) =================
-        btnKenangan.addEventListener('click', () => {
+            // 1. Jalankan efek letup pada balon foto kenangan
             btnKenangan.classList.add('meledak');
+
+            // 2. Kamera langsung meluncur naik drastis (Viewport bergeser ke bawah menampilkan angkasa pekat)
             setTimeout(() => {
                 mainViewport.classList.add('space-launch');
             }, 300);
+
+            // 3. Setelah transisi luar angkasa beres (2 detik), redirect halus ke start.html
             setTimeout(() => {
                 window.location.href = 'start.html';
             }, 2300);
