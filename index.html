@@ -446,8 +446,9 @@
                     <div id="btn-kenangan" class="balloon-group b-1">
                         <div class="balloon"><div class="balloon-text">Foto<br>Kenangan</div></div>
                     </div>
-                    <div class="balloon-group b-2">
-                        <div class="balloon"><div class="balloon-text">Catatan<br>Ranking</div></div>
+                    <!-- PENGUBAHAN DI SINI: Mengubah teks dan menambahkan id="btn-kritiksaran" -->
+                    <div id="btn-kritiksaran" class="balloon-group b-2">
+                        <div class="balloon"><div class="balloon-text">Kritik &<br>Saran</div></div>
                     </div>
                     <div id="btn-minigames" class="balloon-group b-3">
                         <div class="balloon"><div class="balloon-text">Mini games</div></div>
@@ -499,7 +500,8 @@
         const startNode = document.getElementById('start-node');
         const menuNode = document.getElementById('menu-node');
         const btnMinigames = document.getElementById('btn-minigames');
-        const btnKenangan = document.getElementById('btn-kenangan'); // Selector Balon Kenangan
+        const btnKenangan = document.getElementById('btn-kenangan'); 
+        const btnKritikSaran = document.getElementById('btn-kritiksaran'); // Selector Balon Kritik & Saran
         const mainViewport = document.getElementById('main-viewport');
         const windSfx = document.getElementById('windSfx');
         
@@ -545,18 +547,57 @@
 
         // ================= ACTION UTAMA FOTO KENANGAN (KAMERA NAIK KE SPACE) =================
         btnKenangan.addEventListener('click', () => {
-            // 1. Jalankan efek letup pada balon foto kenangan
             btnKenangan.classList.add('meledak');
 
-            // 2. Kamera langsung meluncur naik drastis (Viewport bergeser ke bawah menampilkan angkasa pekat)
             setTimeout(() => {
                 mainViewport.classList.add('space-launch');
             }, 300);
 
-            // 3. Setelah transisi luar angkasa beres (2 detik), redirect halus ke start.html
+            setTimeout(() => {
+              const allBalloons = menuNode.querySelectorAll('.balloon-group');
+                    allBalloons.forEach((b, idx) => {
+                        b.style.animation = `ayunBalon 3s ease-in-out infinite alternate`;
+                        b.style.animationDelay = `-${idx}s`;
+                    });
+                }, 1200);
+            }, 300); 
+        });
+
+        // ================= ACTION UTAMA MINI GAMES (KAMERA TURUN) =================
+        btnMinigames.addEventListener('click', () => {
+            btnMinigames.classList.add('meledak');
+            setTimeout(() => {
+                mainViewport.classList.add('camera-down');
+            }, 300);
+        });
+
+        // ================= ACTION UTAMA FOTO KENANGAN (KAMERA NAIK KE SPACE) =================
+        btnKenangan.addEventListener('click', () => {
+            btnKenangan.classList.add('meledak');
+
+            setTimeout(() => {
+                mainViewport.classList.add('space-launch');
+            }, 300);
+
             setTimeout(() => {
                 window.location.href = 'start.html';
             }, 2300);
+        });
+
+        // ================= ACTION BARU: KRITIK & SARAN (MELEDAK SEMUA & PINDAH HALAMAN) =================
+        btnKritikSaran.addEventListener('click', () => {
+            // Mengambil seluruh balon yang ada di dalam menu
+            const allBalloons = menuNode.querySelectorAll('.balloon-group');
+            
+            // Meledakkan semua balon sekaligus dengan menambahkan class 'meledak'
+            allBalloons.forEach(balloon => {
+                balloon.classList.add('meledak');
+            });
+
+            // Menunggu animasi meledak selesai (300ms sesuai CSS pop), lalu redirect
+            setTimeout(() => {
+                window.location.href = 'Bubbles.html';
+            }, 300);
         });
     </script>
 </body>
