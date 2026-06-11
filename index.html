@@ -447,7 +447,8 @@
                         <div class="balloon"><div class="balloon-text">Foto<br>Kenangan</div></div>
                     </div>
                     <div class="balloon-group b-2">
-                        <div class="balloon"><div class="balloon-text">Catatan<br>Ranking</div></div>
+                        <div id="btn-kritiksaran" class="balloon-group b-2">
+                        <div class="balloon"><div class="balloon-text">kritik<br>Saran</div></div>
                     </div>
                     <div id="btn-minigames" class="balloon-group b-3">
                         <div class="balloon"><div class="balloon-text">Mini games</div></div>
@@ -499,6 +500,7 @@
         const startNode = document.getElementById('start-node');
         const menuNode = document.getElementById('menu-node');
         const btnMinigames = document.getElementById('btn-minigames');
+        const btnKritik = document.getElementById('btn-kritiksaran');
         const btnKenangan = document.getElementById('btn-kenangan'); // Selector Balon Kenangan
         const mainViewport = document.getElementById('main-viewport');
         const windSfx = document.getElementById('windSfx');
@@ -535,6 +537,11 @@
             }, 300); 
         });
 
+        btnKritik.addEventListener('click', () => {
+    btnKritik.classList.add('meledak');
+    window.location.href = 'Bubbles.html';
+});
+        
         // ================= ACTION UTAMA MINI GAMES (KAMERA TURUN) =================
         btnMinigames.addEventListener('click', () => {
             btnMinigames.classList.add('meledak');
