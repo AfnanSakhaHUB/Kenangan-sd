@@ -319,12 +319,8 @@
         <div class="cloud-bg cb2"></div>
     </div>
 
-    <audio id="memoriesAudio" preload="auto">
-        <source src="7!! - Orange (Lirik dan terjemah) (320).mp3" type="audio/mpeg">
-    </audio>
-    <audio id="creditsAudio" preload="auto">
-        <source src="VID-20260610-WA0019.mp3" type="audio/mpeg">
-    </audio>
+        <!-- AUDIO ENGINE (SINGLE PLAYER) -->
+    <audio id="mainAudio" preload="auto"></audio>
 
     <div class="cinema-container">
         <div class="progress-indicator" id="progText">Mempersiapkan Landasan...</div>
@@ -367,8 +363,7 @@
     <script>
         const btnMulaiSkenario = document.getElementById('btnMulaiSkenario');
         const interactionLayer = document.getElementById('interaction-layer');
-        const memoriesAudio = document.getElementById('memoriesAudio');
-        const creditsAudio = document.getElementById('creditsAudio');
+        const mainAudio = document.getElementById('mainAudio'); 
         const displayBox = document.getElementById('displayBox');
         const wrapperZone = document.getElementById('wrapperZone');
         const photoSlot = document.getElementById('photoSlot');
@@ -379,10 +374,7 @@
         const creditScroll = document.getElementById('credit-scroll');
         const btnSkipCredit = document.getElementById('btnSkipCredit');
 
-        // ==========================================================================
-        // TIMELINE KRONOLOGIS (KELAS 5 -> KEGIATAN KELAS 6 -> PERSIAPAN PERPISAHAN)
-        // Disinkronkan dengan durasi lagu Orange (sekitar 350 detik)
-        // ==========================================================================
+        // --- TIMELINE KRONOLOGIS ---
         const memoryTimeline = [
             // --- KELAS 5 ---
             { time: 1, img: "IMG-20260610-WA0001.jpg", text: "Langkah awal kita dimulai di Kelas 5B... Senyum ceria menggunakan baju seragam biru di depan banner FLS2N, saat semua mimpi indah kita baru saja dimulai bersama.", phase: "Masa-Masa Indah Kelas 5" },
@@ -403,7 +395,7 @@
             { time: 165, img: "IMG-20260610-WA0013.jpg", text: "Berdiri berjejer fokus latihan vokal dipandu oleh konduktor. Di setiap bait lagu yang kita nyanyikan, ada doa dan tetes air mata tersembunyi untuk hari esok.", phase: "Persiapan Perpisahan" },
             { time: 180, img: "IMG-20260610-WA0012.jpg", text: "Riuhnya suasana persiapan di atas panggung, anak-anak cowok sibuk membenahi baju sebelum tampil. Momen riuh penuh tawa terakhir sebelum kita benar-benar harus berpisah.", phase: "Persiapan Perpisahan" },
             
-            // --- TASYAKURAN KELULUSAN (PUNCAK ACARA) ---
+            // --- TASYAKURAN KELULUSAN ---
             { time: 195, img: "Screenshot_2026-06-10-09-34-46-907_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Hari yang dinanti sekaligus ditakuti tiba. Berdiri tegak di panggung kelulusan berselimut balon warna-warni, menyadari ini adalah lembaran penutup kita.", phase: "Puncak Kelulusan & Haru" },
             { time: 210, img: "Screenshot_2026-06-10-09-35-05-804_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Pose bebas dengan tanda peace di panggung. Mencoba tersenyum selebar mungkin hanya untuk menyembunyikan rasa sedih karena esok tak ada lagi kelas yang sama.", phase: "Puncak Kelulusan & Haru" },
             { time: 225, img: "Screenshot_2026-06-10-09-35-30-928_cn.wps.xiaomi.abroad.lite-edit.jpg", text: "Lambaian tangan kompak menghadap kamera. Selamat tinggal ruang kelas, selamat tinggal meja dan kursi lapuk yang menjadi saksi bisu perjuangan hebat kita.", phase: "Puncak Kelulusan & Haru" },
@@ -418,7 +410,6 @@
             photoSlot.style.opacity = '0.1';
             photoSlot.style.filter = 'blur(15px) scale(0.95)';
 
-            // Membuat element pesawat murni CSS
             const plane = document.createElement('div');
             plane.className = 'trans-airplane';
             plane.innerHTML = `
@@ -441,7 +432,7 @@
             let startTime = null;
             let lastVaporTime = 0;
             let dataSwapped = false;
-            const duration = 1200; // Durasi pesawat melintas
+            const duration = 1200;
 
             function flyPlane(timestamp) {
                 if (!startTime) startTime = timestamp;
@@ -454,21 +445,17 @@
                 plane.style.left = `${currentX}px`;
                 plane.style.top = `${currentY}px`;
 
-                // Efek kepulan asap pesawat (Jet Vapor Trail)
                 if (timestamp - lastVaporTime > 25 && percent < 0.95) {
                     lastVaporTime = timestamp;
                     const vapor = document.createElement('div');
                     vapor.className = 'jet-trail';
-                    
-                    const jitterY = (Math.random() - 0.5) * 15;
                     vapor.style.left = `${currentX - 40}px`;
-                    vapor.style.top = `${currentY + 6 + jitterY}px`;
+                    vapor.style.top = `${currentY + 6 + (Math.random() - 0.5) * 15}px`;
                     
                     wrapperZone.appendChild(vapor);
                     setTimeout(() => vapor.remove(), 600);
                 }
 
-                // Tukar foto tepat di tengah lintasan pesawat
                 if (percent >= 0.5 && !dataSwapped) {
                     dataSwapped = true;
                     photoSlot.src = targetData.img;
@@ -488,18 +475,20 @@
             requestAnimationFrame(flyPlane);
         };
 
-        // ================= CORE TIMELINE SCENE & MUSIC TRACKER =================
+        // ================= TRACKER TIMELINE UTAMA =================
         const startCinematicScene = () => {
             interactionLayer.style.opacity = '0';
             setTimeout(() => interactionLayer.style.display = 'none', 1000);
 
-            memoriesAudio.play().catch(err => console.log("Audio Error:", err));
+            // Set lagu pertama (Orange)
+            mainAudio.src = "7!! - Orange (Lirik dan terjemah) (320).mp3";
+            mainAudio.play().catch(err => console.log("Audio Error:", err));
+            
             displayBox.classList.add('active');
-
             let currentActiveIndex = -1;
 
-            memoriesAudio.addEventListener('timeupdate', () => {
-                const currentTime = memoriesAudio.currentTime;
+            mainAudio.addEventListener('timeupdate', () => {
+                const currentTime = mainAudio.currentTime;
                 let targetIndex = currentActiveIndex;
 
                 for (let i = 0; i < memoryTimeline.length; i++) {
@@ -514,31 +503,30 @@
                 }
             });
 
-            // KETIKA LAGU ORANGE SELESAI -> FADE OUT KE HITAM DAN MASUK CREDIT SCENE AUTOMATIS
-            memoriesAudio.addEventListener('ended', startCreditSceneWorkflow);
+            // Ganti lagu otomatis saat lagu pertama selesai
+            mainAudio.addEventListener('ended', startCreditSceneWorkflow);
         };
 
-        // ================= WORKFLOW CREDIT SCENE (3 MENIT) =================
+        // ================= WORKFLOW CREDIT SCENE =================
         const startCreditSceneWorkflow = () => {
             fadeOverlay.classList.add('active');
 
             setTimeout(() => {
-                // Sembunyikan container foto utama
                 displayBox.style.display = 'none';
                 progText.style.display = 'none';
                 
-                // Tampilkan & mainkan Credit Scene Layer
                 creditLayer.style.display = 'flex';
-                fadeOverlay.classList.remove('active'); // Lepas overlay hitam agar credit terlihat
+                fadeOverlay.classList.remove('active');
                 
-                creditsAudio.play().catch(err => console.log("Credits Audio Error:", err));
+                // Ganti isi kaset di player yang sama ke lagu Credit Scene
+                mainAudio.src = "VID-20260610-WA0019.mp3";
+                mainAudio.play().catch(err => console.log("Gagal memutar lagu credit:", err));
                 
-                // Jalankan animasi scroll credit selama tepat 3 Menit (180 Detik)
                 creditScroll.style.animation = 'scrollCredits 180s linear forwards';
 
-                // Redirect otomatis ke index.html saat lagu credit selesai / waktu habis (180s)
-                creditsAudio.addEventListener('ended', redirectToIndex);
-                setTimeout(redirectToIndex, 180000);
+                // Jalankan redirect saat lagu ke-2 selesai
+                mainAudio.addEventListener('ended', redirectToIndex);
+                setTimeout(redirectToIndex, 180000); 
             }, 2000);
         };
 
@@ -546,7 +534,6 @@
             window.location.href = 'index.html';
         };
 
-        // Tombol Keluar (X) untuk langsung pergi ke index.html
         btnSkipCredit.addEventListener('click', redirectToIndex);
         btnMulaiSkenario.addEventListener('click', startCinematicScene);
     </script>
