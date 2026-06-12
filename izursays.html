@@ -114,7 +114,36 @@
 
     </div>
 
-    <script>
+                
+                <script type="module">
+        // Import Firebase SDK dari CDN resmi
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getFirestore, 
+            collection, 
+            addDoc, 
+            getDocs, 
+            query, 
+            orderBy, 
+            limit 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Konfigurasi Firebase milik kamu
+        const firebaseConfig = {
+          apiKey: "AIzaSyDpWnZyYngAlLlzH-GkRWSM_kgfkqMqf4U",
+          authDomain: "websitesdlulus.firebaseapp.com",
+          projectId: "websitesdlulus",
+          storageBucket: "websitesdlulus.firebasestorage.app",
+          messagingSenderId: "849517691742",
+          appId: "1:849517691742:web:3efed490e1d70f17c5c5cf",
+          measurementId: "G-7JLWYWPKN3"
+        };
+
+        // Inisialisasi Firebase & Firestore
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // --- SISA KODE GAME KAMU ---
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
@@ -143,14 +172,11 @@
         let maxPhaseTime = 5;
         let particles = [];
 
-        // ==========================================
-        // FIX SESUAI NAMA FILE DI GITHUB LU
-        // ==========================================
         const spriteIdle = new Image();
-        spriteIdle.src = '1000018020-removebg-preview.png'; // File gabungan di github lu
+        spriteIdle.src = '1000018020-removebg-preview.png'; 
 
         const spriteRun = new Image();
-        spriteRun.src = '1000018020-removebg-preview.png'; // File gabungan di github lu
+        spriteRun.src = '1000018020-removebg-preview.png'; 
 
         const spriteConfig = {
             cols: 4,
@@ -205,11 +231,9 @@
         ];
         let activeCommand = null;
 
-        // Keyboard Handlers
         window.addEventListener('keydown', (e) => { if(gameActive) player.keys[e.key] = true; });
         window.addEventListener('keyup', (e) => { if(gameActive) player.keys[e.key] = false; });
 
-        // D-PAD Touch Handlers
         function setupMobileButton(elementId, keyName) {
             const btn = document.getElementById(elementId);
             if(!btn) return;
@@ -237,21 +261,25 @@
         setupMobileButton('pad-left', 'ArrowLeft');
         setupMobileButton('pad-right', 'ArrowRight');
 
-        // Klik tombol mulai + Fitur Rahasia RESETALLSCORE
+        // Klik tombol mulai dengan Validasi Maksimal 5 Kata
         btnStart.addEventListener('click', (e) => {
             e.preventDefault();
             const typedName = nameInput.value.trim();
             
             if(typedName.toUpperCase() === "RESETSCOREALL") {
-                localStorage.removeItem('izur_leaderboard');
-                alert("Leaderboard berhasil di-reset! Game akan dimuat ulang.");
-                window.location.reload();
+                alert("Untuk menghapus skor Firebase, silakan hapus langsung dokumen melalui Firebase Console demi keamanan.");
+                return;
+            }
+
+            // Hitung jumlah kata
+            const kataNama = typedName.split(/\s+/).filter(kata => kata.length > 0);
+            if (kataNama.length > 5) {
+                alert("Waduh! Nama kamu kepanjangan. Maksimal cuma boleh 5 kata ya!");
                 return;
             }
 
             playerName = typedName !== "" ? typedName : "Anonim";
-            
-            overlayModal.classList.add('hidden'); // Menyembunyikan modal total via CSS
+            overlayModal.classList.add('hidden'); 
             initGame();
         });
 
@@ -322,15 +350,18 @@
             }
         }
 
-        function endGamePlay() {
+        // Diubah menjadi async karena berurusan dengan Firebase data fetch
+        async function endGamePlay() {
             gameActive = false;
             izurCommandText.textContent = "GAME OVER! LU DIKACANGI.";
             izurCommandText.style.color = "#f38ba8";
             finalScoreText.textContent = score;
             
-            saveLeaderboard(playerName, score);
-            showLeaderboard();
             gameoverModal.classList.remove('hidden');
+            
+            // Simpan skor ke Firebase terlebih dahulu, lalu tampilkan papan peringkat terbaru
+            await saveLeaderboard(playerName, score);
+            await showLeaderboard();
         }
 
         function checkCurrentZone() {
@@ -428,7 +459,7 @@
             ctx.ellipse(player.x, player.y + 22, 16, 6, 0, 0, Math.PI * 2); 
             ctx.fill();
 
-            // Render Karakter Stickman dari File Tunggal GitHub Lu (Auto-Animate & Crop)
+            // Render Karakter Stickman
             ctx.save();
             if (player.facingLeft) {
                 ctx.translate(player.x * 2, 0);
@@ -455,7 +486,6 @@
                 );
                 spriteConfig.currentFrame += spriteConfig.animSpeed;
             } else {
-                // Saat IDLE (Diam), ambil frame pertama saja dari grid lembar gambar lu
                 ctx.drawImage(
                     spriteIdle, 
                     0, 0, frameW, frameHeight, 
@@ -477,9 +507,6 @@
                 ctx.fillStyle = `rgba(141, 153, 174, ${roofAlpha})`;
                 ctx.beginPath(); ctx.moveTo(rx + rw, ry); ctx.lineTo(rx + rw, ry + rh); ctx.lineTo(cx, cy); ctx.closePath(); ctx.fill();
 
-                ctx.filStyle = `rgba(141, 153, 174, ${roofAlpha})`;
-                ctx.beginPath(); ctx.moveTo(rx + rw, ry); ctx.lineTo(rx + rw, ry + rh); ctx.lineTo(cx, cy); ctx.closePath(); ctx.fill();
-
                 ctx.fillStyle = `rgba(102, 112, 133, ${roofAlpha})`;
                 ctx.beginPath(); ctx.moveTo(rx + rw, ry + rh); ctx.lineTo(rx, ry + rh); ctx.lineTo(cx, cy); ctx.closePath(); ctx.fill();
 
@@ -493,7 +520,6 @@
                 ctx.shadowBlur = 0;
             }
 
-            // Partikel di layar
             particles.forEach((p) => {
                 p.y += p.speedY; p.x += p.speedX;
                 if(p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; }
@@ -504,31 +530,55 @@
             requestAnimationFrame(updateGameEngine);
         }
 
-        function saveLeaderboard(name, finalScore) {
-            let leaderboard = JSON.parse(localStorage.getItem('izur_leaderboard')) || [];
-            leaderboard.push({ name: name, score: finalScore });
-            leaderboard.sort((a, b) => b.score - a.score);
-            leaderboard = leaderboard.slice(0, 5);
-            localStorage.setItem('izur_leaderboard', JSON.stringify(leaderboard));
+        // BARU: Fungsi simpan skor ke Firebase Cloud Firestore
+        async function saveLeaderboard(name, finalScore) {
+            try {
+                // Menyimpan data ke dalam koleksi bernama 'leaderboard'
+                await addDoc(collection(db, "leaderboard"), {
+                    name: name,
+                    score: Number(finalScore),
+                    createdAt: new Date()
+                });
+            } catch (error) {
+                console.error("Gagal menyimpan ke Firebase: ", error);
+            }
         }
 
-        function showLeaderboard() {
-            let leaderboard = JSON.parse(localStorage.getItem('izur_leaderboard')) || [];
-            leaderboardList.innerHTML = "";
-            if(leaderboard.length === 0) {
-                leaderboardList.innerHTML = "<p>Belum ada data skor.</p>";
-                return;
-            }
-            leaderboard.forEach((data, idx) => {
-                let item = document.createElement('div');
-                item.className = "leaderboard-item";
-                if(data.name === playerName && data.score === score) {
-                    item.style.background = "linear-gradient(to right, #ffdd1a, #ffaa00)";
-                    item.style.color = "#000";
+        // BARU: Fungsi memuat data leaderboard dari Firebase Firestore (Top 5)
+        async function showLeaderboard() {
+            leaderboardList.innerHTML = "<p style='color:#a6adc8;'>Memuat papan peringkat...</p>";
+            try {
+                // Query ambil data dari koleksi 'leaderboard' urut skor tertinggi, limit 5 data
+                const q = query(collection(db, "leaderboard"), orderBy("score", "desc"), limit(5));
+                const querySnapshot = await getDocs(q);
+                
+                leaderboardList.innerHTML = "";
+                
+                if (querySnapshot.empty) {
+                    leaderboardList.innerHTML = "<p>Belum ada data skor.</p>";
+                    return;
                 }
-                item.innerHTML = `<span><b>#${idx + 1}</b> ${data.name}</span> <span>${data.score} PTS</span>`;
-                leaderboardList.appendChild(item);
-            });
+                
+                let idx = 0;
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    let item = document.createElement('div');
+                    item.className = "leaderboard-item";
+                    
+                    // Highlight skor milik user sekarang jika namanya sama dan skornya sama
+                    if (data.name === playerName && data.score === score) {
+                        item.style.background = "linear-gradient(to right, #ffdd1a, #ffaa00)";
+                        item.style.color = "#000";
+                    }
+                    
+                    item.innerHTML = `<span><b>#${idx + 1}</b> ${data.name}</span> <span>${data.score} PTS</span>`;
+                    leaderboardList.appendChild(item);
+                    idx++;
+                });
+            } catch (error) {
+                console.error("Gagal memuat dari Firebase: ", error);
+                leaderboardList.innerHTML = "<p style='color:#f38ba8;'>Gagal memuat papan peringkat.</p>";
+            }
         }
     </script>
 </body>
