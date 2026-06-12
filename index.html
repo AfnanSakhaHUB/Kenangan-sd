@@ -196,6 +196,7 @@
         .hidden { display: none !important; }
 
 
+        
         /* ==========================================================================
            KELOMPOK SCENE 2: GAME DARATAN (MINI GAMES SCENE)
            ========================================================================== */
@@ -332,7 +333,7 @@
             position: absolute;
             right: 40px;
             top: 10%;
-            width: 42%; 
+            width: 42%; /* Hampir setengah layar sesuai request */
             height: 80%;
             background: rgba(15, 23, 42, 0.92);
             border: 5px solid #ffdd1a;
@@ -343,8 +344,8 @@
             align-items: center;
             z-index: 10;
             box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-            transform: translateX(600px); 
-            transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s; 
+            transform: translateX(600px); /* Mulai dari luar layar */
+            transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s; /* Muncul setelah kamera turun */
         }
         
         /* Animasi sidebar slide-in saat masuk daratan */
