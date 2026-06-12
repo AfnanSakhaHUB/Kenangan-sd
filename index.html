@@ -497,64 +497,74 @@
     </div>
 
     <script>
-        const startNode = document.getElementById('start-node');
-        const menuNode = document.getElementById('menu-node');
-        const btnMinigames = document.getElementById('btn-minigames');
-        const btnKenangan = document.getElementById('btn-kenangan'); 
-        const btnKritik = document.getElementById('btn-kritik'); // Target Balon Kritik dan Saran baru
-        const mainViewport = document.getElementById('main-viewport');
-        const windSfx = document.getElementById('windSfx');
-        
-        let audioTracker;
+const startNode = document.getElementById('start-node');
+const menuNode = document.getElementById('menu-node');
+const btnMinigames = document.getElementById('btn-minigames');
+const btnKenangan = document.getElementById('btn-kenangan'); 
+const btnKritik = document.getElementById('btn-kritik'); // Memastikan ID btn-kritik terdeteksi
+const mainViewport = document.getElementById('main-viewport');
+const windSfx = document.getElementById('windSfx');
 
-        // Logika Tombol Mulai Awal
-        startNode.addEventListener('click', () => {
-            windSfx.pause(); windSfx.currentTime = 0;
-            windSfx.play().then(() => {
+let audioTracker;
+
+// Logika Tombol Mulai Awal
+startNode.addEventListener('click', () => {
+    windSfx.pause(); windSfx.currentTime = 0;
+    windSfx.play().then(() => {
+        clearInterval(audioTracker);
+        audioTracker = setInterval(() => {
+            if (windSfx.currentTime >= 3.0) {
+                windSfx.pause(); windSfx.currentTime = 0;
                 clearInterval(audioTracker);
-                audioTracker = setInterval(() => {
-                    if (windSfx.currentTime >= 3.0) {
-                        windSfx.pause(); windSfx.currentTime = 0;
-                        clearInterval(audioTracker);
-                    }
-                }, 100);
-            }).catch(error => console.log("Audio terblokir:", error));
+            }
+        }, 100);
+    }).catch(error => console.log("Audio terblokir:", error));
 
-            startNode.classList.add('meledak');
+    startNode.classList.add('meledak');
 
-            setTimeout(() => {
-                startNode.classList.add('hidden');
-                menuNode.classList.remove('hidden');
-                menuNode.classList.add('reveal');
-                
-                setTimeout(() => {
-                    const allBalloons = menuNode.querySelectorAll('.balloon-group');
-                    allBalloons.forEach((b, idx) => {
-                        b.style.animation = `ayunBalon 3s ease-in-out infinite alternate`;
-                        b.style.animationDelay = `-${idx}s`;
-                    });
-                }, 1200);
-            }, 300); 
-        });
+    setTimeout(() => {
+        startNode.classList.add('hidden');
+        menuNode.classList.remove('hidden');
+        menuNode.classList.add('reveal');
+        
+        setTimeout(() => {
+            const allBalloons = menuNode.querySelectorAll('.balloon-group');
+            allBalloons.forEach((b, idx) => {
+                b.style.animation = `ayunBalon 3s ease-in-out infinite alternate`;
+                b.style.animationDelay = `-${idx}s`;
+            });
+        }, 1200);
+    }, 300); 
+});
 
-        // ================= ACTION UTAMA MINI GAMES (KAMERA TURUN) =================
-        btnMinigames.addEventListener('click', () => {
-            btnMinigames.classList.add('meledak');
-            setTimeout(() => {
-                mainViewport.classList.add('camera-down');
-            }, 300);
-        });
+// ================= BALON MINI GAMES (KAMERA TURUN KE BAWAH) =================
+btnMinigames.addEventListener('click', () => {
+    btnMinigames.classList.add('meledak');
+    setTimeout(() => {
+        mainViewport.classList.add('camera-down');
+    }, 300);
+});
 
-        // ================= ACTION UTAMA FOTO KENANGAN (KAMERA NAIK KE SPACE) =================
-        btnKenangan.addEventListener('click', () => {
-            btnKenangan.classList.add('meledak');
-            setTimeout(() => {
-                mainViewport.classList.add('space-launch');
-            }, 300);
-            setTimeout(() => {
-                window.location.href = 'Bubbles.html';
-            }, 300);
-        });
+// ================= BALON FOTO KENANGAN (KAMERA NAIK KE ANGKASA -> START.HTML) =================
+btnKenangan.addEventListener('click', () => {
+    btnKenangan.classList.add('meledak');
+    setTimeout(() => {
+        mainViewport.classList.add('space-launch');
+    }, 300);
+    setTimeout(() => {
+        window.location.href = 'start.html'; // Foto kenangan kembali ke start.html sesuai kode awalmu
+    }, 2300);
+});
+
+// ================= BALON KRITIK DAN SARAN (POP LANGSUNG -> BUBBLES.HTML) =================
+btnKritik.addEventListener('click', () => {
+    btnKritik.classList.add('meledak'); // Efek balon meletup dulu
+    setTimeout(() => {
+        // Pindah ke bubbles.html (Ganti jadi lowercase 'bubbles.html' jika nama file aslimu huruf kecil semua)
+        window.location.href = 'Bubbles.html'; 
+    }, 300); // Nunggu 0.3 detik biar animasi meletupnya kelihatan
+});
+        
     </script>
 </body>
 </html>
