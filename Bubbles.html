@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sky Bubbles Chat</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to bottom, #1A80B8 0%, #87CEEB 60%, #B0E2FF 100%);
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Container Tombol Exit (X & Awan) di Pojok Kanan Atas */
+    .exit-container {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 12px;
+      z-index: 100;
+    }
+
+    .btn-exit {
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(5px);
+      color: #004b73;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    /* Modifikasi khusus untuk tombol awan agar lebih lebar menyerupai awan */
+    .btn-cloud {
+      width: 60px;
+      border-radius: 20px;
+      font-size: 1.5rem;
+    }
+
+    .btn-exit:hover {
+      transform: scale(1.1);
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    /* Area Langit tempat Bubble Terbang */
+    #sky {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: calc(100vh - 160px); 
+      overflow: hidden;
+    }
+
+    /* Elemen Bubble */
+    .bubble {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      box-shadow: inset -10px -10px 20px rgba(0,0,0,0.05), 
+                  inset 10px 10px 20px rgba(255,255,255,0.4),
+                  0 4px 10px rgba(0,0,0,0.1);
+      backdrop-filter: blur(3px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+      text-align: center;
+      user-select: none;
+      overflow-y: auto;
+    }
+
+    .bubble::-webkit-scrollbar {
+      display: none;
+    }
+
+    .bubble .sender {
+      font-size: 0.75rem;
+      font-weight: bold;
+      color: #004b73;
+      margin-bottom: 4px;
+    }
+
+    .bubble .msg {
+      font-size: 0.85rem;
+      color: #222;
+      word-break: break-word;
+    }
+
+    /* Mode Admin */
+    .admin-mode .bubble {
+      cursor: pointer;
+      border: 2px dashed #ff4d4d;
+    }
+    .admin-mode .bubble:hover {
+      background: rgba(255, 77, 77, 0.4);
+    }
+    .admin-badge {
+      display: none;
+      background: #ff4d4d;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      margin-top: 5px;
+    }
+    .admin-mode .admin-badge {
+      display: block;
+    }
+
+    /* Panel Kontrol di Bagian Bawah */
+    .control-panel {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100vw;
+      height: 160px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255, 255, 255, 0.5);
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+      z-index: 10;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .control-panel input, .control-panel textarea {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      font-size: 0.9rem;
+    }
+
+    #senderName { width: 30%; }
+    #messageText { width: 70%; height: 45px; resize: none; }
+
+    .btn-submit {
+      background: #1A80B8;
+      color: white;
+      border: none;
+      padding: 0 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .btn-submit:hover { background: #136391; }
+    .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
+
+    /* Navigasi Halaman */
+    .pagination-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .btn-page {
+      background: #fff;
+      border: 1px solid #1A80B8;
+      color: #1A80B8;
+      padding: 5px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn-page:hover { background: #1A80B8; color: white; }
+    .btn-page:disabled { opacity: 0.3; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+
+  <div class="exit-container">
+    <button class="btn-exit" onclick="window.location.href='index.html'" title="Kembali ke Index">✕</button>
+    <button class="btn-exit btn-cloud" onclick="window.location.href='index.html'" title="Kembali ke Index">☁️</button>
+  </div>
+
+  <div id="sky">
+    </div>
+
+  <div class="control-panel" id="controlPanel">
+    <form id="chatForm">
+      <div class="form-row">
+        <input type="text" id="senderName" placeholder="Nama (Maks 5 kata)..." required>
+        <textarea id="messageText" placeholder="Tulis pesan (Maks 500 huruf)..." maxlength="500" required></textarea>
+        <button type="submit" class="btn-submit" id="btnSubmit">Kirim</button>
+      </div>
+    </form>
+
+    <div class="pagination-row">
+      <button class="btn-page" id="btnPrev" disabled>◀ Prev Page</button>
+      <span id="pageInfo">Halaman 1</span>
+      <button class="btn-page" id="btnNext" disabled>Next Page ▶</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // Konfigurasi Firebase Terbaru
+    const firebaseConfig = {
+      apiKey: "AIzaSyDpWnZyYngAlLlzH-GkRWSM_kgfkqMqf4U",
+      authDomain: "websitesdlulus.firebaseapp.com",
+      projectId: "websitesdlulus",
+      storageBucket: "websitesdlulus.firebasestorage.app",
+      messagingSenderId: "849517691742",
+      appId: "1:849517691742:web:3efed490e1d70f17c5c5cf",
+      measurementId: "G-7JLWYWPKN3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const messagesCollection = collection(db, "bubbles_chats");
+
+    const sky = document.getElementById("sky");
+    const chatForm = document.getElementById("chatForm");
+    const senderNameInput = document.getElementById("senderName");
+    const messageTextInput = document.getElementById("messageText");
+    const btnSubmit = document.getElementById("btnSubmit");
+    
+    const btnPrev = document.getElementById("btnPrev");
+    const btnNext = document.getElementById("btnNext");
+    const pageInfo = document.getElementById("pageInfo");
+
+    let allFetchedBubbles = [];
+    let activeBubblesPhysics = [];
+    let currentPage = 1;
+    const BUBBLES_PER_PAGE = 10;
+
+    // Deteksi Realtime Nama Admin 'gwAdmin'
+    senderNameInput.addEventListener("input", () => {
+      if (senderNameInput.value.trim() === "gwAdmin") {
+        document.body.classList.add("admin-mode");
+      } else {
+        document.body.classList.remove("admin-mode");
+      }
+    });
+
+    // Kirim Data
+    chatForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = senderNameInput.value.trim();
+      const message = messageTextInput.value.trim();
+
+      const wordCount = name.split(/\s+/).filter(w => w.length > 0).length;
+      if (wordCount > 5) {
+        alert("Nama maksimal 5 kata!");
+        return;
+      }
+
+      try {
+        await addDoc(messagesCollection, {
+          name: name,
+          message: message,
+          timestamp: serverTimestamp()
+        });
+        messageTextInput.value = "";
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+    // Listen Data Firestore secara Realtime
+    const q = query(messagesCollection, orderBy("timestamp", "asc"));
+    onSnapshot(q, (snapshot) => {
+      allFetchedBubbles = [];
+      snapshot.forEach(doc => {
+        allFetchedBubbles.push({ id: doc.id, ...doc.data() });
+      });
+      renderCurrentPage();
+    });
+
+    // Render HalamanAktif
+    function renderCurrentPage() {
+      sky.innerHTML = "";
+      activeBubblesPhysics = [];
+
+      const totalBubbles = allFetchedBubbles.length;
+      const maxAvailablePage = Math.ceil(totalBubbles / BUBBLES_PER_PAGE) || 1;
+
+      pageInfo.innerText = `Halaman ${currentPage}`;
+      btnPrev.disabled = currentPage === 1;
+      
+      const currentStartIdx = (currentPage - 1) * BUBBLES_PER_PAGE;
+      const currentPageBubbles = allFetchedBubbles.slice(currentStartIdx, currentStartIdx + BUBBLES_PER_PAGE);
+
+      if (currentPageBubbles.length >= BUBBLES_PER_PAGE || currentPage < maxAvailablePage) {
+        btnNext.disabled = false;
+      } else {
+        btnNext.disabled = true;
+      }
+
+      if (currentPageBubbles.length >= BUBBLES_PER_PAGE) {
+        btnSubmit.disabled = true;
+        messageTextInput.placeholder = "Halaman ini penuh! Pindah ke Next Page untuk menambah.";
+      } else {
+        btnSubmit.disabled = false;
+        messageTextInput.placeholder = "Tulis pesan (Maks 500 huruf)...";
+      }
+
+      currentPageBubbles.forEach(data => {
+        const bubbleEl = document.createElement("div");
+        bubbleEl.classList.add("bubble");
+        bubbleEl.innerHTML = `
+          <div class="sender">${escapeHTML(data.name)}</div>
+          <div class="msg">${escapeHTML(data.message)}</div>
+          <div class="admin-badge">Klik Hapus</div>
+        `;
+
+        // Fitur khusus gwAdmin: klik hapus lalu balik ke index.html
+        bubbleEl.addEventListener("click", async () => {
+          if (senderNameInput.value.trim() === "gwAdmin") {
+            if (confirm("Apakah kamu yakin ingin menghapus bubble ini?")) {
+              try {
+                await deleteDoc(doc(db, "bubbles_chats", data.id));
+                window.location.href = "index.html";
+              } catch (err) {
+                alert("Gagal menghapus!");
+              }
+            }
+          }
+        });
+
+        sky.appendChild(bubbleEl);
+
+        const radius = 140;
+        const maxX = window.innerWidth - radius;
+        const maxY = (window.innerHeight - 160) - radius;
+
+        const physicsObj = {
+          element: bubbleEl,
+          x: Math.random() * maxX,
+          y: Math.random() * maxY,
+          vx: (Math.random() - 0.5) * 3, 
+          vy: (Math.random() - 0.5) * 3, 
+          width: radius,
+          height: radius
+        };
+
+        activeBubblesPhysics.push(physicsObj);
+      });
+    }
+
+    btnPrev.addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderCurrentPage();
+      }
+    });
+
+    btnNext.addEventListener("click", () => {
+      currentPage++;
+      renderCurrentPage();
+    });
+
+    // Animasi Pergerakan Bubble Melayang
+    function updatePhysics() {
+      const maxX = window.innerWidth;
+      const maxY = window.innerHeight - 160; 
+
+      activeBubblesPhysics.forEach(b => {
+        b.x += b.vx;
+        b.y += b.vy;
+
+        if (b.x <= 0) {
+          b.vx *= -1;
+          b.x = 0;
+        } else if (b.x + b.width >= maxX) {
+          b.vx *= -1;
+          b.x = maxX - b.width;
+        }
+
+        if (b.y <= 0) {
+          b.vy *= -1;
+          b.y = 0;
+        } else if (b.y + b.height >= maxY) {
+          b.vy *= -1;
+          b.y = maxY - b.height;
+        }
+
+        b.element.style.left = b.x + "px";
+        b.element.style.top = b.y + "px";
+      });
+
+      requestAnimationFrame(updatePhysics);
+    }
+
+    requestAnimationFrame(updatePhysics);
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+      );
+    }
+  </script>
+</body>
+</html>
