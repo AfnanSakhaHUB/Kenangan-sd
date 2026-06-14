@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cerdas Cermat</title>
+    <style>
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Segoe UI', sans-serif; 
+            color: #000000; /* Semua teks default dipaksa warna hitam gelap */
+        }
+        body { 
+            background: #f0f2f5; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+        }
+        .container { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            width: 90%; 
+            max-width: 900px; 
+            text-align: center; 
+        }
+        .hidden { 
+            display: none !important; 
+        }
+        input { 
+            padding: 12px; 
+            width: 80%; 
+            max-width: 300px; 
+            margin: 15px 0; 
+            border: 2px solid #333333; 
+            border-radius: 6px; 
+            font-size: 16px;
+            color: #000000;
+        }
+        
+        /* Tombol Utama: Kuning cerah, teks hitam tebal agar sangat terbaca */
+        button.main-btn { 
+            padding: 12px 25px; 
+            background: #ffc107; 
+            color: #000000; 
+            border: 2px solid #333333; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            margin: 5px; 
+            font-weight: bold;
+            font-size: 16px;
+        }
+        button.main-btn:hover { 
+            background: #e0a800; 
+        }
+        
+        .game-layout { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            gap: 20px; 
+            margin-top: 20px; 
+        }
+        .side-image { 
+            width: 150px; 
+            height: 150px; 
+            border-radius: 8px; 
+            object-fit: cover; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15); 
+        }
+        .quiz-area { 
+            flex: 1; 
+        }
+        .header-info { 
+            display: flex; 
+            justify-content: space-between; 
+            background: #e9ecef; 
+            padding: 12px 20px; 
+            border-radius: 6px; 
+            margin-bottom: 20px; 
+            font-weight: bold; 
+            border: 1px solid #ccc;
+        }
+        
+        /* Opsi Jawaban Default: Latar belakang putih, tulisan hitam pekat */
+        .option-btn { 
+            display: block; 
+            width: 100%; 
+            padding: 15px; 
+            margin-bottom: 10px; 
+            background: #ffffff; 
+            border: 2px solid #333333; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            text-align: left; 
+            font-size: 16px; 
+            font-weight: bold;
+            color: #000000;
+            transition: all 0.2s; 
+        }
+        .option-btn:hover { 
+            background: #f0f0f0; 
+        }
+        
+        /* Gaya Papan Peringkat (Leaderboard) */
+        .leaderboard-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 15px; 
+        }
+        .leaderboard-table th, .leaderboard-table td { 
+            padding: 12px; 
+            border-bottom: 1px solid #333333; 
+            text-align: center; 
+            color: #000000;
+        }
+        .leaderboard-table th { 
+            background: #e9ecef; 
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="login-screen" class="card">
+            <h2 style="font-size: 24px; font-weight: bold;">Selamat Datang di Cerdas Cermat!</h2>
+            <p style="color: #cc0000; margin-top: 10px; font-weight: bold;">⚠️ PERINGATAN: Sekali salah jawab langsung kalah! Sisa waktu akan semakin sempit di setiap soal berikutnya!</p>
+            <input type="text" id="player-name-input" placeholder="Masukkan nama Anda...">
+            <br>
+            <button class="main-btn" onclick="startGame()">Mulai Game</button>
+        </div>
+
+        <div id="game-screen" class="card hidden">
+            <div class="header-info">
+                <span id="display-name" style="color: #000000;">Pemain: -</span>
+                <span id="display-score" style="color: #000000;">Skor: 0</span>
+                <span id="display-timer" style="color: #cc0000; font-size: 18px;">Waktu: --s</span>
+            </div>
+            <div class="game-layout">
+                <img id="left-img" class="side-image" src="" alt="Kiri">
+                <div class="quiz-area">
+                    <div id="question" style="font-size: 20px; margin-bottom: 20px; font-weight: bold; color: #000000; text-align: left;">Memuat...</div>
+                    <div id="options-container"></div>
+                </div>
+                <img id="right-img" class="side-image" src="" alt="Kanan">
+            </div>
+        </div>
+
+        <div id="end-screen" class="card hidden">
+            <h2 style="color: #cc0000; font-size: 26px; font-weight: bold;">Game Over / Selesai!</h2>
+            <h3 style="margin-top: 15px; font-size: 20px;">Skor Akhir Anda: <span id="final-score" style="color: #0056b3; font-weight: bold;">0</span></h3>
+            <br>
+            <button class="main-btn" onclick="startGame()">Main Lagi</button>
+            <button class="main-btn" onclick="window.location.href='index.html'" style="background: #e9ecef;">Kembali ke Menu Utama</button>
+            
+            <hr style="margin: 25px 0; border: 0; border-top: 2px solid #333333;">
+            
+            <h3 style="font-size: 20px; font-weight: bold;">Papan Skor Cerdas Cermat</h3>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Peringkat</th>
+                        <th>Nama</th>
+                        <th>Skor</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDpWnZyYngAlLlzH-GkRWSM_kgfkqMqf4U",
+            authDomain: "websitesdlulus.firebaseapp.com",
+            projectId: "websitesdlulus",
+            storageBucket: "websitesdlulus.firebasestorage.app",
+            messagingSenderId: "849517691742",
+            appId: "1:849517691742:web:3efed490e1d70f17c5c5cf",
+            measurementId: "G-7JLWYWPKN3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Pertanyaan (Sangat Mudah Dikostumisasi)
+        const questions = [
+            {question:"Afnan punya 8 permen. Naufal memberi 6 lagi. Berapa jumlah permen Afnan sekarang?",answers:["12","14","16","18"],correct:1},
+            {question:"Ragil membeli 20 pensil. Ia memberikan 7 kepada Lula. Sisa pensil Ragil?",answers:["10","13","15","17"],correct:1},
+            {question:"Rayhan memiliki 3 kotak. Setiap kotak berisi 5 buku. Jumlah semua buku?",answers:["8","10","15","20"],correct:2},
+            {question:"Bagus berkata: 'Aku punya 10 apel, setengah dimakan'. Sisa apel?",answers:["3","5","7","10"],correct:1},
+            {question:"Izur membawa 24 bola dan membagi rata kepada 6 teman. Masing-masing mendapat?",answers:["2","4","6","8"],correct:1},
+            {question:"Farhan melihat jam pukul 08.00. Dua jam kemudian pukul?",answers:["09.00","10.00","11.00","12.00"],correct:1},
+            {question:"Shilfie mempunyai 15 kue. Denissa mengambil 4. Naira memberi 2 lagi. Jumlah kue sekarang?",answers:["10","11","13","17"],correct:2},
+            {question:"Arya lebih tinggi dari Zaki. Zaki lebih tinggi dari Dimas. Siapa paling pendek?",answers:["Arya","Zaki","Dimas","Tidak tahu"],correct:2},
+            {question:"Maura membeli 5 es dengan harga 2 ribu per es. Total bayar?",answers:["5 ribu","7 ribu","10 ribu","12 ribu"],correct:2},
+            {question:"Baim punya angka rahasia. Jika ditambah 5 menjadi 15. Angka rahasia itu?",answers:["5","10","15","20"],correct:1},
+            {question:"Zain memiliki 30 kelereng. Lintang mengambil 10. Berapa sisa?",answers:["10","15","20","25"],correct:2},
+            {question:"Azena punya 4 ayam. Setiap ayam punya 2 kaki. Total kaki?",answers:["4","6","8","10"],correct:2},
+            {question:"Ali membawa 100 poin. Berkurang 35 poin. Sisa?",answers:["55","65","75","85"],correct:1},
+            {question:"Eza memiliki 12 permen dan membagi kepada 3 orang. Masing-masing?",answers:["2","3","4","6"],correct:2},
+            {question:"Virga mempunyai 7 buku. Ashar punya 2 kali lipat. Buku Ashar?",answers:["9","12","14","16"],correct:2},
+            {question:"Geca menabung 5 ribu selama 4 hari. Jumlah uang?",answers:["10 ribu","15 ribu","20 ribu","25 ribu"],correct:2},
+            {question:"Afnan, Naufal, dan Ragil bermain. Afnan menang 2 kali, Naufal 3 kali, Ragil 1 kali. Total kemenangan?",answers:["4","5","6","7"],correct:2},
+            {question:"Lula punya 50 kelereng. Hilang 15 karena dikejar kucing 😭. Sisa?",answers:["25","35","40","45"],correct:1},
+            {question:"Rayhan membeli 10 roti. Bagus makan 3. Izur makan 2. Sisa?",answers:["3","5","7","8"],correct:2},
+            {question:"Farhan memiliki 2 tangan. Setiap tangan memiliki 5 jari. Total?",answers:["5","8","10","12"],correct:2},
+            {question:"Jika Denissa lebih cepat dari Naira dan Naira lebih cepat dari Arya, siapa paling lambat?",answers:["Denissa","Naira","Arya","Semua sama"],correct:2},
+            {question:"Baim berkata 1 minggu ada berapa hari?",answers:["5","6","7","8"],correct:2},
+            {question:"Zaki punya 9 bola, Dimas punya 9 bola. Total bola mereka?",answers:["9","12","18","20"],correct:2},
+            {question:"Maura memiliki 100 permen. Ia memberi 50 kepada teman. Sisa?",answers:["25","40","50","75"],correct:2},
+            {question:"Zain membawa 3 ember. Setiap ember berisi 10 liter air. Total air?",answers:["13","20","30","40"],correct:2},
+            {question:"Lintang berkata: 'Aku punya 2 angka. Jika dijumlahkan 10'. Pasangan angka yang benar?",answers:["5+5","2+9","1+8","7+7"],correct:0},
+            {question:"Azena melihat tumbuhan membutuhkan apa untuk hidup?",answers:["Air dan cahaya","Bensin","Listrik","Internet"],correct:0},
+            {question:"Ali bertanya: Hewan yang hidup di air adalah?",answers:["Kucing","Ikan","Ayam","Sapi"],correct:1},
+            {question:"Eza punya 25 kelereng. Ditambah 25 lagi. Jumlah?",answers:["40","45","50","55"],correct:2},
+            {question:"Virga mempunyai 40 buku. Dipinjam Ashar 15. Sisa?",answers:["15","25","35","55"],correct:1},
+            {question:"Geca membeli 8 pensil. Harga satu pensil 1000 rupiah. Total?",answers:["4000","6000","8000","10000"],correct:2},
+            {question:"Afnan bertanya: Planet merah adalah?",answers:["Bumi","Mars","Jupiter","Saturnus"],correct:1},
+            {question:"Naufal punya 18 kue dibagi 2 orang sama rata. Masing-masing?",answers:["6","8","9","12"],correct:2},
+            {question:"Ragil berjalan 5 meter ke depan lalu mundur 2 meter. Berapa jarak dari awal?",answers:["2 meter","3 meter","5 meter","7 meter"],correct:1},
+            {question:"Lula punya 4 kucing. Setiap kucing punya 4 kaki. Jumlah kaki?",answers:["8","12","16","20"],correct:2},
+            {question:"Rayhan memiliki 60 poin. Mendapat bonus 20 poin. Total?",answers:["70","80","90","100"],correct:1},
+            {question:"Bagus membawa 1 lusin telur. Jumlah telur?",answers:["10","12","15","20"],correct:1},
+            {question:"Izur melihat benda jatuh karena gaya...",answers:["Magnet","Gravitasi","Api","Suara"],correct:1},
+            {question:"Farhan punya 100 ribu. Membeli barang 45 ribu. Sisa?",answers:["45 ribu","50 ribu","55 ribu","65 ribu"],correct:2},
+            {question:"Shilfie mempunyai 6 bunga. Denissa mempunyai 3 kali lebih banyak. Jumlah bunga Denissa?",answers:["9","12","18","20"],correct:2}, // Ditambahkan koma yang hilang di sini (Perbaikan Bug)
+            {question:"Naira memiliki 45 stiker. Ia memberikan 15 kepada Arya. Berapa sisa stiker Naira?",answers:["20","25","30","35"],correct:2},
+            {question:"Arya mempunyai 6 kotak pensil. Setiap kotak berisi 3 pensil. Total pensil Arya?",answers:["9","12","18","24"],correct:2},
+            {question:"Zaki berkata: 'Aku punya angka. Jika dikali 2 hasilnya 20'. Angka itu?",answers:["5","10","15","20"],correct:1},
+            {question:"Dimas membawa 36 permen. Dibagi rata kepada 4 teman. Masing-masing mendapat?",answers:["6","8","9","12"],correct:2},
+            {question:"Maura membeli 2 buku seharga 5 ribu masing-masing. Total harga?",answers:["5 ribu","7 ribu","10 ribu","15 ribu"],correct:2},
+            {question:"Baim mempunyai 7 ikan. Semua ikan punya 1 ekor. Jumlah ekor ikan?",answers:["5","7","10","14"],correct:1},
+            {question:"Zain melihat langit biru karena cahaya matahari dipantulkan oleh...",answers:["Atmosfer","Tanah","Laut","Batu"],correct:0},
+            {question:"Lintang punya 81 kelereng. Dibagi 9 teman. Masing-masing?",answers:["7","8","9","10"],correct:2},
+            {question:"Azena menanam tumbuhan. Bagian yang menyerap air adalah...",answers:["Daun","Bunga","Akar","Batang"],correct:2},
+            {question:"Ali bertanya: Hewan yang bertelur adalah...",answers:["Ayam","Kucing","Sapi","Kambing"],correct:0},
+            {question:"Eza punya 90 poin game. Kehilangan 40 poin karena kalah lawan Virga. Sisa?",answers:["40","50","60","70"],correct:1},
+            {question:"Virga mempunyai 12 bola. Ashar mempunyai 3 bola lebih banyak. Bola Ashar?",answers:["13","14","15","16"],correct:2},
+            {question:"Geca punya 5 rak buku. Setiap rak berisi 10 buku. Total buku?",answers:["15","30","50","60"],correct:2},
+            {question:"Afnan membeli 4 ayam goreng. Baim makan 1. Sisa?",answers:["1","2","3","4"],correct:2},
+            {question:"Naufal punya uang 20 ribu. Membeli es 5 ribu. Sisa?",answers:["10 ribu","15 ribu","20 ribu","25 ribu"],correct:1},
+            {question:"Ragil melihat benda yang bisa menghasilkan cahaya alami adalah...",answers:["Matahari","Buku","Pensil","Sepatu"],correct:0},
+            {question:"Lula punya 15 balon. 5 pecah. Berapa tersisa?",answers:["5","10","12","15"],correct:1},
+            {question:"Rayhan membuat pola angka: 2,4,6,8,... Angka berikutnya?",answers:["9","10","12","14"],correct:1},
+            {question:"Bagus mempunyai 1 meter tali. Jika dipotong menjadi 2 bagian sama panjang, tiap bagian?",answers:["25 cm","50 cm","75 cm","100 cm"],correct:1},
+            {question:"Izur memiliki 5 sepeda. Setiap sepeda punya 2 roda. Total roda?",answers:["5","7","10","12"],correct:2},
+            {question:"Farhan bertanya: Organ untuk memompa darah adalah...",answers:["Paru-paru","Jantung","Mata","Otak"],correct:1},
+            {question:"Shilfie membawa 72 kue dan membagi kepada 8 orang. Tiap orang?",answers:["7","8","9","10"],correct:2},
+            {question:"Denissa membeli 3 pensil dan 2 penghapus. Jumlah benda?",answers:["3","5","6","8"],correct:1},
+            {question:"Naira berjalan 10 langkah maju lalu 4 langkah mundur. Berapa langkah dari awal?",answers:["4","6","10","14"],correct:1},
+            {question:"Arya punya 200 poin. Digunakan 75 poin. Sisa?",answers:["100","125","150","175"],correct:1},
+            {question:"Zaki memiliki 4 teman. Setiap teman diberi 2 permen. Total permen?",answers:["6","8","10","12"],correct:1},
+            {question:"Dimas bertanya: Air berubah menjadi uap karena...",answers:["Didinginkan","Dipanaskan","Dipukul","Dilempar"],correct:1},
+            {question:"Maura punya 9 buku. Ditambah 11 buku. Total?",answers:["18","19","20","21"],correct:2},
+            {question:"Baim dan Zain lomba. Baim selesai duluan. Siapa lebih cepat?",answers:["Baim","Zain","Sama","Tidak tahu"],correct:0},
+            {question:"Lintang punya angka 15. Dikurangi 5 lalu dikali 2. Hasil?",answers:["10","15","20","25"],correct:2},
+            {question:"Azena melihat hewan yang memiliki sayap adalah...",answers:["Burung","Ikan","Kucing","Kelinci"],correct:0},
+            {question:"Ali mempunyai 30 kelereng. Ia memberikan 10 kepada Eza. Eza punya?",answers:["10","20","30","40"],correct:0},
+            {question:"Virga memiliki 8 apel. Geca memiliki 8 apel. Total?",answers:["8","12","16","20"],correct:2},
+            {question:"Ashar punya 100 kartu. Hilang 1 kartu karena jatuh. Sisa?",answers:["98","99","100","101"],correct:1},
+            {question:"Afnan menulis angka 1 sampai 10. Ada berapa angka?",answers:["5","8","10","12"],correct:2},
+            {question:"Naufal punya 3 ayam dan 2 kambing. Jumlah hewan?",answers:["3","4","5","6"],correct:2},
+            {question:"Ragil mempunyai 50 ribu. Memberi Lula 20 ribu. Sisa?",answers:["20 ribu","30 ribu","40 ribu","50 ribu"],correct:1},
+            {question:"Lula dan Rayhan mempunyai 25 bola bersama. Jika Rayhan punya 10, Lula punya?",answers:["10","15","20","25"],correct:1},
+            {question:"Bagus melihat benda jatuh ke bawah karena...",answers:["Gravitasi","Angin","Air","Api"],correct:0},
+            {question:"Izur mempunyai 4 tangan robot. Setiap tangan punya 3 jari. Total jari?",answers:["7","10","12","15"],correct:2},
+            {question:"Farhan memiliki 60 jeruk. Dibagi kepada 5 orang. Tiap orang?",answers:["10","12","15","20"],correct:1},
+            {question:"Shilfie punya 30 menit belajar. Ditambah 20 menit lagi. Total?",answers:["40","50","60","70"],correct:1},
+            {question:"Denissa membeli 10 permen untuk teman sekelas. Jika ada 10 teman, masing-masing dapat?",answers:["1","2","5","10"],correct:0},
+            {question:"Naira berkata: Jika hari ini Jumat, besok adalah...",answers:["Kamis","Sabtu","Minggu","Senin"],correct:1},
+            {question:"Arya punya 16 bola. Setengah diberikan Zaki. Sisa?",answers:["4","8","10","12"],correct:1},
+            {question:"Dimas mempunyai 5 ikan. Setiap ikan bernapas dengan...",answers:["Insang","Paru-paru","Kulit manusia","Sayap"],correct:0},
+            {question:"Maura punya 25 kue. Ditambah 25 lagi. Total?",answers:["40","45","50","55"],correct:2},
+            {question:"Baim bertanya: 100 dibagi 10 hasilnya?",answers:["5","10","20","50"],correct:1},
+            {question:"Zain membawa 2 lusin telur. Jumlah telur?",answers:["12","18","24","30"],correct:2},
+            {question:"Lintang memiliki 7 hari dalam seminggu. Jika 2 hari lewat, tersisa?",answers:["3","5","7","9"],correct:1},
+            {question:"Azena mempunyai 500 poin. Mendapat bonus 500 poin. Total?",answers:["500","750","1000","1500"],correct:2},
+            {question:"Ali punya 1 jam waktu bermain. Berapa menit?",answers:["30","45","60","100"],correct:2},
+            {question:"Eza membuat pola: 5,10,15,20,... angka berikutnya?",answers:["21","25","30","35"],correct:1},
+            {question:"Virga membawa 18 buku. Dibagi kepada 3 orang. Tiap orang?",answers:["3","6","9","12"],correct:1},
+            {question:"Ashar memiliki 10 robot. Setiap robot punya 2 mata. Total mata?",answers:["10","12","20","22"],correct:2},
+            {question:"Geca bertanya: Hewan terbesar di bumi adalah...",answers:["Gajah","Paus biru","Singa","Dinosaurus"],correct:1}
+        ];
+
+        // Konfigurasi File Gambar Sesuai Request Anda
+        const leftAnswering = "Screenshot_2026-06-12-15-55-16-334_cn.wps.xiaomi.abroad.lite-edit.jpg";
+        const leftCorrect = "Screenshot_2026-06-12-15-59-12-766_cn.wps.xiaomi.abroad.lite-edit.jpg";
+        const rightDefault = "Screenshot_2026-06-14-13-01-27-751_ru.zdevs.zarchiver-edit.jpg";
+        const rightCorrect = "Screenshot_2026-06-14-13-01-08-624_com.miui.gallery-edit.jpg";
+
+        let name = "", score = 0, currentIdx = 0, timeLeft = 15, timerInterval, canAnswer = true;
+
+        // Fungsi pembantu untuk mengacak array pertanyaan (Fisher-Yates Shuffle)
+        function shuffleQuestions(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        window.startGame = () => {
+            name = document.getElementById("player-name-input").value.trim() || "Pemain Anonim";
+            score = 0; 
+            currentIdx = 0;
+            
+            // PENTING: Mengacak database pertanyaan setiap kali game baru dimulai
+            shuffleQuestions(questions);
+            
+            document.getElementById("login-screen").classList.add("hidden");
+            document.getElementById("end-screen").classList.add("hidden");
+            document.getElementById("game-screen").classList.remove("hidden");
+            document.getElementById("display-name").innerText = "Pemain: " + name;
+            document.getElementById("display-score").innerText = "Skor: " + score;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentIdx >= questions.length) return endGame();
+            clearInterval(timerInterval);
+            
+            // ========================================================
+            // SISTEM TIMER BERKURANG SECARA BERTAHAP (SOAL AKHIR = 3s)
+            // ========================================================
+            const waktuMulai = 15; // Waktu soal pertama (Detik)
+            const waktuAkhir = 3;  // Waktu soal terakhir (Detik)
+            
+            if (questions.length > 1) {
+                timeLeft = waktuMulai - Math.round((waktuMulai - waktuAkhir) * (currentIdx / (questions.length - 1)));
+            } else {
+                timeLeft = waktuAkhir;
+            }
+            
+            canAnswer = true;
+            updateTimerDisplay();
+            
+            document.getElementById("left-img").src = leftAnswering;
+            document.getElementById("right-img").src = rightDefault;
+            
+            // PENTING: Mengambil teks pertanyaan murni saja (Tanpa Penomoran Angka)
+            document.getElementById("question").innerText = questions[currentIdx].question;
+            
+            const container = document.getElementById("options-container");
+            container.innerHTML = "";
+            
+            questions[currentIdx].answers.forEach((ans, i) => {
+                const btn = document.createElement("button");
+                btn.className = "option-btn";
+                btn.innerText = ans;
+                btn.onclick = () => checkAnswer(i);
+                container.appendChild(btn);
+            });
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    checkAnswer(-1); // Kalah karena kehabisan waktu
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            document.getElementById("display-timer").innerText = "Waktu: " + timeLeft + "s";
+        }
+
+        window.checkAnswer = (idx) => {
+            if (!canAnswer) return;
+            canAnswer = false; 
+            clearInterval(timerInterval);
+
+            const correct = questions[currentIdx].correct;
+            const container = document.getElementById("options-container");
+            const buttons = container.getElementsByClassName("option-btn");
+
+            if (idx === correct) {
+                // JIKA BENAR: Latar hijau lembut, teks tetap hijau tua gelap (Sangat Jelas & Kontras)
+                score += 25;
+                document.getElementById("left-img").src = leftCorrect;
+                document.getElementById("right-img").src = rightCorrect;
+                document.getElementById("display-score").innerText = "Skor: " + score;
+                
+                if(buttons[idx]) {
+                    buttons[idx].style.background = "#d4edda";
+                    buttons[idx].style.borderColor = "#c3e6cb";
+                    buttons[idx].style.color = "#155724";
+                }
+                
+                setTimeout(() => { 
+                    currentIdx++; 
+                    loadQuestion(); 
+                }, 1000);
+
+            } else {
+                // JIKA SALAH ATAU TIMEOUT: Latar merah lembut, teks merah tua gelap
+                if (idx !== -1 && buttons[idx]) {
+                    buttons[idx].style.background = "#f8d7da";
+                    buttons[idx].style.borderColor = "#f5c6cb";
+                    buttons[idx].style.color = "#721c24";
+                }
+                
+                // Memberikan highlight hijau lembut pada tombol yang harusnya benar
+                if (buttons[correct]) {
+                    buttons[correct].style.background = "#d4edda";
+                    buttons[correct].style.borderColor = "#c3e6cb";
+                    buttons[correct].style.color = "#155724";
+                }
+
+                // Beri jeda 1.5 detik agar melihat koreksi jawaban, lalu langsung game over
+                setTimeout(() => { 
+                    endGame(); 
+                }, 1500);
+            }
+        }
+
+        async function endGame() {
+            clearInterval(timerInterval);
+            document.getElementById("game-screen").classList.add("hidden");
+            document.getElementById("end-screen").classList.remove("hidden");
+            document.getElementById("final-score").innerText = score;
+            
+            const gameCollection = collection(db, "leaderboard_cerdas_cermat");
+
+            try {
+                // Kirim skor ke koleksi khusus cerdas cermat
+                await addDoc(gameCollection, { name, score, time: new Date() });
+                
+                // Membaca Top 5 Skor Tertinggi khusus game ini
+                const snapshot = await getDocs(query(gameCollection, orderBy("score", "desc"), limit(5)));
+                
+                let html = "";
+                let rank = 1;
+                snapshot.forEach(doc => {
+                    html += `<tr><td>${rank++}</td><td>${doc.data().name}</td><td><strong>${doc.data().score}</strong></td></tr>`;
+                });
+                document.getElementById("leaderboard-body").innerHTML = html;
+            } catch (error) {
+                console.error("Error leaderboard:", error);
+                document.getElementById("leaderboard-body").innerHTML = `<tr><td colspan="3">Gagal memuat skor.</td></tr>`;
+            }
+        }
+    </script>
+</body>
+</html>
